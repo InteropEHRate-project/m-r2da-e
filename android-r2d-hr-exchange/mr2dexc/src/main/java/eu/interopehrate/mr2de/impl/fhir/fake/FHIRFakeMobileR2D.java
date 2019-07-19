@@ -1,4 +1,4 @@
-package eu.interopehrate.mr2dexc.impl.fhir.fake;
+package eu.interopehrate.mr2de.impl.fhir.fake;
 
 import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.AllergyIntolerance;
@@ -29,28 +29,20 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-import eu.interopehrate.mr2dexc.IMobileR2D;
-import eu.interopehrate.mr2dexc.ResourceType;
-import eu.interopehrate.mr2dexc.impl.fhir.utils.LoincCodes;
-import eu.interopehrate.mr2dexc.impl.fhir.utils.SnomedCodes;
+import eu.interopehrate.mr2de.api.R2D;
+import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.ResponseFormat;
+import eu.interopehrate.mr2de.impl.fhir.utils.LoincCodes;
+import eu.interopehrate.mr2de.impl.fhir.utils.SnomedCodes;
 
-public class FHIRFakeMobileR2D implements IMobileR2D {
-
-    @Override
-    public Resource getLastResource(ResourceType rType) {
-        if (rType == ResourceType.PATIENT_SUMMARY) {
-            return buildPatientSummary();
-        }
-
-        return new Bundle();
-    }
+public class FHIRFakeMobileR2D implements R2D {
 
 
     @Override
-    public Bundle getResources(ResourceType[] rTypes, Date from) {
+    public Bundle getRecords(HealthRecordType[] hrTypes, Date from, ResponseFormat responseFormat) {
         Bundle results = new Bundle();
 
-        if (Arrays.asList(rTypes).contains(ResourceType.PATIENT_SUMMARY)) {
+        if (Arrays.asList(hrTypes).contains(HealthRecordType.PATIENT_SUMMARY)) {
             Bundle patientSummaryBundle = buildPatientSummary();
             Bundle.BundleEntryComponent entry = (new Bundle.BundleEntryComponent()).setResource(patientSummaryBundle);
             results.addEntry(entry);
@@ -59,7 +51,26 @@ public class FHIRFakeMobileR2D implements IMobileR2D {
         return results;
     }
 
-    public Bundle buildPatientSummary() {
+
+    @Override
+    public Bundle getAllRecords(Date from, ResponseFormat responseFormat) {
+        HealthRecordType[] hrTypes = new HealthRecordType[]{HealthRecordType.PATIENT_SUMMARY};
+
+        return getRecords(hrTypes, from, responseFormat);
+    }
+
+
+    @Override
+    public Resource getLastResource(HealthRecordType rType) {
+        if (rType == HealthRecordType.PATIENT_SUMMARY) {
+            return buildPatientSummary();
+        }
+
+        return new Bundle();
+    }
+
+
+    private Bundle buildPatientSummary() {
         // Bundle contains all Resources of Patient Summary
         Bundle bundle = new Bundle();
         bundle.setType(Bundle.BundleType.DOCUMENT);
@@ -75,7 +86,7 @@ public class FHIRFakeMobileR2D implements IMobileR2D {
         // PS status
         ps.setStatus(Composition.CompositionStatus.FINAL);
         // PS Type
-        ps.setType(LoincCodes.PATIENT_SUMMARY.getCodeableConcept());
+        ps.setType(LoincCodes.PATIENT_SUMMARY_CODE.getCodeableConcept());
         // PS Profile
         Meta ipsProfile = new Meta();
         ipsProfile.addProfile("http://hl7.org/fhir/uv/ips/StructureDefinition/composition-uv-ips");
@@ -118,7 +129,7 @@ public class FHIRFakeMobileR2D implements IMobileR2D {
 
         // Allergies Section (Required)
         Composition.SectionComponent allergiesSection = new Composition.SectionComponent();
-        allergiesSection.setCode(LoincCodes.ALLERGIES_AND_INTOLERANCE.getCodeableConcept());
+        allergiesSection.setCode(LoincCodes.PATIENT_SUMMARY_ALLERGY_SECTION.getCodeableConcept());
 
         AllergyIntolerance allergy = buildAllergyIntoleranceForMedication(patient, SnomedCodes.PENICILLIN.getCodeableConcept());
         allergy.setOnset(new DateTimeType("2010"));
@@ -128,7 +139,7 @@ public class FHIRFakeMobileR2D implements IMobileR2D {
 
         // Active Problems Section (Required)
         Composition.SectionComponent activeProblems = new Composition.SectionComponent();
-        activeProblems.setCode(LoincCodes.ACTIVE_PROBLEMS.getCodeableConcept());
+        activeProblems.setCode(LoincCodes.PATIENT_SUMMARY_ACTIVE_PROBLEMS_SECTION.getCodeableConcept());
         ps.addSection(activeProblems);
 
         Condition cond1 = buildCondition(patient, SnomedCodes.MENO_PAUSAL.getCodeableConcept());
@@ -148,7 +159,7 @@ public class FHIRFakeMobileR2D implements IMobileR2D {
 
         // Medication Section (Required)
         Composition.SectionComponent medicationSection = new Composition.SectionComponent();
-        medicationSection.setCode(LoincCodes.MEDICATION.getCodeableConcept());
+        medicationSection.setCode(LoincCodes.PATIENT_SUMMARY_MEDICATION_SECTION.getCodeableConcept());
 
         // Medication #1
         MedicationStatement ms1 = buildMedicationStatement(patient);

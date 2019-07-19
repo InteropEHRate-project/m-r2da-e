@@ -1,12 +1,13 @@
-package eu.interopehrate.mr2dexc;
+package eu.interopehrate.mr2de;
 
-import eu.interopehrate.mr2dexc.impl.fhir.fake.FHIRFakeMobileR2D;
+import eu.interopehrate.mr2de.api.R2D;
+import eu.interopehrate.mr2de.impl.fhir.fake.FHIRFakeMobileR2D;
 
 /*
  *  Author: Engineering Ingegneria Informatica
  * Project: InteropEHRate - www.interopehrate.eu
  *
- * Description: factory class for instances of IMobileR2D
+ * Description: factory class for instances of R2D
  */
 public class MobileR2DFactory {
 
@@ -22,7 +23,7 @@ public class MobileR2DFactory {
      * should interact with a specific server.
      */
 
-    public static IMobileR2D create() {
+    public static R2D create() {
         return new FHIRFakeMobileR2D();
     }
 }

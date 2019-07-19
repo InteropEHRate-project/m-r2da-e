@@ -1,4 +1,4 @@
-package eu.interopehrate.mr2dexc;
+package eu.interopehrate.mr2de;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
