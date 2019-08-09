@@ -3,25 +3,19 @@ package eu.interopehrate.mr2de.impl.fhir.utils;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 
-public enum LoincCodes {
+public enum ICD9Codes {
 
-    PATIENT_SUMMARY_CODE("60591-5", "Patient summary Document"),
-    PATIENT_SUMMARY_ALLERGY_SECTION("48765-2", "Allergies and adverse reactions Document"),
-    PATIENT_SUMMARY_ACTIVE_PROBLEMS_SECTION("11450-4", "Problem list reported"),
-    PATIENT_SUMMARY_MEDICATION_SECTION("10160-0", "Medication use"),
-    PATIENT_SUMMARY_IMMUNIZATION_SECTION("11369-6", "Immunizations"),
-    PATIENT_SUMMARY_MEDICAL_DEVICES_SECTION("46264-8", "Medical devices"),
-    PATIENT_SUMMARY_RESULTS_SECTION("46264-8", "Results"),
-    PATIENT_SUMMARY_PROCEDURES_SECTION("47519-4", "History of procedures")
+    ALTRE_CARDIOMIOPATIE_PRIMITIVE("425.4", "Altre Cardiomiopatie Primitive")
+    ,INSUFFICIENZA_CUORE_SINISTRO("428.1", "Insufficienza del cuore sinistro (scompenso cardiaco Sinistro)")
     ;
 
-    public static final String SYSTEM = "http://loinc.org";
+    public static final String SYSTEM = "ICD9M";
     private String code;
     private String descritption;
     private Coding coding;
     private CodeableConcept concept;
 
-    LoincCodes(String code, String description) {
+    ICD9Codes(String code, String description) {
         this.code = code;
         this.descritption = description;
     }
@@ -43,3 +37,4 @@ public enum LoincCodes {
         return concept;
     }
 }
+

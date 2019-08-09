@@ -19,12 +19,12 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class BasicUnitTest {
 
     @Test
-    public void testGetLastResource() {
+    public void testGetLastResourceForPatientSummary() {
         // Get an instance of R2D
-        R2D mobileR2D = MobileR2DFactory.create();
+        R2D mobileR2D = MobileR2DFactory.create("", "");
 
         // Inkove getLastResource() method to retrieve Patient Summary
         Bundle psBundle = (Bundle)mobileR2D.getLastResource(HealthRecordType.PATIENT_SUMMARY.PATIENT_SUMMARY);
@@ -33,7 +33,7 @@ public class ExampleUnitTest {
         Composition patientSummary = (Composition)psBundle.getEntryFirstRep().getResource();
 
         // Verify Patient Summary Title
-        assertEquals("Patient Summary of patient Maria Rossi", patientSummary.getTitle());
+        assertEquals("Patient Summary of patient Mario Rossi", patientSummary.getTitle());
 
         // Verify Patient Summary Code
         Coding coding = patientSummary.getType().getCodingFirstRep();
@@ -47,7 +47,7 @@ public class ExampleUnitTest {
 
         // Verify Sections
         List<Composition.SectionComponent> sections = patientSummary.getSection();
-        assertEquals(3, sections.size());
+        assertEquals(4, sections.size());
 
         // Sample code used only to show how to navigate Patient Summary sections
         List<Reference> sectionEntries;
@@ -55,10 +55,6 @@ public class ExampleUnitTest {
         IBaseResource entryRes;
         for (Composition.SectionComponent section : sections) {
             sectionCode = section.getCode().getCodingFirstRep();
-            sectionEntries = section.getEntry();
-            for (Reference entry : sectionEntries) {
-                entryRes = entry.getResource();
-            }
         }
     }
 
