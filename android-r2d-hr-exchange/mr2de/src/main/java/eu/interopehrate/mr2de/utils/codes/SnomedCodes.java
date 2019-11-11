@@ -1,4 +1,4 @@
-package eu.interopehrate.mr2de.impl.fhir.utils;
+package eu.interopehrate.mr2de.utils.codes;
 
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;

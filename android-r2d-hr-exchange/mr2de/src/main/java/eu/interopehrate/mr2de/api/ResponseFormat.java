@@ -4,7 +4,7 @@ package eu.interopehrate.mr2de.api;
  *      Author: Engineering Ingegneria Informatica
  *     Project: InteropEHRate - www.interopehrate.eu
  *
- * Description: Enumeration representing the format of medical data requested with R2D.
+ * Description: Enumeration representing the format of medical data requested with MR2D.
  */
 public enum ResponseFormat {
 
@@ -12,7 +12,7 @@ public enum ResponseFormat {
     Data are represented as FHIR Resources, using only semantic codes defined by the InteropEHRate
     profile and obtained from the conversion of the codes(if any) in the original source data or by
     means of a semi automatic information extraction process. Semantic codes obtained by information
-     extraction will allow the client to show labels and portion of the original natural language
+     extraction will allow the fhirClient to show labels and portion of the original natural language
      content in the language of the user (both HCP and Citizen)
      */
     STRUCTURED_CONVERTED,
@@ -26,7 +26,7 @@ public enum ResponseFormat {
     /*
     Data are represented in a human readable document format (e.g. PDF). No information extraction
     or conversion of semantic code is performed. The exact content of the returned document is not
-    defined by the R2D protocol.
+    defined by the MR2D protocol.
      */
     UNSTRUCTURED,
 

@@ -5,7 +5,7 @@ package eu.interopehrate.mr2de.api;
  *     Project: InteropEHRate - www.interopehrate.eu
  *
  * Description: Enumeration representing the medical data type tha can be requested with
- *              R2D protocol.
+ *              MR2D protocol.
  */
 
 public enum HealthRecordType {

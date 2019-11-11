@@ -1,17 +1,16 @@
 package eu.interopehrate.mr2de;
 
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Composition;
+import java.util.Locale;
 
-import eu.interopehrate.mr2de.api.HealthRecordType;
-import eu.interopehrate.mr2de.api.R2D;
+import eu.interopehrate.mr2de.MobileR2DFactory;
+import eu.interopehrate.mr2de.api.MR2D;
 
 public class R2DTest {
 
     public static void main(String[] args) {
+        MR2D mobileR2D = MobileR2DFactory.create(Locale.ITALY, "ytrer-ewwer-rwerw");
 
-        R2D mobileR2D = MobileR2DFactory.create("", "");
-
+        /*
         Bundle patientSummaryBundle = (Bundle)mobileR2D.getLastResource(HealthRecordType.PATIENT_SUMMARY);
 
         Composition ps = (Composition)patientSummaryBundle.getEntryFirstRep().getResource();
@@ -33,6 +32,7 @@ public class R2DTest {
         for (Bundle.BundleEntryComponent entry : patientSummaryBundle.getEntry()) {
             System.out.println(entry.getResource().fhirType() + " with id: " + entry.getResource().getId());
         }
+        */
     }
 
 }

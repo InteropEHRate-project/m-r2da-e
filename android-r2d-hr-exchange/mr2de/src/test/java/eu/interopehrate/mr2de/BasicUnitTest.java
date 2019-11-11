@@ -1,18 +1,6 @@
 package eu.interopehrate.mr2de;
 
-import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.Composition;
-import org.hl7.fhir.r4.model.Reference;
 import org.junit.Test;
-
-import java.util.List;
-
-import eu.interopehrate.mr2de.api.HealthRecordType;
-import eu.interopehrate.mr2de.api.R2D;
-
-import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -23,8 +11,9 @@ public class BasicUnitTest {
 
     @Test
     public void testGetLastResourceForPatientSummary() {
-        // Get an instance of R2D
-        R2D mobileR2D = MobileR2DFactory.create("", "");
+        /*
+        // Get an instance of MR2D
+        MR2D mobileR2D = MobileR2DFactory.create("", "");
 
         // Inkove getLastResource() method to retrieve Patient Summary
         Bundle psBundle = (Bundle)mobileR2D.getLastResource(HealthRecordType.PATIENT_SUMMARY.PATIENT_SUMMARY);
@@ -56,6 +45,7 @@ public class BasicUnitTest {
         for (Composition.SectionComponent section : sections) {
             sectionCode = section.getCode().getCodingFirstRep();
         }
+        */
     }
 
 }

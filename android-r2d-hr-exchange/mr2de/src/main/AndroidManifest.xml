@@ -1,2 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="eu.interopehrate.mr2de" />
+    package="eu.interopehrate.mr2de" >
+
+    <application>
+        <provider
+            android:authorities="MR2DE.MR2DEContext"
+            android:exported="false"
+            android:enabled="true"
+            android:name=".MR2DEContext" />
+    </application>
+
+    <!-- uses-library android:name="org.andengine.extension.augmentedreality" android:required="true"/ -->
+
+</manifest>

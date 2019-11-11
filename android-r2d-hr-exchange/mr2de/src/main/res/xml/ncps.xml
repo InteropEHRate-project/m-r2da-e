@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ncplist xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ncp country="ITA" supportsFHIR="true" supportsEHDSI="false">http://hapi.fhir.org/baseR4</ncp>
+    <ncp country="BEL" supportsFHIR="true" supportsEHDSI="false">http://hapi.fhir.org/baseR4</ncp>
+    <ncp country="GRC" supportsFHIR="true" supportsEHDSI="false">http://hapi.fhir.org/baseR4</ncp>
+
+    <!-- Fake NCP used for switching MR2DE working locally for demo purposes only -->
+    <ncp country="FKE" supportsFHIR="false" supportsEHDSI="false"></ncp>
+
+</ncplist>
