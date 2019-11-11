@@ -39,8 +39,9 @@ public class MR2DOverFHIR implements MR2D {
         this.sessionToken = sessionToken;
 
         // Creates FHIRContext, this is an expensive operation performed once
-        // MUST BE MOVED elsewhere
+        // TODO: MUST BE MOVED elsewhere
         fhirContext = FhirContext.forR4();
+        // TODO: investigate if this setting is ok
         fhirContext.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
         fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
     }
