@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.Iterator;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BearerTokenAuthInterceptor;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
@@ -36,8 +38,11 @@ public class MR2DOverFHIR implements MR2D {
         this.ncp = ncp;
         this.sessionToken = sessionToken;
 
-        // Creates FHIRContext, this is an expensive operation
-        this.fhirContext = FhirContext.forR4();
+        // Creates FHIRContext, this is an expensive operation performed once
+        // MUST BE MOVED elsewhere
+        fhirContext = FhirContext.forR4();
+        fhirContext.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
+        fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
     }
 
 
