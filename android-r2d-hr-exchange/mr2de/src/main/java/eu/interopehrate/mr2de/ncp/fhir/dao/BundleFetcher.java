@@ -9,11 +9,15 @@ import java.util.Set;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 
+/**
+ *       Author: Engineering Ingegneria Informatica
+ *      Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: Class that fetches all the pages of a query and return a single bundle.
+ */
 class BundleFetcher {
 
     static void fetchRestOfBundle(IGenericClient theClient, Bundle theBundle) {
-        // we need to keep track of which resources are already in the bundle so that if other resources (e.g. Practitioner) are _included,
-        // we don't end up with multiple copies
         Set<String> resourcesAlreadyAdded = new HashSet<>();
         addInitialUrlsToSet(theBundle, resourcesAlreadyAdded);
         Bundle partialBundle = theBundle;

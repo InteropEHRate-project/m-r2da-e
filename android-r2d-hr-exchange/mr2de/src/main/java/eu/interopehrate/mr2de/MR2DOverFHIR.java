@@ -35,6 +35,7 @@ public class MR2DOverFHIR implements MR2D {
     private final FhirContext fhirContext;
 
     MR2DOverFHIR(NCPDescriptor ncp, String sessionToken) {
+        Log.d(getClass().getName(), "Created instance of MR2DOverFHIR. MR2DE IS WORKING IN FHIR MODALITY.");
         this.ncp = ncp;
         this.sessionToken = sessionToken;
 
