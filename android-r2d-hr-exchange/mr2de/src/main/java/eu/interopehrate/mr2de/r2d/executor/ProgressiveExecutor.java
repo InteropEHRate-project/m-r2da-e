@@ -2,6 +2,9 @@ package eu.interopehrate.mr2de.r2d.executor;
 
 import org.hl7.fhir.r4.model.Bundle;
 
+import eu.interopehrate.mr2de.api.HealthRecordBundle;
+import eu.interopehrate.mr2de.api.HealthRecordType;
+
 /**
  *       Author: Engineering Ingegneria Informatica
  *      Project: InteropEHRate - www.interopehrate.eu
@@ -15,18 +18,25 @@ import org.hl7.fhir.r4.model.Bundle;
 public interface ProgressiveExecutor {
 
     /**
-     * Starts the execution of a set of queries by submitting the first one.
+     * Starts a progressive execution.
      *
      * @return An instance of LazyIterator
      */
-    LazyIterator start(Arguments args);
+    HealthRecordBundle start(Arguments args);
 
 
     /**
-     * Executes the next step of the current execution. It means getting the
-     * next page of the current executing query, or starting a new one.
+     * Executes the next step of the current execution for the provided type.
      *
      * @return a FHIR Bundle
      */
-    Bundle next();
+    Bundle next(HealthRecordType type);
+
+
+    /**
+     *
+     * @return Returns all the HealthRecordType provided to the Executor
+     */
+    HealthRecordType[] getHealthRecordTypes();
+
 }

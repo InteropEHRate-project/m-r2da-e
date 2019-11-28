@@ -71,7 +71,7 @@ public class MobileR2DFactory {
                 country);
 
         // business logic
-        NCPDescriptor ncpDesc = NCPRegistry.getNCPByCountry(country);
+        NCPDescriptor ncpDesc = NCPRegistry.getNCPDescriptor(country);
         if (ncpDesc == null)
             throw new MR2DException("No NCP descriptor found for country: " + country);
 

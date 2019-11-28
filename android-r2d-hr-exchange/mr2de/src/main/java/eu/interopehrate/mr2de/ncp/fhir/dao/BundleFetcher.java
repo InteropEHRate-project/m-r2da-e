@@ -2,7 +2,6 @@ package eu.interopehrate.mr2de.ncp.fhir.dao;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.r4.model.api.IBaseBundle;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +21,7 @@ class BundleFetcher {
         addInitialUrlsToSet(theBundle, resourcesAlreadyAdded);
         Bundle partialBundle = theBundle;
         for (; ; ) {
-            if (partialBundle.getLink(IBaseBundle.LINK_NEXT) != null) {
+            if (partialBundle.getLink(Bundle.LINK_NEXT) != null) {
                 partialBundle = theClient.loadPage().next(partialBundle).execute();
                 addAnyResourcesNotAlreadyPresentToBundle(theBundle, partialBundle, resourcesAlreadyAdded);
             } else {

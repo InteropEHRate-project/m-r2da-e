@@ -39,7 +39,11 @@ public class ResourceDAO {
         if (tokens.length < 2)
             throw new IllegalArgumentException("Provided id is not a valid FHIR id: " + resourceURL);
 
-        return (Resource)fhirClient.read().resource(tokens[tokens.length - 2]).withUrl(resourceURL).execute();
+        return (Resource)fhirClient.read()
+                .resource(tokens[tokens.length - 2])
+                .withUrl(resourceURL)
+                .accept(GenericFHIRDAO.ACCEPT_JSON)
+                .execute();
     }
 
 }

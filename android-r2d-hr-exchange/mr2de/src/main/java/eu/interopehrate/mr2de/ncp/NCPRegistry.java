@@ -7,7 +7,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -56,7 +58,7 @@ public final class NCPRegistry {
      * @param iso3166Alpha3Country: three letters country code as specified in ISO 3166
      * @return the corresponding NCDDescriptor instance;
      */
-    public static NCPDescriptor getNCPByCountry(String iso3166Alpha3Country) {
+    public static NCPDescriptor getNCPDescriptor(String iso3166Alpha3Country) {
         if (iso3166Alpha3Country == null || iso3166Alpha3Country.isEmpty())
             throw new IllegalArgumentException("MR2D precondition error: Argument 'country' cannot be null or empty.");
 
@@ -64,4 +66,12 @@ public final class NCPRegistry {
         return registry.get(iso3166Alpha3Country);
     }
 
+    /**
+     *
+     * @param
+     * @return the list of NCP descriptors;
+     */
+    public static Collection<NCPDescriptor> getNCPDescriptors() {
+        return NCPRegistry.registry.values();
+    }
 }

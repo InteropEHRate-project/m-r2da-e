@@ -2,16 +2,19 @@ package eu.interopehrate.mr2de;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+
 import org.hl7.fhir.r4.model.Resource;
 
 import java.util.Date;
-import java.util.Iterator;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BearerTokenAuthInterceptor;
+import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
@@ -20,6 +23,7 @@ import eu.interopehrate.mr2de.ncp.fhir.dao.FHIRDaoFactory;
 import eu.interopehrate.mr2de.ncp.fhir.dao.GenericFHIRDAO;
 import eu.interopehrate.mr2de.ncp.fhir.dao.ResourceDAO;
 import eu.interopehrate.mr2de.ncp.fhir.executor.FHIRProgressiveExecutor;
+import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 
 /**
@@ -48,8 +52,12 @@ public class MR2DOverFHIR implements MR2D {
     }
 
 
-    public Iterator<Resource> getRecords(HealthRecordType[] hrTypes, Date from, ResponseFormat responseFormat) {
-        Log.d(getClass().getName(), "Starting execution of method getRecords()");
+    @NonNull
+    @WorkerThread
+    public HealthRecordBundle getRecords(@NonNull HealthRecordType[] hrTypes,
+                                         @NonNull Date from,
+                                         @NonNull ResponseFormat responseFormat) {
+        Log.d(getClass().getName(), "Execution of method getRecords() STARTED.");
 
         // Preconditions checks
         if (hrTypes == null || hrTypes.length == 0)
@@ -60,23 +68,35 @@ public class MR2DOverFHIR implements MR2D {
 
         // Business Logic
         try {
+            // Creates executor
             FHIRProgressiveExecutor executor = new FHIRProgressiveExecutor(createFHIRClient(), hrTypes);
 
+            // Creates Arguments
             Arguments args = new Arguments();
-            // TODO: dove definire i nomi dei parametri???
-            if (from != null)
-                args.add("FROM", from);
+            args.add(ArgumentName.RESPONSE_FORMAT, responseFormat);
+            if (from != null) args.add(ArgumentName.FROM, from);
 
+            // Starts Execution
             return executor.start(args);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception in method getRecords()", e);
             throw new MR2DException(e);
+        } finally {
+            Log.d(getClass().getName(), "Execution of method getRecords() HAS_STARTED (completion has been delegated to progressive executor)");
         }
     }
 
+
     @Override
-    public Resource getLastRecord(HealthRecordType hrType, ResponseFormat responseFormat) {
-        Log.d(getClass().getName(), "Starting execution of method getLastResource()");
+    public HealthRecordBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
+        return getRecords(HealthRecordType.values(), from, responseFormat);
+    }
+
+    @NonNull
+    @Override
+    @WorkerThread
+    public Resource getLastRecord(@NonNull HealthRecordType hrType, @NonNull ResponseFormat responseFormat) {
+        Log.d(getClass().getName(), "Execution of method getLastResource() STARTED.");
 
         // Preconditions checks
         if (hrType == null)
@@ -92,12 +112,17 @@ public class MR2DOverFHIR implements MR2D {
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception in method getLastResource()", e);
             throw new MR2DException(e);
+        } finally {
+            Log.d(getClass().getName(), "Execution of method getLastResource() COMPLETED.");
         }
     }
 
+
+    @NonNull
     @Override
-    public Resource getRecord(String resId, ResponseFormat responseFormat) {
-        Log.d(getClass().getName(), "Starting execution of method getRecord()");
+    @WorkerThread
+    public Resource getRecord(@NonNull String resId, @NonNull ResponseFormat responseFormat) {
+        Log.d(getClass().getName(), "Execution of method getRecord() STARTED.");
 
         // Preconditions checks
         if (resId == null || resId.isEmpty())
@@ -113,12 +138,15 @@ public class MR2DOverFHIR implements MR2D {
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception in method getLastResource()", e);
             throw new MR2DException(e);
+        } finally {
+            Log.d(getClass().getName(), "Execution of method getRecord() COMPLETED.");
         }
     }
 
     /*
      * Creates instances of IGenericClient for interacting with remote FHIR server
      */
+    @NonNull
     private IGenericClient createFHIRClient() {
         IGenericClient fC = fhirContext.newRestfulGenericClient(ncp.getEndpoint());
         fC.registerInterceptor(new BearerTokenAuthInterceptor(this.sessionToken));

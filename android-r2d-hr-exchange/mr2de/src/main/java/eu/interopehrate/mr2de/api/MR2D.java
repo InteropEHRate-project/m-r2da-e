@@ -1,8 +1,11 @@
 package eu.interopehrate.mr2de.api;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+
 import org.hl7.fhir.r4.model.Resource;
 
-import javax.annotation.Nonnull;
+import java.util.Date;
 
 import eu.interopehrate.mr2de.MR2DException;
 
@@ -17,20 +20,23 @@ public interface MR2D {
 
     /**
      *
-     * @param hrTypes: array containing the requested health data types
-     * @param from: date from which health data must be retrieved
-     * @param responseFormat: the format of returned data (structured or unstructured)
+     * @param hrTypes : array containing the requested health data types
+     * @param from : date from which health data must be retrieved
+     * @param responseFormat : the format of returned data (structured or unstructured)
      * @return
-    public Iterator<Resource> getRecords(HealthRecordType[] hrTypes, Date from, ResponseFormat responseFormat) throws MR2DException;
      */
+    public HealthRecordBundle getRecords(HealthRecordType[] hrTypes,
+                                         Date from,
+                                         ResponseFormat responseFormat) throws MR2DException;
 
     /**
      *
-     * @param from: date from which health data must be retrieved
-     * @param responseFormat: the format of returned data (structured or unstructured)
+     * @param from : date from which health data must be retrieved
+     * @param responseFormat : the format of returned data (structured or unstructured)
      * @return
-    public Iterator<Resource> getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException;
      */
+    public HealthRecordBundle getAllRecords(Date from,
+                                            ResponseFormat responseFormat) throws MR2DException;
 
 
     /**
@@ -41,7 +47,10 @@ public interface MR2D {
      *
      * @return the last instace (more recent) of the specific medical data type passed as argument.
      */
-    public Resource getLastRecord(HealthRecordType hrType, ResponseFormat responseFormat) throws MR2DException;
+    @NonNull
+    @WorkerThread
+    public Resource getLastRecord(@NonNull HealthRecordType hrType,
+                                  @NonNull ResponseFormat responseFormat) throws MR2DException;
 
 
     /**
@@ -52,6 +61,9 @@ public interface MR2D {
      *
      * @return an instance of Resource corresponding to the one identified by the id, otherwise null
      */
-    public Resource getRecord(String resId, ResponseFormat responseFormat) throws MR2DException;
+    @NonNull
+    @WorkerThread
+    public Resource getRecord(@NonNull String resId,
+                              @NonNull ResponseFormat responseFormat) throws MR2DException;
 
 }

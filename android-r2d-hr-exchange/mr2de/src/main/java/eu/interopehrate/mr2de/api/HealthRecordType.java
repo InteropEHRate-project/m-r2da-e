@@ -11,7 +11,8 @@ package eu.interopehrate.mr2de.api;
 public enum HealthRecordType {
 
     PATIENT_SUMMARY
-    /*,PRESCRIPTION
+    /*,OBSERVATION
+    ,PRESCRIPTION
     ,LABORATORY_REPORT
     ,MEDICAL_IMAGE
     ,DISCHARGE_REPORT*/

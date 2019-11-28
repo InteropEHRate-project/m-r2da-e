@@ -1,6 +1,10 @@
 package eu.interopehrate.mr2de.r2d.executor;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -11,15 +15,28 @@ import java.util.Map;
  */
 public class Arguments {
 
-    private Map<String, Argument> args = new HashMap<String, Argument>();
+    private Map<ArgumentName, Argument> args = new Hashtable<>();
 
-    public Arguments add(String name, Object value) {
+    public Arguments add(@NonNull ArgumentName name, @NonNull Object value) {
         args.put(name, new Argument(name, value));
         return this;
     }
 
-    public Argument getByName(String name) {
+    public boolean hasArgument(@NonNull ArgumentName name) {
+        return args.containsKey(name);
+    }
+
+    @Nullable
+    public Argument getByName(@NonNull ArgumentName name) {
         return args.get(name);
+    }
+
+    @Nullable
+    public Object getValueByName(@NonNull ArgumentName name) {
+        if (args.containsKey(name))
+            return args.get(name).getValue();
+
+        return null;
     }
 
     @Override
