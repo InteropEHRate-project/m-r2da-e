@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // Creating a Patient from Country FKE for connceting to FAKE MR2D
                 Patient p = new Patient();
-                //p.addAddress().setCountry("FKE");
-                p.addAddress().setCountry("ITA");
+                p.addAddress().setCountry("FKE");
+                //p.addAddress().setCountry("ITA");
                 try {
                     mr2d = MobileR2DFactory.create(p, "abc-def-ghi-lmn");
                     findViewById(R.id.getLastButton).setEnabled(true);

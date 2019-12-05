@@ -8,7 +8,6 @@ import java.util.Locale;
 
 import eu.interopehrate.mr2de.ncp.NCPDescriptor;
 import eu.interopehrate.mr2de.ncp.NCPRegistry;
-import eu.interopehrate.mr2de.ncp.fhir.fake.FHIRFakeMobileMR2D;
 import eu.interopehrate.mr2de.api.MR2D;
 
 /**
@@ -82,6 +81,6 @@ public class MobileR2DFactory {
             throw new IllegalArgumentException("NCP adopting only eHDSI protocol are not supported yet.");
 
         // Used only for testing purposes or for demo
-        return new FHIRFakeMobileMR2D();
+        return new MR2DOverLocal();
     }
 }

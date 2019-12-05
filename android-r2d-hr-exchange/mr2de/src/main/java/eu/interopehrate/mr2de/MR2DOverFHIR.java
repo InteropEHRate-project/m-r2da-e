@@ -32,7 +32,7 @@ import eu.interopehrate.mr2de.r2d.executor.Arguments;
  *
  *  Description: Concrete implementation of MR2D working with FHIR protocol
  */
-public class MR2DOverFHIR implements MR2D {
+class MR2DOverFHIR implements MR2D {
 
     private final NCPDescriptor ncp;
     private final String sessionToken;

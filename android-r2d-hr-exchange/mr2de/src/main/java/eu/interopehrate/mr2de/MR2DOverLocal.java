@@ -1,4 +1,4 @@
-package eu.interopehrate.mr2de.ncp.fhir.fake;
+package eu.interopehrate.mr2de;
 
 import android.content.Context;
 import android.util.Log;
@@ -17,21 +17,19 @@ import java.util.Scanner;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
-import eu.interopehrate.mr2de.MR2DEContext;
-import eu.interopehrate.mr2de.MR2DException;
-import eu.interopehrate.mr2de.R;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
+import eu.interopehrate.mr2de.r2d.executor.DefaultHealthRecordBundle;
 
-public class FHIRFakeMobileMR2D implements MR2D {
+class MR2DOverLocal implements MR2D {
 
     private Bundle patientSummary;
     private final FhirContext fhirContext;
 
-    public FHIRFakeMobileMR2D() {
-        Log.d(getClass().getName(), "Created instance of FHIRFakeMobileMR2D. MR2DE IS WORKING IN MOCK MODALITY.");
+    MR2DOverLocal() {
+        Log.d(getClass().getName(), "Created instance of MR2DOverLocal. MR2DE IS WORKING IN MOCK MODALITY.");
         fhirContext = FhirContext.forR4();
         fhirContext.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
         fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
@@ -40,13 +38,19 @@ public class FHIRFakeMobileMR2D implements MR2D {
 
     @Override
     public HealthRecordBundle getRecords(HealthRecordType[] hrTypes, Date from, ResponseFormat responseFormat) throws MR2DException {
-        return null;
+        Log.d(getClass().getName(), "Execution of method getRecords() STARTED.");
+        Bundle ps = (Bundle)getLastRecord(HealthRecordType.PATIENT_SUMMARY, responseFormat);
+
+        Log.d(getClass().getName(), "Execution of method getRecords() COMPLETED.");
+        return new DefaultHealthRecordBundle(ps, HealthRecordType.PATIENT_SUMMARY);
     }
 
     @Override
     public HealthRecordBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
-        return null;
-        //return getLastRecord(HealthRecordType.PATIENT_SUMMARY, responseFormat);
+        Log.d(getClass().getName(), "Execution of method getAllRecords() STARTED.");
+        HealthRecordBundle hrb = getRecords(HealthRecordType.values(), from, responseFormat);
+        Log.d(getClass().getName(), "Execution of method getAllRecords() COMPLETED.");
+        return hrb;
     }
 
     @NonNull
@@ -71,6 +75,7 @@ public class FHIRFakeMobileMR2D implements MR2D {
                 patientSummary = (Bundle)fhirContext.newJsonParser().parseResource(sb.toString());
             }
             bundle = patientSummary;
+            bundle.setUserData(HealthRecordType.class.getName(), HealthRecordType.PATIENT_SUMMARY);
         }
 
         Log.d(getClass().getName(), "Execution of method getLastResource() COMPLETED.");

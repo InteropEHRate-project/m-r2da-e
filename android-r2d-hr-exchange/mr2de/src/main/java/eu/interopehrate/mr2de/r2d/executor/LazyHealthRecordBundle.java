@@ -8,6 +8,13 @@ import org.hl7.fhir.r4.model.Resource;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 
+/**
+ *       Author: Engineering Ingegneria Informatica
+ *      Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: See HealthRecordBundle class.
+ *
+ */
 public class LazyHealthRecordBundle implements HealthRecordBundle {
 
     private HealthRecordType current;
