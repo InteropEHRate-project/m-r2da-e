@@ -55,9 +55,11 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
         // If needed, retrieves other pages composing the PS Bundle
         // PatientSummary MUST be retrieved in a single interaction
         // even is a multi page one.
-        if (results.getLink(Bundle.LINK_NEXT) != null) {
+        if (results.getLink(Bundle.LINK_NEXT) != null)
             BundleFetcher.fetchRestOfBundle(this.fhirClient, results);
-        }
+
+        // IMPORTANT: Sets total equals to size of contained entries
+        results.setTotal(results.getEntry().size());
 
         return results;
     }

@@ -76,6 +76,7 @@ class MR2DOverLocal implements MR2D {
             }
             bundle = patientSummary;
             bundle.setUserData(HealthRecordType.class.getName(), HealthRecordType.PATIENT_SUMMARY);
+            bundle.setTotal(bundle.getEntry().size());
         }
 
         Log.d(getClass().getName(), "Execution of method getLastResource() COMPLETED.");

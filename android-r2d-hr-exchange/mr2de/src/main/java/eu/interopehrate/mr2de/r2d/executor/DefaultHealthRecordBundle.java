@@ -75,10 +75,8 @@ public class DefaultHealthRecordBundle implements HealthRecordBundle {
         Bundle bundle = bundles.get(type);
         if (bundle == null)
             return 0;
-        else if (bundle.getTotal() != 0)
-            return bundle.getTotal();
         else
-            return bundle.getEntry().size();
+            return bundle.getTotal();
     }
 
 }

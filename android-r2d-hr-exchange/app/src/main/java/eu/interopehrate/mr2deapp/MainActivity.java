@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 // Creating a Patient from Country FKE for connceting to FAKE MR2D
                 Patient p = new Patient();
                 p.addAddress().setCountry("FKE");
-                //p.addAddress().setCountry("ITA");
+                // p.addAddress().setCountry("ITA");
                 try {
                     mr2d = MobileR2DFactory.create(p, "abc-def-ghi-lmn");
                     findViewById(R.id.getLastButton).setEnabled(true);
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GregorianCalendar gc = new GregorianCalendar(2019, Calendar.NOVEMBER, 26);
+                GregorianCalendar gc = new GregorianCalendar(2019, Calendar.DECEMBER, 2);
                 (new GetRecords()).execute(gc.getTime());
             }
         });
@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
                     currentType = t;
                     while (bundle.hasNext(currentType)) {
                         Resource r = bundle.next(currentType);
+                        // Log.d(getClass().getName(), r.getId());
                         // simulate saving resource to DB
                         try {
                             Thread.sleep(10);
