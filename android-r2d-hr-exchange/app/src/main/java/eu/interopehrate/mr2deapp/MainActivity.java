@@ -167,6 +167,10 @@ public class MainActivity extends AppCompatActivity {
         private TextView progressLabel = (TextView) findViewById(R.id.progressLabel);
 
         @Override
+        /*
+         * Used to write the total number of records downloaded
+         * at the end of the "doInBackground" method
+         */
         protected void onPostExecute(HealthRecordBundle bundle) {
             progressLabel.setText("Downloaded " +  totalRecords + " records.");
             int i = ((ProgressBar) findViewById(R.id.progressBar)).getProgress();
@@ -180,15 +184,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        /*
+         * Used to update the progress bar. It shows the type whose download
+         * is running and the number of records downloaded compared to the
+         * total.
+         */
         protected void onProgressUpdate(HealthRecordBundle... bundles) {
             progressLabel.setText("Downloading " + currentType + "...");
-            if (numRecords == 1)
+            if (numRecords == 1) // sets the max to the progress bar
                 progressBar.setMax(bundles[0].getTotal(currentType));
 
             progressBar.setProgress(numRecords);
         }
 
         @Override
+        /*
+         * Executes the getAllRecords methods, that may cause the submission
+         * of an undefined number of REST invocations to the server. Invocations
+         * are executed in a lazy way during iterations of results. This is the reason
+         * also the oteration must be performed in the "doInBackground" method.
+         */
         protected HealthRecordBundle doInBackground(Object... args) {
             HealthRecordBundle bundle = null;
             HealthRecordType cu = null;
