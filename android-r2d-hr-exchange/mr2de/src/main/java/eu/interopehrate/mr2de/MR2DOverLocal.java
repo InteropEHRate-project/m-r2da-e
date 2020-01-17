@@ -21,6 +21,7 @@ import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
+import eu.interopehrate.mr2de.exceptions.MR2DException;
 import eu.interopehrate.mr2de.r2d.executor.DefaultHealthRecordBundle;
 
 class MR2DOverLocal implements MR2D {

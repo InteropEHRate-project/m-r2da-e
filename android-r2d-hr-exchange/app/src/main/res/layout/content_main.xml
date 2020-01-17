@@ -7,30 +7,46 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MR2DE Test App"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="MR2D Test App"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.102" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="344dp"
-        android:layout_height="479dp"
+        android:id="@+id/linearLayout_1"
+        android:layout_width="337dp"
+        android:layout_height="171dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.462">
+        app:layout_constraintTop_toBottomOf="@id/title">
+
+        <Switch
+            android:id="@+id/fakeSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:text=" Fake mode"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/patientSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="0dp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="20dp" />
 
         <Button
             android:id="@+id/createButton"
@@ -38,27 +54,41 @@
             android:layout_height="60dp"
             android:text="Instantiate MR2DE" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_2"
+        android:layout_width="338dp"
+        android:layout_height="339dp"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_1"
+        app:layout_constraintVertical_bias="0.445">
+
         <Space
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/getLastButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:enabled="false"
-            android:text="Get_Last_Patient_Summary" />
+            android:text="Get_Last_PatientSummary()" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="20dp" />
 
         <Button
             android:id="@+id/getAllButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:enabled="false"
-            android:text="GET_ALL_RECORDS" />
+            android:text="Get_All_Records()" />
 
         <TextView
             android:id="@+id/progressLabel"
@@ -74,14 +104,14 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="20dp" />
 
         <Button
             android:id="@+id/getRecordButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:enabled="false"
-            android:text="GET_RECORD" />
+            android:text="Get_Record()" />
 
         <EditText
             android:id="@+id/resIdText"
@@ -97,18 +127,5 @@
             android:layout_height="10dp" />
 
     </LinearLayout>
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -21,7 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import eu.interopehrate.mr2de.MR2DException;
+import eu.interopehrate.mr2de.exceptions.MR2DException;
 import eu.interopehrate.mr2de.MobileR2DFactory;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
@@ -29,32 +32,59 @@ import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String MARIO_ROSSI = "Mario Rossi";
+    private static final String MARIO_ROSSI_SESSION = "f70e7d7e-ad8a-478d-9e02-2499e37fb7a8";
+
+    private static final String CARLA_VERDI = "Carla Verdi";
+    private static final String CARLA_VERDI_SESSION = "7cde8fcd-dccd-47e1-ba25-e2fd96813649";
 
     private MR2D mr2d;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Spinner for Patient
+        Spinner patientSpinner = (Spinner)findViewById(R.id.patientSpinner);
+        patientSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item,
+                new String[]{MARIO_ROSSI, CARLA_VERDI}));
+
+        // Button for MR2D instantiation
         Button b = findViewById(R.id.createButton);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mr2d != null)
-                    return;
-
-                // Creating a Patient from Country FKE for connceting to FAKE MR2D
-                Patient p = new Patient();
-                p.addAddress().setCountry("FKE");
-                // p.addAddress().setCountry("ITA");
                 try {
-                    mr2d = MobileR2DFactory.create(p, "abc-def-ghi-lmn");
+                    // Creating a Patient for connecting to MR2D
+                    Patient p = new Patient();
+
+                    // Checks selected Patient
+                    String session = MARIO_ROSSI_SESSION;
+                    if (patientSpinner.getSelectedItem().equals(CARLA_VERDI))
+                        session = CARLA_VERDI_SESSION;
+
+                    // Sets patient's reference NCP
+                    if (((Switch)findViewById(R.id.fakeSwitch)).isChecked())
+                        p.addAddress().setCountry("FKE");
+                    else
+                        p.addAddress().setCountry("ITA");
+
+                    // Creates an instance of MR2D
+                    mr2d = MobileR2DFactory.create(p, session);
+
+                    // Disable all buttons
                     findViewById(R.id.getLastButton).setEnabled(true);
                     findViewById(R.id.getAllButton).setEnabled(true);
                     findViewById(R.id.getRecordButton).setEnabled(true);
                     findViewById(R.id.resIdText).setEnabled(true);
+                    /*
+                    patientSpinner.setEnabled(false);
+                    findViewById(R.id.fakeSwitch).setEnabled(false);
                     findViewById(R.id.createButton).setEnabled(false);
+                     */
                 } catch (MR2DException e) {
                     Log.e(getClass().getName(), "Error while loading MR2D", e);
                 }
@@ -111,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(org.hl7.fhir.r4.model.Bundle psBundle) {
             StringBuilder sb = new StringBuilder();
-            if (psBundle.getEntry().size() == 0)
+            if (psBundle == null || psBundle.getEntry().size() == 0)
                 sb.append("No last resource found.");
             else {
                 Composition ps = (Composition)psBundle.getEntryFirstRep().getResource();
@@ -173,9 +203,6 @@ public class MainActivity extends AppCompatActivity {
          */
         protected void onPostExecute(HealthRecordBundle bundle) {
             progressLabel.setText("Downloaded " +  totalRecords + " records.");
-            int i = ((ProgressBar) findViewById(R.id.progressBar)).getProgress();
-            // Snackbar.make(findViewById(R.id.getRecordButton), "Downloaded  " +  totalRecords +
-            //        " records from NCP.", Snackbar.LENGTH_LONG).show();
         }
 
         @Override
@@ -190,6 +217,9 @@ public class MainActivity extends AppCompatActivity {
          * total.
          */
         protected void onProgressUpdate(HealthRecordBundle... bundles) {
+            if (bundles[0] == null)
+                return;
+
             progressLabel.setText("Downloading " + currentType + "...");
             if (numRecords == 1) // sets the max to the progress bar
                 progressBar.setMax(bundles[0].getTotal(currentType));

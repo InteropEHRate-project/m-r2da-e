@@ -18,7 +18,9 @@ import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
+import eu.interopehrate.mr2de.exceptions.MR2DException;
 import eu.interopehrate.mr2de.ncp.NCPDescriptor;
+import eu.interopehrate.mr2de.ncp.fhir.ExceptionDetector;
 import eu.interopehrate.mr2de.ncp.fhir.dao.FHIRDaoFactory;
 import eu.interopehrate.mr2de.ncp.fhir.dao.GenericFHIRDAO;
 import eu.interopehrate.mr2de.ncp.fhir.dao.ResourceDAO;
@@ -43,9 +45,9 @@ class MR2DOverFHIR implements MR2D {
         this.ncp = ncp;
         this.sessionToken = sessionToken;
 
-        // Creates FHIRContext, this is an expensive operation performed once
-        // TODO: MUST BE MOVED elsewhere
+        // Creates FHIRContext, this is an expensive operation must be performed once
         fhirContext = FhirContext.forR4();
+
         // TODO: investigate if this setting is ok
         fhirContext.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
         fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
@@ -80,7 +82,7 @@ class MR2DOverFHIR implements MR2D {
             return executor.start(args);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception in method getRecords()", e);
-            throw new MR2DException(e);
+            throw ExceptionDetector.detectException(e);
         } finally {
             Log.d(getClass().getName(), "Execution of method getRecords() HAS_STARTED (completion has been delegated to progressive executor)");
         }
@@ -111,7 +113,7 @@ class MR2DOverFHIR implements MR2D {
             return fhirDao.getLast();
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception in method getLastResource()", e);
-            throw new MR2DException(e);
+            throw ExceptionDetector.detectException(e);
         } finally {
             Log.d(getClass().getName(), "Execution of method getLastResource() COMPLETED.");
         }
@@ -137,7 +139,7 @@ class MR2DOverFHIR implements MR2D {
             return resourceDAO.read(resId);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Exception in method getLastResource()", e);
-            throw new MR2DException(e);
+            throw ExceptionDetector.detectException(e);
         } finally {
             Log.d(getClass().getName(), "Execution of method getRecord() COMPLETED.");
         }
@@ -149,7 +151,9 @@ class MR2DOverFHIR implements MR2D {
     @NonNull
     private IGenericClient createFHIRClient() {
         IGenericClient fC = fhirContext.newRestfulGenericClient(ncp.getEndpoint());
+        Log.d(getClass().getName(), "Creating FHIR client for session: " + this.sessionToken);
         fC.registerInterceptor(new BearerTokenAuthInterceptor(this.sessionToken));
         return fC;
     }
+
 }

@@ -1,31 +1,32 @@
 {
   "resourceType": "Bundle",
-  "id": "48d2b8bf-9baa-49cd-9655-28a9029e5f04",
+  "id": "9b3d4ddf-788a-4004-926a-cc865dd4391b",
   "meta": {
-    "lastUpdated": "2019-11-11T14:59:28.374+00:00"
+    "lastUpdated": "2020-01-13T15:04:18.781+01:00"
   },
   "type": "searchset",
   "total": 1,
   "link": [
     {
       "relation": "self",
-      "url": "http://hapi.fhir.org/baseR4/Composition?_count=1&_include=*&_pretty=true&_sort=-date&type=http%3A%2F%2Floinc.org%7C60591-5"
+      "url": "http://localhost:8080/NCP/fhir/Composition?_count=1&_include=*&patient=Patient%2F33&type=http%3A%2F%2Floinc.org%7C60591-5"
     }
   ],
   "entry": [
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Composition/58979",
+      "fullUrl": "http://localhost:8080/NCP/fhir/Composition/1",
       "resource": {
         "resourceType": "Composition",
-        "id": "58979",
+        "id": "1",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
             "http://hl7.org/fhir/uv/ips/StructureDefinition/composition-uv-ips"
           ]
         },
+        "language": "it-IT",
         "status": "final",
         "type": {
           "coding": [
@@ -37,117 +38,135 @@
           ]
         },
         "subject": {
-          "reference": "Patient/59011"
+          "reference": "Patient/33"
         },
-        "date": "2019-11-11T15:56:59+01:00",
+        "date": "2015-01-01T00:00:00+01:00",
         "author": [
           {
-            "reference": "Practitioner/59010"
+            "reference": "Practitioner/32"
           }
         ],
-        "title": "Patient Summary of patient Mario Rossi",
+        "title": "Patient Summary di: Mario Rossi",
         "attester": [
           {
             "mode": "legal",
-            "time": "2019-11-11T15:56:59+01:00",
+            "time": "2015-01-01T00:00:00+01:00",
             "party": {
-              "reference": "Practitioner/59010"
+              "reference": "Practitioner/32"
             }
           },
           {
             "mode": "legal",
-            "time": "2019-11-11T15:56:59+01:00",
+            "time": "2015-01-01T00:00:00+01:00",
             "party": {
-              "reference": "Organization/59012"
+              "reference": "Organization/34"
             }
           }
         ],
         "custodian": {
-          "reference": "Organization/59012"
+          "reference": "Organization/34"
         },
         "section": [
           {
-            "code": {
-              "coding": [
-                {
-                  "system": "http://loinc.org",
-                  "code": "48765-2",
-                  "display": "Allergies and Intolerances"
-                }
-              ]
-            },
-            "entry": [
-              {
-                "reference": "AllergyIntolerance/58980"
-              }
-            ]
-          },
-          {
+            "title": "Problemi attivi",
             "code": {
               "coding": [
                 {
                   "system": "http://loinc.org",
                   "code": "11450-4",
-                  "display": "Active Problems"
+                  "display": "Problemi attivi"
                 }
               ]
             },
             "entry": [
               {
-                "reference": "Condition/58993"
+                "reference": "Condition/4"
               },
               {
-                "reference": "Condition/58994"
+                "reference": "Condition/3"
               }
             ]
           },
           {
+            "title": "Medicinali",
             "code": {
               "coding": [
                 {
                   "system": "http://loinc.org",
                   "code": "10160-0",
-                  "display": "Medication"
+                  "display": "Medicinali"
                 }
               ]
             },
             "entry": [
               {
-                "reference": "MedicationStatement/58981"
+                "reference": "MedicationStatement/16"
               },
               {
-                "reference": "MedicationStatement/58982"
+                "reference": "MedicationStatement/14"
               },
               {
-                "reference": "MedicationStatement/58983"
+                "reference": "MedicationStatement/13"
               },
               {
-                "reference": "MedicationStatement/58984"
+                "reference": "MedicationStatement/11"
               },
               {
-                "reference": "MedicationStatement/58985"
+                "reference": "MedicationStatement/15"
               },
               {
-                "reference": "MedicationStatement/58986"
+                "reference": "MedicationStatement/12"
               }
             ]
           },
           {
+            "title": "Allergie ed Intolleranze",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "48765-2",
+                  "display": "Allergie ed Intolleranze"
+                }
+              ]
+            },
+            "entry": [
+              {
+                "reference": "AllergyIntolerance/2"
+              }
+            ]
+          },
+          {
+            "title": "Parametri Vitali",
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "8716-3",
+                  "display": "Parametri Vitali"
+                }
+              ]
+            },
+            "entry": [
+              {
+                "reference": "Observation/26"
+              }
+            ]
+          },
+          {
+            "title": "Test diagnostici rilevanti e/o dati di laboratorio",
             "code": {
               "coding": [
                 {
                   "system": "http://loinc.org",
                   "code": "30954-2",
-                  "display": "Relevant diagnostic tests and/or laboratory data "
+                  "display": "Test diagnostici rilevanti e/o dati di laboratorio"
                 }
               ]
             },
             "entry": [
               {
-                "reference": "Observation/58995"
-              },
-              {
-                "reference": "Observation/58996"
+                "reference": "Observation/28"
               }
             ]
           }
@@ -158,14 +177,14 @@
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Practitioner/59010",
+      "fullUrl": "http://localhost:8080/NCP/fhir/Practitioner/32",
       "resource": {
         "resourceType": "Practitioner",
-        "id": "59010",
+        "id": "32",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p"
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn"
         },
         "identifier": [
           {
@@ -214,18 +233,18 @@
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Patient/59011",
+      "fullUrl": "http://localhost:8080/NCP/fhir/Patient/33",
       "resource": {
         "resourceType": "Patient",
-        "id": "59011",
+        "id": "33",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p"
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn"
         },
         "text": {
           "status": "generated",
-          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Mario <b>ROSSI </b></div><table class=\"hapiPropertyTable\"><tbody><tr><td>Identifier</td><td>RSSMRA60A01D663E</td></tr><tr><td>Address</td><td><span>Piazza del Duomo </span><br/><span>Pisa </span><span>Italia </span></td></tr><tr><td>Date of birth</td><td><span>01 January 1960</span></td></tr></tbody></table></div>"
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">Mario <b>ROSSI </b></div><table class=\"hapiPropertyTable\"><tbody><tr><td>Identifier</td><td>RSSMRA60A01D663E</td></tr><tr><td>Address</td><td><span>Piazza del Duomo </span><br/><span>Pisa </span><span>Italia </span></td></tr><tr><td>Date of birth</td><td><span>01 gennaio 1960</span></td></tr></tbody></table></div>"
         },
         "identifier": [
           {
@@ -268,9 +287,22 @@
             "postalCode": "56011"
           }
         ],
+        "communication": [
+          {
+            "language": {
+              "coding": [
+                {
+                  "code": "it-IT",
+                  "display": "Italian"
+                }
+              ]
+            },
+            "preferred": true
+          }
+        ],
         "generalPractitioner": [
           {
-            "reference": "Practitioner/59010"
+            "reference": "Practitioner/32"
           }
         ]
       },
@@ -279,14 +311,66 @@
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Organization/59012",
+      "fullUrl": "http://localhost:8080/NCP/fhir/AllergyIntolerance/2",
       "resource": {
-        "resourceType": "Organization",
-        "id": "59012",
+        "resourceType": "AllergyIntolerance",
+        "id": "2",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p"
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
+          "profile": [
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/allergyintolerance-uv-ips"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-ver-status",
+              "code": "confirmed"
+            }
+          ]
+        },
+        "type": "allergy",
+        "category": [
+          "medication"
+        ],
+        "criticality": "high",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "373270004",
+              "display": "Penicillina -classe di antibiotico-"
+            }
+          ]
+        },
+        "patient": {
+          "reference": "Patient/33"
+        },
+        "onsetDateTime": "2010"
+      },
+      "search": {
+        "mode": "include"
+      }
+    },
+    {
+      "fullUrl": "http://localhost:8080/NCP/fhir/Organization/34",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "34",
+        "meta": {
+          "versionId": "1",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn"
         },
         "identifier": [
           {
@@ -312,241 +396,142 @@
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/AllergyIntolerance/58980",
+      "fullUrl": "http://localhost:8080/NCP/fhir/Condition/3",
       "resource": {
-        "resourceType": "AllergyIntolerance",
-        "id": "58980",
+        "resourceType": "Condition",
+        "id": "3",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/allergyintolerance-uv-ips"
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/condition-uv-ips"
           ]
         },
-        "type": "allergy",
-        "category": [
-          "medication"
-        ],
-        "criticality": "high",
-        "code": {
+        "clinicalStatus": {
           "coding": [
             {
-              "system": "http://snomed.info/sct",
-              "code": "373270004",
-              "display": "Penicillin -class of antibiotic- (substance)"
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
             }
           ]
         },
-        "patient": {
-          "reference": "Patient/59011"
-        },
-        "onsetDateTime": "2010"
-      },
-      "search": {
-        "mode": "include"
-      }
-    },
-    {
-      "fullUrl": "http://hapi.fhir.org/baseR4/MedicationStatement/58981",
-      "resource": {
-        "resourceType": "MedicationStatement",
-        "id": "58981",
-        "meta": {
-          "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed"
+            }
           ]
         },
-        "status": "active",
-        "medicationReference": {
-          "reference": "Medication/58987"
-        },
-        "subject": {
-          "reference": "Patient/59011"
-        },
-        "dosage": [
+        "category": [
           {
-            "patientInstruction": "1 cps, 200mg x 2 die (8:00 - 20:00)",
-            "timing": {
-              "repeat": {
-                "frequency": 2,
-                "period": 1,
-                "periodUnit": "d",
-                "timeOfDay": [
-                  "08:00",
-                  "20:00"
-                ]
-              }
-            },
-            "route": {
-              "coding": [
-                {
-                  "system": "http://snomed.info/sct",
-                  "code": "26643006",
-                  "display": "Oral use"
-                }
-              ]
-            },
-            "doseAndRate": [
+            "coding": [
               {
-                "doseQuantity": {
-                  "value": 200,
-                  "unit": "mg",
-                  "system": "http://unitsofmeasure.org",
-                  "code": "mg"
-                }
+                "system": "http://loinc.org",
+                "code": "75326-9",
+                "display": "Problema"
               }
             ]
           }
-        ]
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-9",
+              "code": "428.1",
+              "display": "Insufficienza del cuore sinistro (scompenso cardiaco Sinistro)"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/33"
+        },
+        "onsetDateTime": "2017-03-30"
       },
       "search": {
         "mode": "include"
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/MedicationStatement/58982",
+      "fullUrl": "http://localhost:8080/NCP/fhir/Condition/4",
       "resource": {
-        "resourceType": "MedicationStatement",
-        "id": "58982",
+        "resourceType": "Condition",
+        "id": "4",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/condition-uv-ips"
           ]
         },
-        "status": "active",
-        "medicationReference": {
-          "reference": "Medication/58988"
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
         },
-        "subject": {
-          "reference": "Patient/59011"
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+              "code": "confirmed"
+            }
+          ]
         },
-        "dosage": [
+        "category": [
           {
-            "patientInstruction": "1 cps, 25mg x 2 die (8:00 - 20:00)",
-            "timing": {
-              "repeat": {
-                "frequency": 2,
-                "period": 1,
-                "periodUnit": "d",
-                "timeOfDay": [
-                  "08:00",
-                  "20:00"
-                ]
-              }
-            },
-            "route": {
-              "coding": [
-                {
-                  "system": "http://snomed.info/sct",
-                  "code": "26643006",
-                  "display": "Oral use"
-                }
-              ]
-            },
-            "doseAndRate": [
+            "coding": [
               {
-                "doseQuantity": {
-                  "value": 25,
-                  "unit": "mg",
-                  "system": "http://unitsofmeasure.org",
-                  "code": "mg"
-                }
+                "system": "http://loinc.org",
+                "code": "75326-9",
+                "display": "Problema"
               }
             ]
           }
-        ]
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/icd-9",
+              "code": "425.4",
+              "display": "Altre Cardiomiopatie Primitive"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/33"
+        },
+        "onsetDateTime": "2017-03-30"
       },
       "search": {
         "mode": "include"
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/MedicationStatement/58983",
+      "fullUrl": "http://localhost:8080/NCP/fhir/MedicationStatement/11",
       "resource": {
         "resourceType": "MedicationStatement",
-        "id": "58983",
+        "id": "11",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
             "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
           ]
         },
         "status": "active",
         "medicationReference": {
-          "reference": "Medication/58989"
+          "reference": "Medication/9"
         },
         "subject": {
-          "reference": "Patient/59011"
+          "reference": "Patient/33"
         },
-        "dosage": [
-          {
-            "patientInstruction": "1/2 cps, 20mg x 2 die (8:00 - 20:00)",
-            "timing": {
-              "repeat": {
-                "frequency": 2,
-                "period": 1,
-                "periodUnit": "d",
-                "timeOfDay": [
-                  "08:00",
-                  "20:00"
-                ]
-              }
-            },
-            "route": {
-              "coding": [
-                {
-                  "system": "http://snomed.info/sct",
-                  "code": "26643006",
-                  "display": "Oral use"
-                }
-              ]
-            },
-            "doseAndRate": [
-              {
-                "doseQuantity": {
-                  "value": 20,
-                  "unit": "mg",
-                  "system": "http://unitsofmeasure.org",
-                  "code": "mg"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "search": {
-        "mode": "include"
-      }
-    },
-    {
-      "fullUrl": "http://hapi.fhir.org/baseR4/MedicationStatement/58984",
-      "resource": {
-        "resourceType": "MedicationStatement",
-        "id": "58984",
-        "meta": {
-          "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
-          ]
-        },
-        "status": "active",
-        "medicationReference": {
-          "reference": "Medication/58990"
-        },
-        "subject": {
-          "reference": "Patient/59011"
-        },
+        "effectiveDateTime": "2015-03",
         "dosage": [
           {
             "patientInstruction": "1 cps 10mg die (22:00)",
@@ -565,7 +550,7 @@
                 {
                   "system": "http://snomed.info/sct",
                   "code": "26643006",
-                  "display": "Oral use"
+                  "display": "Uso orale"
                 }
               ]
             },
@@ -587,84 +572,26 @@
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/MedicationStatement/58985",
+      "fullUrl": "http://localhost:8080/NCP/fhir/MedicationStatement/12",
       "resource": {
         "resourceType": "MedicationStatement",
-        "id": "58985",
+        "id": "12",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
             "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
           ]
         },
         "status": "active",
         "medicationReference": {
-          "reference": "Medication/58991"
+          "reference": "Medication/7"
         },
         "subject": {
-          "reference": "Patient/59011"
+          "reference": "Patient/33"
         },
-        "dosage": [
-          {
-            "patientInstruction": "1 cps 20mg die (14:00)",
-            "timing": {
-              "repeat": {
-                "frequency": 1,
-                "period": 1,
-                "periodUnit": "d",
-                "timeOfDay": [
-                  "14:00"
-                ]
-              }
-            },
-            "route": {
-              "coding": [
-                {
-                  "system": "http://snomed.info/sct",
-                  "code": "26643006",
-                  "display": "Oral use"
-                }
-              ]
-            },
-            "doseAndRate": [
-              {
-                "doseQuantity": {
-                  "value": 20,
-                  "unit": "mg",
-                  "system": "http://unitsofmeasure.org",
-                  "code": "mg"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "search": {
-        "mode": "include"
-      }
-    },
-    {
-      "fullUrl": "http://hapi.fhir.org/baseR4/MedicationStatement/58986",
-      "resource": {
-        "resourceType": "MedicationStatement",
-        "id": "58986",
-        "meta": {
-          "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
-          ]
-        },
-        "status": "active",
-        "medicationReference": {
-          "reference": "Medication/58992"
-        },
-        "subject": {
-          "reference": "Patient/59011"
-        },
+        "effectiveDateTime": "2015-03",
         "dosage": [
           {
             "patientInstruction": "1 cps 250mg die lun, mer, ven (14:00)",
@@ -688,7 +615,7 @@
                 {
                   "system": "http://snomed.info/sct",
                   "code": "26643006",
-                  "display": "Oral use"
+                  "display": "Uso orale"
                 }
               ]
             },
@@ -710,130 +637,257 @@
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Condition/58993",
+      "fullUrl": "http://localhost:8080/NCP/fhir/MedicationStatement/13",
       "resource": {
-        "resourceType": "Condition",
-        "id": "58993",
+        "resourceType": "MedicationStatement",
+        "id": "13",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/condition-uv-ips"
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
           ]
         },
-        "clinicalStatus": {
-          "coding": [
-            {
-              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
-              "code": "active"
-            }
-          ]
+        "status": "active",
+        "medicationReference": {
+          "reference": "Medication/6"
         },
-        "verificationStatus": {
-          "coding": [
-            {
-              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
-              "code": "confirmed"
-            }
-          ]
+        "subject": {
+          "reference": "Patient/33"
         },
-        "category": [
+        "effectiveDateTime": "2015-03",
+        "dosage": [
           {
-            "coding": [
+            "patientInstruction": "1/2 cps, 20mg x 2 die (8:00 - 20:00)",
+            "timing": {
+              "repeat": {
+                "frequency": 2,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "08:00",
+                  "20:00"
+                ]
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Uso orale"
+                }
+              ]
+            },
+            "doseAndRate": [
               {
-                "system": "http://loinc.org",
-                "code": "75326-9",
-                "display": "Problem"
+                "doseQuantity": {
+                  "value": 20,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
               }
             ]
           }
-        ],
-        "code": {
-          "coding": [
-            {
-              "system": "ICD9M",
-              "code": "425.4",
-              "display": "Altre Cardiomiopatie Primitive"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "Patient/59011"
-        },
-        "onsetDateTime": "2017-03-30"
+        ]
       },
       "search": {
         "mode": "include"
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Condition/58994",
+      "fullUrl": "http://localhost:8080/NCP/fhir/MedicationStatement/14",
       "resource": {
-        "resourceType": "Condition",
-        "id": "58994",
+        "resourceType": "MedicationStatement",
+        "id": "14",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/condition-uv-ips"
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
           ]
         },
-        "clinicalStatus": {
-          "coding": [
-            {
-              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
-              "code": "active"
-            }
-          ]
+        "status": "active",
+        "medicationReference": {
+          "reference": "Medication/8"
         },
-        "verificationStatus": {
-          "coding": [
-            {
-              "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
-              "code": "confirmed"
-            }
-          ]
+        "subject": {
+          "reference": "Patient/33"
         },
-        "category": [
+        "effectiveDateTime": "2015-03",
+        "dosage": [
           {
-            "coding": [
+            "patientInstruction": "1 cps, 25mg x 2 die (8:00 - 20:00)",
+            "timing": {
+              "repeat": {
+                "frequency": 2,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "08:00",
+                  "20:00"
+                ]
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Uso orale"
+                }
+              ]
+            },
+            "doseAndRate": [
               {
-                "system": "http://loinc.org",
-                "code": "75326-9",
-                "display": "Problem"
+                "doseQuantity": {
+                  "value": 25,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
               }
             ]
           }
-        ],
-        "code": {
-          "coding": [
-            {
-              "system": "ICD9M",
-              "code": "428.1",
-              "display": "Insufficienza del cuore sinistro (scompenso cardiaco Sinistro)"
-            }
-          ]
-        },
-        "subject": {
-          "reference": "Patient/59011"
-        },
-        "onsetDateTime": "2017-03-30"
+        ]
       },
       "search": {
         "mode": "include"
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Observation/58995",
+      "fullUrl": "http://localhost:8080/NCP/fhir/MedicationStatement/15",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "id": "15",
+        "meta": {
+          "versionId": "1",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
+          "profile": [
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
+          ]
+        },
+        "status": "active",
+        "medicationReference": {
+          "reference": "Medication/5"
+        },
+        "subject": {
+          "reference": "Patient/33"
+        },
+        "effectiveDateTime": "2015-03",
+        "dosage": [
+          {
+            "patientInstruction": "1 cps 20mg die (14:00)",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "14:00"
+                ]
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Uso orale"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 20,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "search": {
+        "mode": "include"
+      }
+    },
+    {
+      "fullUrl": "http://localhost:8080/NCP/fhir/MedicationStatement/16",
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "id": "16",
+        "meta": {
+          "versionId": "1",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
+          "profile": [
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/medicationstatement-uv-ips"
+          ]
+        },
+        "status": "active",
+        "medicationReference": {
+          "reference": "Medication/10"
+        },
+        "subject": {
+          "reference": "Patient/33"
+        },
+        "effectiveDateTime": "2015-03",
+        "dosage": [
+          {
+            "patientInstruction": "1 cps, 200mg x 2 die (8:00 - 20:00)",
+            "timing": {
+              "repeat": {
+                "frequency": 2,
+                "period": 1,
+                "periodUnit": "d",
+                "timeOfDay": [
+                  "08:00",
+                  "20:00"
+                ]
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Uso orale"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "doseQuantity": {
+                  "value": 200,
+                  "unit": "mg",
+                  "system": "http://unitsofmeasure.org",
+                  "code": "mg"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "search": {
+        "mode": "include"
+      }
+    },
+    {
+      "fullUrl": "http://localhost:8080/NCP/fhir/Observation/26",
       "resource": {
         "resourceType": "Observation",
-        "id": "58995",
+        "id": "26",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
             "http://hl7.org/fhir/uv/ips/StructureDefinition/observation-laboratory-uv-ips"
           ]
@@ -844,26 +898,26 @@
             {
               "system": "http://loinc.org",
               "code": "8716-3",
-              "display": "Vital Signs"
+              "display": "Parametri Vitali"
             }
           ]
         },
         "subject": {
-          "reference": "Patient/59011"
+          "reference": "Patient/33"
         },
         "effectiveDateTime": "2017-03-30T08:45:00",
         "hasMember": [
           {
-            "reference": "Observation/58997"
+            "reference": "Observation/22"
           },
           {
-            "reference": "Observation/58998"
+            "reference": "Observation/31"
           },
           {
-            "reference": "Observation/58999"
+            "reference": "Observation/25"
           },
           {
-            "reference": "Observation/59000"
+            "reference": "Observation/30"
           }
         ]
       },
@@ -872,14 +926,14 @@
       }
     },
     {
-      "fullUrl": "http://hapi.fhir.org/baseR4/Observation/58996",
+      "fullUrl": "http://localhost:8080/NCP/fhir/Observation/28",
       "resource": {
         "resourceType": "Observation",
-        "id": "58996",
+        "id": "28",
         "meta": {
           "versionId": "1",
-          "lastUpdated": "2019-11-11T14:57:02.665+00:00",
-          "source": "#suQYTTSaE5O4EZ6p",
+          "lastUpdated": "2020-01-10T14:30:03.364+01:00",
+          "source": "#DXB1NBfRouQApbvn",
           "profile": [
             "http://hl7.org/fhir/uv/ips/StructureDefinition/observation-laboratory-uv-ips"
           ]
@@ -890,41 +944,41 @@
             {
               "system": "http://loinc.org",
               "code": "18723-7",
-              "display": "Hematology studies (set)"
+              "display": "Analisi del sangue"
             }
           ]
         },
         "subject": {
-          "reference": "Patient/59011"
+          "reference": "Patient/33"
         },
         "effectiveDateTime": "2017-11-17T08:45:00",
         "hasMember": [
           {
-            "reference": "Observation/59001"
+            "reference": "Observation/17"
           },
           {
-            "reference": "Observation/59002"
+            "reference": "Observation/19"
           },
           {
-            "reference": "Observation/59003"
+            "reference": "Observation/27"
           },
           {
-            "reference": "Observation/59004"
+            "reference": "Observation/20"
           },
           {
-            "reference": "Observation/59005"
+            "reference": "Observation/18"
           },
           {
-            "reference": "Observation/59006"
+            "reference": "Observation/24"
           },
           {
-            "reference": "Observation/59007"
+            "reference": "Observation/23"
           },
           {
-            "reference": "Observation/59008"
+            "reference": "Observation/21"
           },
           {
-            "reference": "Observation/59009"
+            "reference": "Observation/29"
           }
         ]
       },

@@ -1,10 +1,10 @@
-package eu.interopehrate.mr2de;
+package eu.interopehrate.mr2de.exceptions;
 
 /**
  *      Author: Engineering Ingegneria Informatica
  *     Project: InteropEHRate - www.interopehrate.eu
  *
- * Description: Exception acting as a wrapper on a real underlying exception.
+ * Description: Exception acting as a wrapper on a concrete underlying exception.
  */
 public class MR2DException extends RuntimeException {
 

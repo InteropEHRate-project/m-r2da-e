@@ -12,6 +12,7 @@ import java.util.Map;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
+import eu.interopehrate.mr2de.ncp.fhir.ExceptionDetector;
 import eu.interopehrate.mr2de.ncp.fhir.dao.FHIRDaoFactory;
 import eu.interopehrate.mr2de.r2d.executor.LazyHealthRecordBundle;
 import eu.interopehrate.mr2de.r2d.executor.ProgressiveExecutor;
@@ -79,23 +80,33 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
         if (entry.getBundle() == null) {
             Log.d(getClass().getName(), "Retrieving first page of current type: " + type);
             // Retrieves first page of current query, MUST NOT BE EXECUTED IN MAIN THREAD
-            Bundle firstBundle = entry.getDao().search(args);
-            firstBundle.setUserData(HealthRecordType.class.getName(), type);
-            entry.setBundle(firstBundle);
-            if (firstBundle.isEmpty() || firstBundle.getLink(Bundle.LINK_NEXT) == null)
-                entry.setCompleted();
+            try {
+                Bundle firstBundle = entry.getDao().search(args);
+                firstBundle.setUserData(HealthRecordType.class.getName(), type);
+                entry.setBundle(firstBundle);
+                if (firstBundle.isEmpty() || firstBundle.getLink(Bundle.LINK_NEXT) == null)
+                    entry.setCompleted();
 
-            return firstBundle;
+                return firstBundle;
+            } catch (Exception e) {
+                Log.e(getClass().getName(), "Exception in method next()", e);
+                throw ExceptionDetector.detectException(e);
+            }
         } else if (entry.getBundle().getLink(Bundle.LINK_NEXT) != null) {
             Log.d(getClass().getName(), "Retrieving next page of current type: " + type);
             // Retrieves next page of current query, MUST NOT BE EXECUTED IN MAIN THREAD
-            Bundle nextBundle = entry.getDao().nextPage(entry.getBundle());
-            nextBundle.setUserData(HealthRecordType.class.getName(), type);
-            entry.setBundle(nextBundle);
-            if (nextBundle.isEmpty() || nextBundle.getLink(Bundle.LINK_NEXT) == null)
-                entry.setCompleted();
+            try {
+                Bundle nextBundle = entry.getDao().nextPage(entry.getBundle());
+                nextBundle.setUserData(HealthRecordType.class.getName(), type);
+                entry.setBundle(nextBundle);
+                if (nextBundle.isEmpty() || nextBundle.getLink(Bundle.LINK_NEXT) == null)
+                    entry.setCompleted();
 
-            return nextBundle;
+                return nextBundle;
+            } catch (Exception e) {
+                Log.e(getClass().getName(), "Exception in method next()", e);
+                throw ExceptionDetector.detectException(e);
+            }
         } else {
             Log.d(getClass().getName(), "No more records to be fetched for type: " + type);
             entry.setCompleted();

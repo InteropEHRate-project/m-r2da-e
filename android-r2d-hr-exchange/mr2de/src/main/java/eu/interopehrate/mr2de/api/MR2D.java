@@ -7,7 +7,7 @@ import org.hl7.fhir.r4.model.Resource;
 
 import java.util.Date;
 
-import eu.interopehrate.mr2de.MR2DException;
+import eu.interopehrate.mr2de.exceptions.MR2DException;
 
 /**
  *      Author: Engineering Ingegneria Informatica

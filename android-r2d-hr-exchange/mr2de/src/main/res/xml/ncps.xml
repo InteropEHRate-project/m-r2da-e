@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ncplist xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ncp country="ITA" supportsFHIR="true" supportsEHDSI="false">http://hapi.fhir.org/baseR4</ncp>
-    <ncp country="BEL" supportsFHIR="true" supportsEHDSI="false">http://hapi.fhir.org/baseR4</ncp>
-    <ncp country="GRC" supportsFHIR="true" supportsEHDSI="false">http://hapi.fhir.org/baseR4</ncp>
+    <ncp country="ITA" supportsFHIR="true" supportsEHDSI="false">http://213.249.46.205:8080/NCP/fhir/</ncp>
+    <ncp country="BEL" supportsFHIR="true" supportsEHDSI="false">http://213.249.46.205:8080/NCP/fhir/</ncp>
+    <ncp country="GRC" supportsFHIR="true" supportsEHDSI="false">http://213.249.46.205:8080/NCP/fhir/</ncp>
 
-    <!-- Fake NCP used for switching MR2DE working locally for demo purposes only -->
+    <!-- Fake NCP used for switching MR2DE working locally for demo purposes only (10.0.2.2/213.249.46.205)-->
     <ncp country="FKE" supportsFHIR="false" supportsEHDSI="false"></ncp>
 
 </ncplist>

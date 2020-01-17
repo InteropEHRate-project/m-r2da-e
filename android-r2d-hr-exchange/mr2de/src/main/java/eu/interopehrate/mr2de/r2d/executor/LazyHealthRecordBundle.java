@@ -1,10 +1,13 @@
 package eu.interopehrate.mr2de.r2d.executor;
 
+import android.util.Log;
+
 import androidx.annotation.WorkerThread;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 
+import eu.interopehrate.mr2de.exceptions.MR2DException;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 
@@ -42,12 +45,18 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
     @Override
     public boolean hasNext(HealthRecordType type) {
         if (cacheIndex == cacheSize) {
-            cache = executor.next(type);
-            if (cache == null)
-                return false;
-            else {
-                cacheSize = cache.getEntry().size();
-                cacheIndex = 0;
+            // executes next step of query
+            try {
+                cache = executor.next(type);
+                if (cache == null)
+                    return false;
+                else {
+                    cacheSize = cache.getEntry().size();
+                    cacheIndex = 0;
+                }
+            } catch (Exception e) {
+                Log.e(getClass().getName(), "Exception in method executor.next()", e);
+                throw new MR2DException(e);
             }
         }
 
