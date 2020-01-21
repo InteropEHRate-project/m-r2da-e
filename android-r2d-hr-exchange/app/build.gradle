@@ -31,6 +31,10 @@ android {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
 
+//    testOptions {
+//        unitTests.returnDefaultValues = true
+//    }
+
     // added for default static interface methods
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
