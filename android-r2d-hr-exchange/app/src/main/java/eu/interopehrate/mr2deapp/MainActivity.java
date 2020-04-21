@@ -24,7 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import eu.interopehrate.mr2de.exceptions.MR2DException;
+import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.MobileR2DFactory;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;

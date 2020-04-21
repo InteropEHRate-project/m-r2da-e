@@ -6,9 +6,9 @@ import org.hl7.fhir.r4.model.Patient;
 
 import java.util.Locale;
 
-import eu.interopehrate.mr2de.exceptions.MR2DException;
-import eu.interopehrate.mr2de.ncp.NCPDescriptor;
-import eu.interopehrate.mr2de.ncp.NCPRegistry;
+import eu.interopehrate.mr2d.exceptions.MR2DException;
+import eu.interopehrate.mr2d.ncp.NCPDescriptor;
+import eu.interopehrate.mr2d.ncp.NCPRegistry;
 import eu.interopehrate.mr2de.api.MR2D;
 
 /**

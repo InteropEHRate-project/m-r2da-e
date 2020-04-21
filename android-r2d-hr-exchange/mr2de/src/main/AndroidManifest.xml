@@ -6,7 +6,7 @@
             android:authorities="MR2DE.MR2DEContext"
             android:exported="false"
             android:enabled="true"
-            android:name=".MR2DEContext" />
+            android:name="eu.interopehrate.mr2d.MR2DContext" />
     </application>
 
     <!-- uses-library android:name="org.andengine.extension.augmentedreality" android:required="true"/ -->

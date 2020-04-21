@@ -41,4 +41,6 @@ public interface HealthRecordBundle {
      */
     int getTotal(HealthRecordType type);
 
+
+    
 }

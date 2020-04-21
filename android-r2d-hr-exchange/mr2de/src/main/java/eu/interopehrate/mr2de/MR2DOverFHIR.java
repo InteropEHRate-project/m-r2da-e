@@ -18,13 +18,14 @@ import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.exceptions.MR2DException;
-import eu.interopehrate.mr2de.ncp.NCPDescriptor;
-import eu.interopehrate.mr2de.ncp.fhir.ExceptionDetector;
-import eu.interopehrate.mr2de.ncp.fhir.dao.FHIRDaoFactory;
-import eu.interopehrate.mr2de.ncp.fhir.dao.GenericFHIRDAO;
-import eu.interopehrate.mr2de.ncp.fhir.dao.ResourceDAO;
-import eu.interopehrate.mr2de.ncp.fhir.executor.FHIRProgressiveExecutor;
+import eu.interopehrate.mr2d.exceptions.MR2DException;
+import eu.interopehrate.mr2d.ncp.NCPDescriptor;
+import eu.interopehrate.mr2de.fhir.ExceptionDetector;
+import eu.interopehrate.mr2de.fhir.R2DHttpRestfulClientFactory;
+import eu.interopehrate.mr2de.fhir.dao.FHIRDaoFactory;
+import eu.interopehrate.mr2de.fhir.dao.GenericFHIRDAO;
+import eu.interopehrate.mr2de.fhir.dao.ResourceDAO;
+import eu.interopehrate.mr2de.fhir.executor.FHIRProgressiveExecutor;
 import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 
@@ -45,11 +46,19 @@ class MR2DOverFHIR implements MR2D {
         this.ncp = ncp;
         this.sessionToken = sessionToken;
 
-        // Creates FHIRContext, this is an expensive operation must be performed once
+        // Creates FHIRContext, this is an expensive operation MUST be performed once
         fhirContext = FhirContext.forR4();
+        R2DHttpRestfulClientFactory httpFactory = new R2DHttpRestfulClientFactory(fhirContext);
+        if (BuildConfig.DEBUG) {
+            // Only for testing the app inside eng infrastructure
+            //httpFactory.setProxy("proxy.eng.it", 3128);
+            httpFactory.setProxy("10.0.2.2", 13128);
+        }
+        // TODO: investigate if this performance setting is ok
+        httpFactory.setServerValidationMode(ServerValidationModeEnum.NEVER);
 
-        // TODO: investigate if this setting is ok
-        fhirContext.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
+        fhirContext.setRestfulClientFactory(httpFactory);
+        // TODO: investigate if this performance setting is ok
         fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
     }
 
@@ -150,9 +159,13 @@ class MR2DOverFHIR implements MR2D {
      */
     @NonNull
     private IGenericClient createFHIRClient() {
-        IGenericClient fC = fhirContext.newRestfulGenericClient(ncp.getEndpoint());
         Log.d(getClass().getName(), "Creating FHIR client for session: " + this.sessionToken);
+
+        IGenericClient fC = fhirContext.newRestfulGenericClient(ncp.getEndpoint());
+
+        // Registering outgoing interceptor for adding Bearer Token to requests
         fC.registerInterceptor(new BearerTokenAuthInterceptor(this.sessionToken));
+
         return fC;
     }
 

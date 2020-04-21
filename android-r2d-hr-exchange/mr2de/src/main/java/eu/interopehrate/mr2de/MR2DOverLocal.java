@@ -17,11 +17,12 @@ import java.util.Scanner;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
+import eu.interopehrate.mr2d.MR2DContext;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.exceptions.MR2DException;
+import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.r2d.executor.DefaultHealthRecordBundle;
 
 class MR2DOverLocal implements MR2D {
@@ -63,7 +64,7 @@ class MR2DOverLocal implements MR2D {
         Bundle bundle = new Bundle();
         if (rType == HealthRecordType.PATIENT_SUMMARY) {
             if (patientSummary == null) {
-                Context libContext = MR2DEContext.getMR2DEContext();
+                Context libContext = MR2DContext.getMR2DContext();
                 // load sample PS file
                 InputStream is = libContext.getResources().openRawResource(R.raw.sample_patient_summary);
                 Scanner sc = new Scanner(is);

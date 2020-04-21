@@ -7,7 +7,7 @@ import androidx.annotation.WorkerThread;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 
-import eu.interopehrate.mr2de.exceptions.MR2DException;
+import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 
@@ -15,7 +15,11 @@ import eu.interopehrate.mr2de.api.HealthRecordType;
  *       Author: Engineering Ingegneria Informatica
  *      Project: InteropEHRate - www.interopehrate.eu
  *
- *  Description: See HealthRecordBundle class.
+ *  Description: Implementation of HealthRecordBundle interface. LazyHealthRecordBundle allows
+ *  clients to iterate over query result adopting a lazy loading policy.
+ *  Health data must will be downloaded incrementally only when needed.
+ *
+ *  Lazy Loading is implemented by interaction with class ProgressiveExecutor.
  *
  */
 public class LazyHealthRecordBundle implements HealthRecordBundle {
@@ -39,6 +43,7 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
 
     @Override
     public int getTotal(HealthRecordType type) {
+        // TODO: controllare che sia giusto, perche questo corrrisponde solo al corrente
         return cache.getTotal();
     }
 
@@ -73,5 +78,7 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
         } else
             throw new IllegalStateException("No more objects to retrieve from LazyHealthRecordBundle.");
     }
+
+
 
 }
