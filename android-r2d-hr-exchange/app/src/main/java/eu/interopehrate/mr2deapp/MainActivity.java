@@ -80,11 +80,6 @@ public class MainActivity extends AppCompatActivity {
                     findViewById(R.id.getAllButton).setEnabled(true);
                     findViewById(R.id.getRecordButton).setEnabled(true);
                     findViewById(R.id.resIdText).setEnabled(true);
-                    /*
-                    patientSpinner.setEnabled(false);
-                    findViewById(R.id.fakeSwitch).setEnabled(false);
-                    findViewById(R.id.createButton).setEnabled(false);
-                     */
                 } catch (MR2DException e) {
                     Log.e(getClass().getName(), "Error while loading MR2D", e);
                 }

@@ -8,9 +8,11 @@ package eu.interopehrate.mr2d.ncp;
  */
 public final class NCPDescriptor {
     private String country; //ISO 3166 alpha 3
-    private String endpoint;
     private boolean supportsFHIR;
     private boolean supportsEHDSI;
+    private String fhirEndpoint;
+    private String ehdsiEndpoint;
+    private String iamEndpoint;
 
     public String getCountry() {
         return country;
@@ -20,13 +22,30 @@ public final class NCPDescriptor {
         this.country = country;
         return this;
     }
-
-    public String getEndpoint() {
-        return endpoint;
+    public String getFhirEndpoint() {
+        return fhirEndpoint;
     }
 
-    public NCPDescriptor setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+    public NCPDescriptor setFhirEndpoint(String fhirEndpoint) {
+        this.fhirEndpoint = fhirEndpoint;
+        return this;
+    }
+
+    public String getEhdsiEndpoint() {
+        return ehdsiEndpoint;
+    }
+
+    public NCPDescriptor setEhdsiEndpoint(String ehdsiEndpoint) {
+        this.ehdsiEndpoint = ehdsiEndpoint;
+        return this;
+    }
+
+    public String getIamEndpoint() {
+        return iamEndpoint;
+    }
+
+    public NCPDescriptor setIamEndpoint(String iamEndpoint) {
+        this.iamEndpoint = iamEndpoint;
         return this;
     }
 
@@ -52,9 +71,11 @@ public final class NCPDescriptor {
     public String toString() {
         return "NCPDescriptor{" +
                 "country='" + country + '\'' +
-                ", endpoint='" + endpoint + '\'' +
                 ", supportsFHIR=" + supportsFHIR +
                 ", supportsEHDSI=" + supportsEHDSI +
+                ", fhirEndpoint='" + fhirEndpoint + '\'' +
+                ", ehdsiEndpoint='" + ehdsiEndpoint + '\'' +
+                ", iamEndpoint='" + iamEndpoint + '\'' +
                 '}';
     }
 }

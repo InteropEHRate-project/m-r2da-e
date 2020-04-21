@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import eu.interopehrate.mr2d.ncp.NCPRegistry;
-import eu.interopehrate.mr2de.R;
+import eu.interopehrate.mr2d.R;
 
 /**
  *       Author: Engineering Ingegneria Informatica

@@ -14,6 +14,7 @@ import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BearerTokenAuthInterceptor;
+import eu.interopehrate.mr2d.BuildConfig;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
@@ -161,7 +162,7 @@ class MR2DOverFHIR implements MR2D {
     private IGenericClient createFHIRClient() {
         Log.d(getClass().getName(), "Creating FHIR client for session: " + this.sessionToken);
 
-        IGenericClient fC = fhirContext.newRestfulGenericClient(ncp.getEndpoint());
+        IGenericClient fC = fhirContext.newRestfulGenericClient(ncp.getFhirEndpoint());
 
         // Registering outgoing interceptor for adding Bearer Token to requests
         fC.registerInterceptor(new BearerTokenAuthInterceptor(this.sessionToken));

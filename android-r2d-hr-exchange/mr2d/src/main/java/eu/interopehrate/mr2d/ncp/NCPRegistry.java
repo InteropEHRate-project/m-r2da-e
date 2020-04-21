@@ -9,6 +9,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.IllegalFormatException;
 import java.util.Map;
 
 
@@ -23,6 +24,9 @@ public final class NCPRegistry {
     private final static Map<String, NCPDescriptor> registry = new HashMap<String, NCPDescriptor>();
 
     private static final String NCP_TAG_NAME = "ncp";
+    private static final String FHIR_TAG_NAME = "fhir";
+    private static final String EHDSI_TAG_NAME = "ehdsi";
+    private static final String IAM_TAG_NAME = "iam";
     private static final String COUNTRY_ATTR_NAME = "country";
     private static final String SUPPORTS_FHIR_ATTR_NAME = "supportsFHIR";
     private static final String SUPPORTS_EHDSI_ATTR_NAME = "supportsEHDSI";
@@ -34,20 +38,23 @@ public final class NCPRegistry {
         NCPDescriptor ncp = null;
         int event = parser.getEventType();
         while (event != XmlPullParser.END_DOCUMENT) {
-
-            if (event == XmlPullParser.START_TAG) {
+           if (event == XmlPullParser.START_TAG) {
                 if (NCP_TAG_NAME.equals(parser.getName())) {
                     ncp = new NCPDescriptor();
-
                     ncp.setCountry(parser.getAttributeValue(null, COUNTRY_ATTR_NAME))
-                            .setSupportsEHDSI(Boolean.parseBoolean(parser.getAttributeValue(null, SUPPORTS_EHDSI_ATTR_NAME)))
-                            .setSupportsFHIR(Boolean.parseBoolean(parser.getAttributeValue(null, SUPPORTS_FHIR_ATTR_NAME)))
-                            .setEndpoint(parser.nextText());
-
-                    Log.d(NCPRegistry.class.getName(), "Registered NCP for country: " + ncp.getCountry());
-                    registry.put(ncp.getCountry(), ncp);
+                        .setSupportsEHDSI(Boolean.parseBoolean(parser.getAttributeValue(null, SUPPORTS_EHDSI_ATTR_NAME)))
+                        .setSupportsFHIR(Boolean.parseBoolean(parser.getAttributeValue(null, SUPPORTS_FHIR_ATTR_NAME)));
+                } else if (FHIR_TAG_NAME.equals(parser.getName())) {
+                    ncp.setFhirEndpoint(parser.nextText());
+                } else if (EHDSI_TAG_NAME.equals(parser.getName())) {
+                    ncp.setEhdsiEndpoint(parser.nextText());
+                } else if (IAM_TAG_NAME.equals(parser.getName())) {
+                    ncp.setIamEndpoint(parser.nextText());
                 }
-            }
+            } else if (event == XmlPullParser.END_TAG && NCP_TAG_NAME.equals(parser.getName())) {
+               registry.put(ncp.getCountry(), ncp);
+               Log.d(NCPRegistry.class.getName(), "Registered NCP for country: " + ncp.getCountry());
+           }
             event = parser.next();
         }
     }

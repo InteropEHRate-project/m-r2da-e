@@ -18,6 +18,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import eu.interopehrate.mr2d.MR2DContext;
+import eu.interopehrate.mr2d.R;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.HealthRecordType;

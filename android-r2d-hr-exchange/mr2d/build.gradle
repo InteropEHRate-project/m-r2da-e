@@ -42,7 +42,7 @@ dependencies {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = "mr2de"
+            artifactId = "mr2d"
             artifact("build/outputs/aar/$archivesBaseName"+"-release.aar") {
                 extension "aar"
 
@@ -74,7 +74,7 @@ publishing {
 
             // descriptive information to add to the generated POM file
             pom {
-                name = 'MR2DE Library'
+                name = 'MR2D Library'
                 description = 'Android library (developed by InteropEHRate consortium) for interacting with an Health Repository adopting R2D protocol.'
                 url = 'http://www.interopehrate.eu'
             }

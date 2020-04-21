@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     // import library module mr2de and its dependencies (only those marked 'api')
-    implementation project(':mr2de')
+    implementation project(':mr2d')
 
     testImplementation 'junit:junit:4.12'
     // Required for instrumented tests

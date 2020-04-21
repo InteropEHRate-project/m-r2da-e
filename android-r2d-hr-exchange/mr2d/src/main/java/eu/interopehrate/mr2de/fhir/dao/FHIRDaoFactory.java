@@ -14,10 +14,13 @@ public class FHIRDaoFactory {
     public static GenericFHIRDAO create(IGenericClient fhirClient, HealthRecordType type) {
         if (type == HealthRecordType.PATIENT_SUMMARY)
             return new PatientSummaryDAO(fhirClient);
-        /*
+        else if (type == HealthRecordType.LABORATORY_REPORT)
+            return new LaboratoryReportsDAO(fhirClient);
+       /*
         else if (type == HealthRecordType.OBSERVATION)
             return new ObservationDAO(fhirClient);
         */
+
         return null;
     }
 

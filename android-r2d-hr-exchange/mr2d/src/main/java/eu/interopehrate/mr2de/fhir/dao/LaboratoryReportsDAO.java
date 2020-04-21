@@ -3,20 +3,19 @@ package eu.interopehrate.mr2de.fhir.dao;
 import android.util.Log;
 
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.Composition;
+import org.hl7.fhir.r4.model.DiagnosticReport;
 import org.hl7.fhir.r4.model.Resource;
 
-import java.util.Date;
-
-import ca.uhn.fhir.rest.api.SearchTotalModeEnum;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2de.utils.codes.LoincCodes;
 
-public class ObservationDAO extends GenericFHIRDAO {
+public class LaboratoryReportsDAO extends GenericFHIRDAO {
 
-    public ObservationDAO(IGenericClient client) {
+    public LaboratoryReportsDAO(IGenericClient client) {
         super(client);
     }
 
@@ -24,23 +23,21 @@ public class ObservationDAO extends GenericFHIRDAO {
     public Bundle search(Arguments args) {
         Log.d(getClass().getName(), "Starting execution of method search()");
 
-        final IQuery<Bundle> q = fhirClient
+        IQuery<Bundle> q = fhirClient
                 .search()
-                .forResource(Observation.class)
-                .sort().descending(Observation.DATE)
-                .totalMode(SearchTotalModeEnum.ACCURATE)
+                .forResource(DiagnosticReport.class)
+                .where(DiagnosticReport.CATEGORY.exactly().code("LAB"))
+                .sort().descending(DiagnosticReport.DATE)
+                .include(Composition.INCLUDE_ALL)
                 .accept(GenericFHIRDAO.ACCEPT_JSON)
                 .returnBundle(Bundle.class);
 
-        // Adds condition on optional date parameter
-        if (args.hasArgument(ArgumentName.FROM)) {
-            final Date from = (Date)args.getValueByName(ArgumentName.FROM);
-            q.where(Observation.DATE.afterOrEquals().day(from));
-        }
-
         // Executes query
-        final Bundle results = q.execute();
+        Bundle results = q.execute();
         Log.d(getClass().getSimpleName(), results.getLink(Bundle.LINK_SELF).getUrl());
+
+        // IMPORTANT: Sets total equals to size of contained entries
+        results.setTotal(results.getEntry().size());
 
         return results;
     }
@@ -49,11 +46,13 @@ public class ObservationDAO extends GenericFHIRDAO {
     public Resource getLast() {
         Log.d(getClass().getName(), "Starting execution of method getLast()");
 
-        final IQuery<Bundle> q = fhirClient
+        IQuery<Bundle> q = fhirClient
                 .search()
-                .forResource(Observation.class)
-                .sort().descending(Observation.DATE)
+                .forResource(DiagnosticReport.class)
+                .where(DiagnosticReport.CATEGORY.exactly().code("LAB"))
                 .count(1)
+                .sort().descending(DiagnosticReport.DATE)
+                .include(Composition.INCLUDE_ALL)
                 .accept(GenericFHIRDAO.ACCEPT_JSON)
                 .returnBundle(Bundle.class);
 
@@ -61,6 +60,9 @@ public class ObservationDAO extends GenericFHIRDAO {
         final Bundle results = q.execute();
         Log.d(getClass().getSimpleName(), results.getLink(Bundle.LINK_SELF).getUrl());
 
-        return results;
+        if (results.getEntry().size() > 0)
+            return results.getEntryFirstRep().getResource();
+
+        return null;
     }
 }
