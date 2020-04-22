@@ -23,7 +23,7 @@
         android:id="@+id/linearLayout_1"
         android:layout_width="337dp"
         android:layout_height="171dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
@@ -46,12 +46,12 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="10dp" />
 
         <Button
             android:id="@+id/createButton"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:text="Instantiate MR2DE" />
 
     </LinearLayout>
@@ -60,7 +60,7 @@
         android:id="@+id/linearLayout_2"
         android:layout_width="338dp"
         android:layout_height="339dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.513"
@@ -73,9 +73,23 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:enabled="false"
+            android:text="Login()" />
+
+        <Button
+            android:id="@+id/getToken"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:enabled="false"
+            android:text="Get_Token()" />
+
+        <Button
             android:id="@+id/getLastButton"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:enabled="false"
             android:text="Get_Last_PatientSummary()" />
 
@@ -86,7 +100,7 @@
         <Button
             android:id="@+id/getAllButton"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:enabled="false"
             android:text="Get_All_Records()" />
 
@@ -109,7 +123,7 @@
         <Button
             android:id="@+id/getRecordButton"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:enabled="false"
             android:text="Get_Record()" />
 

@@ -34,6 +34,9 @@ dependencies {
     api "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$FHIR_VERSION"
 
     implementation "androidx.annotation:annotation:1.1.0"
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
 }
 
 /*

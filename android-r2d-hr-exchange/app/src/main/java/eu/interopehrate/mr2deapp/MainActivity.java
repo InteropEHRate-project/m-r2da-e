@@ -73,9 +73,11 @@ public class MainActivity extends AppCompatActivity {
                         p.addAddress().setCountry("ITA");
 
                     // Creates an instance of MR2D
-                    mr2d = MobileR2DFactory.create(p, session);
+                    mr2d = MobileR2DFactory.create(p, session, view);
 
                     // Disable all buttons
+                    findViewById(R.id.login).setEnabled(true);
+                    findViewById(R.id.getToken).setEnabled(true);
                     findViewById(R.id.getLastButton).setEnabled(true);
                     findViewById(R.id.getAllButton).setEnabled(true);
                     findViewById(R.id.getRecordButton).setEnabled(true);
@@ -83,6 +85,22 @@ public class MainActivity extends AppCompatActivity {
                 } catch (MR2DException e) {
                     Log.e(getClass().getName(), "Error while loading MR2D", e);
                 }
+            }
+        });
+
+        b = findViewById(R.id.login);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mr2d.login("sofianna","sofianna");
+            }
+        });
+
+        b = findViewById(R.id.getToken);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Token", mr2d.getToken());
             }
         });
 

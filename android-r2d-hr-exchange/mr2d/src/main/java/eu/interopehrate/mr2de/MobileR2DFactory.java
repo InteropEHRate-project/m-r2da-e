@@ -1,6 +1,7 @@
 package eu.interopehrate.mr2de;
 
 import android.util.Log;
+import android.view.View;
 
 import org.hl7.fhir.r4.model.Patient;
 
@@ -29,7 +30,7 @@ public class MobileR2DFactory {
      * @param ncpSessionToken: session token obtained by the login service to the NCP
      * @return
      */
-    public static MR2D create(Patient patient, String ncpSessionToken) {
+    public static MR2D create(Patient patient, String ncpSessionToken, View view) {
         // preconditions checks
         if (patient == null)
             throw new IllegalArgumentException("Precondition failed: Argument patient cannot be null");
@@ -38,7 +39,7 @@ public class MobileR2DFactory {
             throw new IllegalArgumentException("Precondition failed: Argument ncpSessionToken cannot be empty");
 
         // business logic
-        return MobileR2DFactory.create(patient.getAddressFirstRep().getCountry(), ncpSessionToken);
+        return MobileR2DFactory.create(patient.getAddressFirstRep().getCountry(), ncpSessionToken, view);
     }
 
     /**
@@ -49,7 +50,7 @@ public class MobileR2DFactory {
      * @param ncpSessionToken: session token obtained by the login service to the NCP
      * @return
      */
-    public static MR2D create(Locale locale, String ncpSessionToken) {
+    public static MR2D create(Locale locale, String ncpSessionToken, View view) {
         // preconditions checks
         if (locale == null)
             throw new IllegalArgumentException("Precondition failed: argument 'locale' cannot be null");
@@ -58,11 +59,11 @@ public class MobileR2DFactory {
             throw new IllegalArgumentException("Precondition failed: argument 'ncpSessionToken' cannot be empty");
 
         // business logic
-        return MobileR2DFactory.create(locale.getISO3Country(), ncpSessionToken);
+        return MobileR2DFactory.create(locale.getISO3Country(), ncpSessionToken, view);
     }
 
 
-    private static MR2D create(String country, String ncpSessionToken) {
+    private static MR2D create(String country, String ncpSessionToken, View view) {
         // preconditions checks
         if (country == null || country.isEmpty())
             throw new IllegalArgumentException("Precondition failed: argument 'country' cannot be empty");
@@ -76,7 +77,7 @@ public class MobileR2DFactory {
             throw new MR2DException("No NCP descriptor found for country: " + country);
 
         if (ncpDesc.isSupportsFHIR())
-            return new MR2DOverFHIR(ncpDesc, ncpSessionToken);
+            return new MR2DOverFHIR(ncpDesc, ncpSessionToken, view);
 
         if (ncpDesc.isSupportsEHDSI())
             throw new IllegalArgumentException("NCP adopting only eHDSI protocol are not supported yet.");

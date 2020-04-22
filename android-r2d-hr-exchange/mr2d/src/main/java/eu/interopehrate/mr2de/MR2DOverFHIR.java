@@ -1,6 +1,7 @@
 package eu.interopehrate.mr2de;
 
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
@@ -29,6 +30,7 @@ import eu.interopehrate.mr2de.fhir.dao.ResourceDAO;
 import eu.interopehrate.mr2de.fhir.executor.FHIRProgressiveExecutor;
 import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2dsm.GenericMR2DSM;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -41,11 +43,13 @@ class MR2DOverFHIR implements MR2D {
     private final NCPDescriptor ncp;
     private final String sessionToken;
     private final FhirContext fhirContext;
+    private View view;
 
-    MR2DOverFHIR(NCPDescriptor ncp, String sessionToken) {
+    MR2DOverFHIR(NCPDescriptor ncp, String sessionToken, View view) {
         Log.d(getClass().getName(), "Created instance of MR2DOverFHIR. MR2DE IS WORKING IN FHIR MODALITY.");
         this.ncp = ncp;
         this.sessionToken = sessionToken;
+        this.view = view;
 
         // Creates FHIRContext, this is an expensive operation MUST be performed once
         fhirContext = FhirContext.forR4();
@@ -170,4 +174,25 @@ class MR2DOverFHIR implements MR2D {
         return fC;
     }
 
+    @Override
+    public void login(String username, String password) {
+        Log.d(getClass().getName(), "Login");
+        GenericMR2DSM mr2DSM = new GenericMR2DSM(view);
+        mr2DSM.setKeycloakURL(ncp.getIamEndpoint());
+        mr2DSM.login(username,password);
+    }
+
+    @Override
+    public void logout() {
+        Log.d(getClass().getName(), "Logout");
+        GenericMR2DSM mr2DSM = new GenericMR2DSM(view);
+        mr2DSM.logout();
+    }
+
+    @Override
+    public String getToken() {
+        Log.d(getClass().getName(), "Get stored token");
+        GenericMR2DSM mr2DSM = new GenericMR2DSM(view);
+        return mr2DSM.getToken();
+    }
 }

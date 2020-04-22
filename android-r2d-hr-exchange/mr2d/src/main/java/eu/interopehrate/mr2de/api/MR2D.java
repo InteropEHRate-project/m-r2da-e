@@ -8,6 +8,7 @@ import org.hl7.fhir.r4.model.Resource;
 import java.util.Date;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
+import eu.interopehrate.mr2dsm.api.MR2DSM;
 
 /**
  *      Author: Engineering Ingegneria Informatica
@@ -16,7 +17,7 @@ import eu.interopehrate.mr2d.exceptions.MR2DException;
  * Description: interface of local proxy compliant to MR2D specifications. It allows
  *              a mobile fhirClient to submit requests compliant to MR2D specifications.
  */
-public interface MR2D {
+public interface MR2D extends MR2DSM {
 
     /**
      *
