@@ -2,7 +2,6 @@ package eu.interopehrate.mr2de;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
@@ -26,7 +25,6 @@ import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.r2d.executor.DefaultHealthRecordBundle;
-import eu.interopehrate.mr2dsm.GenericMR2DSM;
 
 class MR2DOverLocal implements MR2D {
 

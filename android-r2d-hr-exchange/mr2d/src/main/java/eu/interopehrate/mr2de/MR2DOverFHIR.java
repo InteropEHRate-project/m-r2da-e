@@ -30,7 +30,7 @@ import eu.interopehrate.mr2de.fhir.dao.ResourceDAO;
 import eu.interopehrate.mr2de.fhir.executor.FHIRProgressiveExecutor;
 import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
-import eu.interopehrate.mr2dsm.GenericMR2DSM;
+import eu.interopehrate.mr2dsm.MR2DSMOverKeycloak;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -177,7 +177,7 @@ class MR2DOverFHIR implements MR2D {
     @Override
     public void login(String username, String password) {
         Log.d(getClass().getName(), "Login");
-        GenericMR2DSM mr2DSM = new GenericMR2DSM(view);
+        MR2DSMOverKeycloak mr2DSM = new MR2DSMOverKeycloak(view);
         mr2DSM.setKeycloakURL(ncp.getIamEndpoint());
         mr2DSM.login(username,password);
     }
@@ -185,14 +185,14 @@ class MR2DOverFHIR implements MR2D {
     @Override
     public void logout() {
         Log.d(getClass().getName(), "Logout");
-        GenericMR2DSM mr2DSM = new GenericMR2DSM(view);
+        MR2DSMOverKeycloak mr2DSM = new MR2DSMOverKeycloak(view);
         mr2DSM.logout();
     }
 
     @Override
     public String getToken() {
         Log.d(getClass().getName(), "Get stored token");
-        GenericMR2DSM mr2DSM = new GenericMR2DSM(view);
+        MR2DSMOverKeycloak mr2DSM = new MR2DSMOverKeycloak(view);
         return mr2DSM.getToken();
     }
 }

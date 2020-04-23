@@ -16,14 +16,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class GenericMR2DSM implements MR2DSM {
+public class MR2DSMOverKeycloak implements MR2DSM {
     private View view;
     public AuthenticationKeycloak postsService;
     String keycloakURL;
 
-    public GenericMR2DSM(View view) {
+    public MR2DSMOverKeycloak(View view) {
         this.view = view;
     }
 
