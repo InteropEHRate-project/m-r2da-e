@@ -32,11 +32,6 @@ import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String MARIO_ROSSI = "Mario Rossi";
-    private static final String MARIO_ROSSI_SESSION = "f70e7d7e-ad8a-478d-9e02-2499e37fb7a8";
-
-    private static final String CARLA_VERDI = "Carla Verdi";
-    private static final String CARLA_VERDI_SESSION = "7cde8fcd-dccd-47e1-ba25-e2fd96813649";
 
     private MR2D mr2d;
 
@@ -44,11 +39,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Spinner for Patient
-        Spinner patientSpinner = (Spinner)findViewById(R.id.patientSpinner);
-        patientSpinner.setAdapter(new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item,
-                new String[]{MARIO_ROSSI, CARLA_VERDI}));
 
         // Button for MR2D instantiation
         Button b = findViewById(R.id.createButton);
@@ -58,11 +48,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     // Creating a Patient for connecting to MR2D
                     Patient p = new Patient();
-
-                    // Checks selected Patient
-                    String session = MARIO_ROSSI_SESSION;
-                    if (patientSpinner.getSelectedItem().equals(CARLA_VERDI))
-                        session = CARLA_VERDI_SESSION;
 
                     // Sets patient's reference NCP
                     if (((Switch)findViewById(R.id.fakeSwitch)).isChecked())

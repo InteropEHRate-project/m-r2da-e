@@ -41,6 +41,7 @@ import eu.interopehrate.mr2dsm.api.MR2DSM;
  *  Description: Concrete implementation of MR2D working with FHIR protocol
  */
 class MR2DOverFHIR implements MR2D {
+    private static final String MARIO_ROSSI_SESSION = "f70e7d7e-ad8a-478d-9e02-2499e37fb7a8";
 
     private final NCPDescriptor ncp;
     private final FhirContext fhirContext;
@@ -143,7 +144,6 @@ class MR2DOverFHIR implements MR2D {
         }
     }
 
-
     @NonNull
     @Override
     @WorkerThread
@@ -189,20 +189,24 @@ class MR2DOverFHIR implements MR2D {
 
     @Override
     public void login(String username, String password) {
-        Log.d(getClass().getName(), "Login");
+        Log.d(getClass().getName(), "Executing Login...");
         mr2dsm.login(username, password);
     }
 
     @Override
     public void logout() {
-        Log.d(getClass().getName(), "Logout");
+        Log.d(getClass().getName(), "Executing Logout...");
         mr2dsm.logout();
     }
 
     @Override
     public String getToken() {
-        Log.d(getClass().getName(), "Get stored token");
-        return mr2dsm.getToken();
+        Log.d(getClass().getName(), "Returning session token...");
+        if (mr2dsm.getToken() == null)
+            return null;
+
+        return MARIO_ROSSI_SESSION;
+        // return mr2dsm.getToken();
     }
 
 }
