@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
-import eu.interopehrate.mr2de.MobileR2DFactory;
+import eu.interopehrate.mr2de.MR2DFactory;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String CARLA_VERDI_SESSION = "7cde8fcd-dccd-47e1-ba25-e2fd96813649";
 
     private MR2D mr2d;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         p.addAddress().setCountry("ITA");
 
                     // Creates an instance of MR2D
-                    mr2d = MobileR2DFactory.create(p, session, view);
+                    mr2d = MR2DFactory.create(p);
 
                     // Disable all buttons
                     findViewById(R.id.login).setEnabled(true);

@@ -18,57 +18,67 @@ import eu.interopehrate.mr2de.api.MR2D;
  *
  * Description: factory class for instances of MR2D
  */
-public class MobileR2DFactory {
+public final class MR2DFactory {
 
-    private MobileR2DFactory() {}
+    private MR2DFactory() {}
 
     /**
-     * Factory method for creating an instance of MR2D (linked to the specific session
-     * provided as argument).
+     * Factory method for creating an instance of MR2D
      *
-     * @param patient: patient
-     * @param ncpSessionToken: session token obtained by the login service to the NCP
+     * @param ncp: ncp
      * @return
      */
-    public static MR2D create(Patient patient, String ncpSessionToken, View view) {
+    public static MR2D create(NCPDescriptor ncp) {
+        // preconditions checks
+        if (ncp == null)
+            throw new IllegalArgumentException("Precondition failed: Argument ncp cannot be null");
+
+        // business logic
+        return MR2DFactory.create(ncp.getCountry());
+    }
+
+    /**
+     * Factory method for creating an instance of MR2D
+     *
+     * @param patient: patient
+     * @return
+     */
+    public static MR2D create(Patient patient) {
         // preconditions checks
         if (patient == null)
             throw new IllegalArgumentException("Precondition failed: Argument patient cannot be null");
 
-        if (ncpSessionToken == null || ncpSessionToken.isEmpty())
-            throw new IllegalArgumentException("Precondition failed: Argument ncpSessionToken cannot be empty");
-
         // business logic
-        return MobileR2DFactory.create(patient.getAddressFirstRep().getCountry(), ncpSessionToken, view);
+        return MR2DFactory.create(patient.getAddressFirstRep().getCountry());
     }
 
     /**
-     * Factory method for creating an instance of MR2D (linked to the specific session
-     * provided as argument).
+     * Factory method for creating an instance of MR2D
      *
      * @param locale: locale indicating the country of the patient
-     * @param ncpSessionToken: session token obtained by the login service to the NCP
      * @return
      */
-    public static MR2D create(Locale locale, String ncpSessionToken, View view) {
+    public static MR2D create(Locale locale) {
         // preconditions checks
         if (locale == null)
             throw new IllegalArgumentException("Precondition failed: argument 'locale' cannot be null");
 
-        if (ncpSessionToken == null || ncpSessionToken.isEmpty())
-            throw new IllegalArgumentException("Precondition failed: argument 'ncpSessionToken' cannot be empty");
-
         // business logic
-        return MobileR2DFactory.create(locale.getISO3Country(), ncpSessionToken, view);
+        return MR2DFactory.create(locale.getISO3Country());
     }
 
-
-    private static MR2D create(String country, String ncpSessionToken, View view) {
+    /**
+     * Factory method for creating an instance of MR2D
+     *
+     * @param country: ISO 3166 alpha 3 code identifying country
+     * @return
+     */
+    private static MR2D create(String country) {
         // preconditions checks
         if (country == null || country.isEmpty())
             throw new IllegalArgumentException("Precondition failed: argument 'country' cannot be empty");
 
-        Log.d(MobileR2DFactory.class.getName(), "Requested creation of an instance of MR2D for country: " +
+        Log.d(MR2DFactory.class.getName(), "Requested creation of an instance of MR2D for country: " +
                 country);
 
         // business logic
@@ -77,7 +87,7 @@ public class MobileR2DFactory {
             throw new MR2DException("No NCP descriptor found for country: " + country);
 
         if (ncpDesc.isSupportsFHIR())
-            return new MR2DOverFHIR(ncpDesc, ncpSessionToken, view);
+            return new MR2DOverFHIR(ncpDesc);
 
         if (ncpDesc.isSupportsEHDSI())
             throw new IllegalArgumentException("NCP adopting only eHDSI protocol are not supported yet.");
@@ -85,4 +95,5 @@ public class MobileR2DFactory {
         // Used only for testing purposes or for demo
         return new MR2DOverLocal();
     }
+
 }

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import ca.uhn.fhir.rest.server.exceptions.AuthenticationException;
 import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
-import eu.interopehrate.mr2de.MobileR2DFactory;
+import eu.interopehrate.mr2de.MR2DFactory;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2d.exceptions.MR2DSecurityException;
@@ -27,9 +27,9 @@ public class R2DSecurityTests {
     public static void setUp() throws Exception {
         Patient marioRossi = new Patient();
         marioRossi.addAddress().setCountry("ITA");
-        marioRossiR2D = MobileR2DFactory.create(marioRossi, MARIO_ROSSI_SESSION);
-        notAuthenticatedR2D = MobileR2DFactory.create(marioRossi, "");
-        invalidSessionR2D = MobileR2DFactory.create(marioRossi, "6538765492736452437");
+        marioRossiR2D = MR2DFactory.create(marioRossi, MARIO_ROSSI_SESSION);
+        notAuthenticatedR2D = MR2DFactory.create(marioRossi, "");
+        invalidSessionR2D = MR2DFactory.create(marioRossi, "6538765492736452437");
     }
 
     @Test

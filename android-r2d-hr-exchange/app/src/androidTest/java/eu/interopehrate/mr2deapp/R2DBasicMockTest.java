@@ -8,7 +8,7 @@ import org.hl7.fhir.r4.model.Resource;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import eu.interopehrate.mr2de.MobileR2DFactory;
+import eu.interopehrate.mr2de.MR2DFactory;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
@@ -30,7 +30,7 @@ public class R2DBasicMockTest {
     public static void setUp() throws Exception {
         Patient marioRossi = new Patient();
         marioRossi.addAddress().setCountry("FKE");
-        marioRossiR2D = MobileR2DFactory.create(marioRossi, "bla-bla-bla-bla");
+        marioRossiR2D = MR2DFactory.create(marioRossi);
     }
 
     @Test

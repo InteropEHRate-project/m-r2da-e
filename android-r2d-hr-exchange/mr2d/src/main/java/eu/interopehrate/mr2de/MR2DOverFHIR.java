@@ -16,6 +16,7 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BearerTokenAuthInterceptor;
 import eu.interopehrate.mr2d.BuildConfig;
+import eu.interopehrate.mr2d.exceptions.MR2DSecurityException;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.MR2D;
@@ -30,7 +31,8 @@ import eu.interopehrate.mr2de.fhir.dao.ResourceDAO;
 import eu.interopehrate.mr2de.fhir.executor.FHIRProgressiveExecutor;
 import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
-import eu.interopehrate.mr2dsm.MR2DSMOverKeycloak;
+import eu.interopehrate.mr2dsm.MR2DSMFactory;
+import eu.interopehrate.mr2dsm.api.MR2DSM;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -41,32 +43,33 @@ import eu.interopehrate.mr2dsm.MR2DSMOverKeycloak;
 class MR2DOverFHIR implements MR2D {
 
     private final NCPDescriptor ncp;
-    private final String sessionToken;
     private final FhirContext fhirContext;
-    private View view;
+    private MR2DSM mr2dsm;
 
-    MR2DOverFHIR(NCPDescriptor ncp, String sessionToken, View view) {
+    MR2DOverFHIR(NCPDescriptor ncp) {
         Log.d(getClass().getName(), "Created instance of MR2DOverFHIR. MR2DE IS WORKING IN FHIR MODALITY.");
         this.ncp = ncp;
-        this.sessionToken = sessionToken;
-        this.view = view;
-
         // Creates FHIRContext, this is an expensive operation MUST be performed once
         fhirContext = FhirContext.forR4();
+        // TODO: investigate if this performance setting is ok
+        fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
+
+        // Creates the RestfulClientFactory for connecting to proxy
+        /*
         R2DHttpRestfulClientFactory httpFactory = new R2DHttpRestfulClientFactory(fhirContext);
         if (BuildConfig.DEBUG) {
             // Only for testing the app inside eng infrastructure
             //httpFactory.setProxy("proxy.eng.it", 3128);
             httpFactory.setProxy("10.0.2.2", 13128);
         }
-        // TODO: investigate if this performance setting is ok
-        httpFactory.setServerValidationMode(ServerValidationModeEnum.NEVER);
-
         fhirContext.setRestfulClientFactory(httpFactory);
-        // TODO: investigate if this performance setting is ok
-        fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
-    }
+        */
 
+        // TODO: investigate if this performance setting is ok
+        fhirContext.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
+
+        mr2dsm = MR2DSMFactory.create(ncp);
+    }
 
     @NonNull
     @WorkerThread
@@ -76,6 +79,10 @@ class MR2DOverFHIR implements MR2D {
         Log.d(getClass().getName(), "Execution of method getRecords() STARTED.");
 
         // Preconditions checks
+        if (! this.isAuthenticated())
+            throw new MR2DSecurityException(new IllegalStateException("MR2D is in NOT_AUTHENTICATED status. " +
+                    "Execute login() method to grant access to business methods of MR2D." ));
+
         if (hrTypes == null || hrTypes.length == 0)
             hrTypes = HealthRecordType.values();
 
@@ -102,7 +109,6 @@ class MR2DOverFHIR implements MR2D {
         }
     }
 
-
     @Override
     public HealthRecordBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
         return getRecords(HealthRecordType.values(), from, responseFormat);
@@ -115,6 +121,10 @@ class MR2DOverFHIR implements MR2D {
         Log.d(getClass().getName(), "Execution of method getLastResource() STARTED.");
 
         // Preconditions checks
+        if (! this.isAuthenticated())
+            throw new MR2DSecurityException(new IllegalStateException("MR2D is in NOT_AUTHENTICATED status. " +
+                    "Execute login() method to grant access to business methods of MR2D." ));
+
         if (hrType == null)
             throw new IllegalArgumentException("Precondition failed: Argument hrType cannot be null.");
 
@@ -141,6 +151,10 @@ class MR2DOverFHIR implements MR2D {
         Log.d(getClass().getName(), "Execution of method getRecord() STARTED.");
 
         // Preconditions checks
+        if (! this.isAuthenticated())
+            throw new MR2DSecurityException(new IllegalStateException("MR2D is in NOT_AUTHENTICATED status. " +
+                    "Execute login() method to grant access to business methods of MR2D." ));
+
         if (resId == null || resId.isEmpty())
             throw new IllegalArgumentException("Precondition failed: Argument resId does not have a valid id.");
 
@@ -164,12 +178,11 @@ class MR2DOverFHIR implements MR2D {
      */
     @NonNull
     private IGenericClient createFHIRClient() {
-        Log.d(getClass().getName(), "Creating FHIR client for session: " + this.sessionToken);
+        Log.d(getClass().getName(), "Creating FHIR client for authenticated session");
 
         IGenericClient fC = fhirContext.newRestfulGenericClient(ncp.getFhirEndpoint());
-
         // Registering outgoing interceptor for adding Bearer Token to requests
-        fC.registerInterceptor(new BearerTokenAuthInterceptor(this.sessionToken));
+        fC.registerInterceptor(new BearerTokenAuthInterceptor(getToken()));
 
         return fC;
     }
@@ -177,22 +190,19 @@ class MR2DOverFHIR implements MR2D {
     @Override
     public void login(String username, String password) {
         Log.d(getClass().getName(), "Login");
-        MR2DSMOverKeycloak mr2DSM = new MR2DSMOverKeycloak(view);
-        mr2DSM.setKeycloakURL(ncp.getIamEndpoint());
-        mr2DSM.login(username,password);
+        mr2dsm.login(username, password);
     }
 
     @Override
     public void logout() {
         Log.d(getClass().getName(), "Logout");
-        MR2DSMOverKeycloak mr2DSM = new MR2DSMOverKeycloak(view);
-        mr2DSM.logout();
+        mr2dsm.logout();
     }
 
     @Override
     public String getToken() {
         Log.d(getClass().getName(), "Get stored token");
-        MR2DSMOverKeycloak mr2DSM = new MR2DSMOverKeycloak(view);
-        return mr2DSM.getToken();
+        return mr2dsm.getToken();
     }
+
 }
