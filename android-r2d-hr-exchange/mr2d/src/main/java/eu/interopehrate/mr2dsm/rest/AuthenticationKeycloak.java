@@ -8,11 +8,10 @@ package eu.interopehrate.mr2dsm.rest;
  */
 
 import eu.interopehrate.mr2dsm.model.AccessTokenResponce;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -36,4 +35,21 @@ public interface AuthenticationKeycloak {
                                                @Field("username") String username,
                                                @Field("password") String password,
                                                @Field("client_id") String client_id);
+
+    /**
+     *
+     * Responsible for logout the active session
+     *
+     * @param grantType,
+     * @param refresh_token
+     * @param client_id
+     *
+     */
+
+    @FormUrlEncoded
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @POST("/auth/realms/interopEHRate/protocol/openid-connect/logout")
+    Call<ResponseBody> logout(@Field("grant_type") String grantType,
+                              @Field("refresh_token") String refresh_token,
+                              @Field("client_id") String client_id);
 }

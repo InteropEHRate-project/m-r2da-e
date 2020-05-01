@@ -74,6 +74,13 @@
             android:text="Login()" />
 
         <Button
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:enabled="false"
+            android:text="Logout()" />
+
+        <Button
             android:id="@+id/getToken"
             android:layout_width="match_parent"
             android:layout_height="50dp"

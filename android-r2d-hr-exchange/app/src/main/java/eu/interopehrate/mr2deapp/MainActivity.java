@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Disable all buttons
                     findViewById(R.id.login).setEnabled(true);
+                    findViewById(R.id.logout).setEnabled(true);
                     findViewById(R.id.getToken).setEnabled(true);
                     findViewById(R.id.getLastButton).setEnabled(true);
                     findViewById(R.id.getAllButton).setEnabled(true);
@@ -76,6 +77,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mr2d.login("mario.rossi","interopehrate");
+            }
+        });
+
+        b = findViewById(R.id.logout);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mr2d.logout();
             }
         });
 
