@@ -11,7 +11,6 @@ public interface MR2DSM {
      * @param password
      *
      */
-
     void login(String username, String password) throws MR2DSecurityException;
 
     /**
@@ -21,11 +20,15 @@ public interface MR2DSM {
 
     /**
      *
-     * Responsible for retrive the token from SharePreferences
+     * Responsible for retrieve the token from SharePreferences
      *
      */
     String getToken();
 
+    /**
+     * Default implementation of method isAuthenticated() to obtain the status of MR2DSM
+     * @return
+     */
     default boolean isAuthenticated() {
         return getToken() != null;
     }

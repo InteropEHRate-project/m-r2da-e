@@ -205,8 +205,7 @@ class MR2DOverFHIR implements MR2D {
         if (mr2dsm.getToken() == null)
             return null;
 
-        return MARIO_ROSSI_SESSION;
-        // return mr2dsm.getToken();
+        return mr2dsm.getToken();
     }
 
 }

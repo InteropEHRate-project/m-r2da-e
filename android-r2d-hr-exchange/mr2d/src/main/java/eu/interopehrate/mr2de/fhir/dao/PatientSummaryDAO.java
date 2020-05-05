@@ -5,6 +5,7 @@ import android.util.Log;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Composition;
+import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
@@ -36,6 +37,43 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
         Log.d(getClass().getName(), "Starting execution of method getLast()");
 
         Coding psCode = LoincCodes.PATIENT_SUMMARY.getCoding();
+        // Creates query to retrieve the instance of Composition
+        IQuery<Bundle> q = fhirClient
+                .search()
+                .forResource(Composition.class)
+                .where(Composition.TYPE.exactly().systemAndCode(psCode.getSystem(), psCode.getCode()))
+                .count(1)
+                .sort().descending(Composition.DATE)
+                .accept(GenericFHIRDAO.ACCEPT_JSON)
+                .returnBundle(Bundle.class);
+
+        // Executes query
+        Bundle compositions = q.execute();
+        Log.d(getClass().getSimpleName(), compositions.getLink(Bundle.LINK_SELF).getUrl());
+
+        // If there is one instance of Composition, then invokes the $document operation on it
+        if (compositions != null && compositions.getEntry().size() > 0) {
+            Bundle.BundleEntryComponent comp = compositions.getEntry().get(0);
+            // Invokes operation $document to create PS Bundle
+            Parameters patientSummary =
+                    fhirClient.operation()
+                    .onInstance(comp.getResource().getIdElement())
+                    .named("$document")
+                    .withNoParameters(Parameters.class)
+                    .useHttpGet()
+                    .execute();
+
+            return patientSummary.getParameterFirstRep().getResource();
+        }
+
+        return new Bundle();
+    }
+
+    /*
+    private Resource oldGetLast() {
+        Log.d(getClass().getName(), "Starting execution of method getLast()");
+
+        Coding psCode = LoincCodes.PATIENT_SUMMARY.getCoding();
 
         IQuery<Bundle> q = fhirClient
                 .search()
@@ -62,5 +100,6 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
 
         return results;
     }
+    */
 
 }

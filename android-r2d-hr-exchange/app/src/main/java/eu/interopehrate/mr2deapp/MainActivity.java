@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
                     // Disable all buttons
                     findViewById(R.id.login).setEnabled(true);
-                    findViewById(R.id.logout).setEnabled(true);
-                    findViewById(R.id.getToken).setEnabled(true);
-                    findViewById(R.id.getLastButton).setEnabled(true);
-                    findViewById(R.id.getAllButton).setEnabled(true);
-                    findViewById(R.id.getRecordButton).setEnabled(true);
-                    findViewById(R.id.resIdText).setEnabled(true);
+                    findViewById(R.id.getToken).setEnabled(false);
+                    findViewById(R.id.getLastButton).setEnabled(false);
+                    findViewById(R.id.getAllButton).setEnabled(false);
+                    findViewById(R.id.getRecordButton).setEnabled(false);
+                    findViewById(R.id.resIdText).setEnabled(false);
+                    findViewById(R.id.logout).setEnabled(false);
                 } catch (MR2DException e) {
                     Log.e(getClass().getName(), "Error while loading MR2D", e);
                 }
@@ -77,6 +77,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mr2d.login("mario.rossi","interopehrate");
+                findViewById(R.id.logout).setEnabled(true);
+                findViewById(R.id.getToken).setEnabled(true);
+                findViewById(R.id.getLastButton).setEnabled(true);
+                findViewById(R.id.getAllButton).setEnabled(true);
+                findViewById(R.id.getRecordButton).setEnabled(true);
+                findViewById(R.id.resIdText).setEnabled(true);
+                findViewById(R.id.login).setEnabled(false);
             }
         });
 
@@ -85,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mr2d.logout();
+                findViewById(R.id.login).setEnabled(true);
+                findViewById(R.id.getToken).setEnabled(false);
+                findViewById(R.id.getLastButton).setEnabled(false);
+                findViewById(R.id.getAllButton).setEnabled(false);
+                findViewById(R.id.getRecordButton).setEnabled(false);
+                findViewById(R.id.resIdText).setEnabled(false);
+                findViewById(R.id.logout).setEnabled(false);
             }
         });
 
