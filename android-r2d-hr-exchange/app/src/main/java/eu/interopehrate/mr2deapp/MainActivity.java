@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         protected org.hl7.fhir.r4.model.Bundle doInBackground(Object[] args) {
             try {
                 return (org.hl7.fhir.r4.model.Bundle)MainActivity.this.mr2d.
-                        getLastRecord((HealthRecordType)args[0], ResponseFormat.STRUCTURED_CONVERTED);
+                        getLastRecord((HealthRecordType)args[0], ResponseFormat.STRUCTURED_UNCONVERTED);
             } catch (MR2DException e) {
                 Log.e(getClass().getName(), "Error while interacting with NCP", e);
             }
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Resource doInBackground(String[] args) {
             try {
-                return MainActivity.this.mr2d.getRecord(args[0], ResponseFormat.STRUCTURED_CONVERTED);
+                return MainActivity.this.mr2d.getRecord(args[0]);
             } catch (MR2DException e) {
                 Log.e(getClass().getName(), "Error while interacting with NCP", e);
             }
@@ -258,7 +258,8 @@ public class MainActivity extends AppCompatActivity {
             HealthRecordType cu = null;
             try {
                 // executes method getAllRecords providing the starting date
-                bundle = MainActivity.this.mr2d.getAllRecords((Date)args[0], null);
+                // bundle = MainActivity.this.mr2d.getAllRecords((Date)args[0], ResponseFormat.ALL);
+                bundle = MainActivity.this.mr2d.getRecords((Date)args[0], ResponseFormat.ALL);
 
                 for (HealthRecordType t : bundle.getHealthRecordTypes()) {
                     numRecords = 0;
@@ -268,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                         // Log.d(getClass().getName(), r.getId());
                         // simulate saving resource to DB
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

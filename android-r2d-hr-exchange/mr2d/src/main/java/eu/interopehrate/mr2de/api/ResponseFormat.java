@@ -14,13 +14,14 @@ public enum ResponseFormat {
     means of a semi automatic information extraction process. Semantic codes obtained by information
      extraction will allow the fhirClient to show labels and portion of the original natural language
      content in the language of the user (both HCP and Citizen)
-     */
     STRUCTURED_CONVERTED,
+     */
 
     /*
     Data are represented as FHIR Resources, using same semantic codes (if any) as the original
     source data (no conversion of semantic codes is perfomed)
      */
+
     STRUCTURED_UNCONVERTED,
 
     /*
@@ -37,5 +38,6 @@ public enum ResponseFormat {
     If the server is not able to perform any data transformations, only UNSTRUCTURED values
     are returned.
      */
+
     ALL;
 }

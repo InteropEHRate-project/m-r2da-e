@@ -3,6 +3,7 @@ package eu.interopehrate.mr2de.r2d.dao;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 
+import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 
 /**
@@ -20,20 +21,20 @@ public interface HealthRecordDAO {
      *
      * @param args contains an instance of Arguments, that holds the list of Argument
      *             passed to the method. Every instance of Argument has a name that
-     *             has been setted with the corresponding search attribute name of
-     *             FHIR. For Example, if the search has to be performed over the
-     *             Patient Resource, Argument must be named only with search name
-     *             parameters defined by FHIR Specs.
+     *             has been set with the corresponding search attribute name of
+     *             the matching FHIR resource. For Example, if the search has to be
+     *             performed over the Patient Resource, Argument must be named only
+     *             with search name parameters defined by FHIR Specs for Patient resource.
      * @return
      */
-    Bundle search(Arguments args);
+    Bundle search(Arguments args, ResponseFormat format);
 
     /**
      *
      * @return performs a search of a specific kind oh health data
      *         returning only the most recent one.
      */
-    Resource getLast();
+    Resource getLast(ResponseFormat format);
 
     /**
      * Returns a specific instance of healt record identifed by its id.

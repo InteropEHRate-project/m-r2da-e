@@ -26,9 +26,9 @@ public interface MR2D extends MR2DSM {
      * @param responseFormat : the format of returned data (structured or unstructured)
      * @return
      */
-    public HealthRecordBundle getRecords(HealthRecordType[] hrTypes,
-                                         Date from,
-                                         ResponseFormat responseFormat) throws MR2DException;
+    public HealthRecordBundle getRecords(Date from,
+                                         ResponseFormat responseFormat,
+                                         HealthRecordType ...hrTypes) throws MR2DException;
 
     /**
      *
@@ -58,13 +58,11 @@ public interface MR2D extends MR2DSM {
      * Returns a specific instance of health record identified by the provided id
      *
      * @param resId: id of the resource that must be retrieved
-     * @param responseFormat: the format of returned data (structured or unstructured)
      *
      * @return an instance of Resource corresponding to the one identified by the id, otherwise null
      */
     @NonNull
     @WorkerThread
-    public Resource getRecord(@NonNull String resId,
-                              @NonNull ResponseFormat responseFormat) throws MR2DException;
+    public Resource getRecord(@NonNull String resId) throws MR2DException;
 
 }

@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: "maven-publish"
 
 group = "eu.interoperhate"
-version="0.1.1"
+version="0.2.0"
 
 configurations {
     all*.exclude group: 'org.codehaus.woodstox'
@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
+    implementation 'org.reflections:reflections:0.9.12'
 }
 
 /*

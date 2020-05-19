@@ -14,8 +14,7 @@ import java.util.Map;
  *  Description: represents a collection of instances of Argument
  */
 public class Arguments {
-
-    private Map<ArgumentName, Argument> args = new Hashtable<>();
+     private Map<ArgumentName, Argument> args = new Hashtable<>();
 
     public Arguments add(@NonNull ArgumentName name, @NonNull Object value) {
         args.put(name, new Argument(name, value));

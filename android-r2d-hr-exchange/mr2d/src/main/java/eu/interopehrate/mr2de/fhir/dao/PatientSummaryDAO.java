@@ -10,6 +10,8 @@ import org.hl7.fhir.r4.model.Resource;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
+import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 import eu.interopehrate.mr2de.utils.codes.LoincCodes;
 
@@ -26,15 +28,8 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
     }
 
     @Override
-    public Bundle search(Arguments args) {
-        Log.d(getClass().getName(), "Starting execution of method search()");
-
-        return (Bundle)getLast();
-    }
-
-    @Override
-    public Resource getLast() {
-        Log.d(getClass().getName(), "Starting execution of method getLast()");
+    protected Bundle searchFirstPageOfStructuredData(Arguments args) {
+        Log.d(getClass().getSimpleName(), "Retrieving first page of Structured - " + HealthRecordType.PATIENT_SUMMARY);
 
         Coding psCode = LoincCodes.PATIENT_SUMMARY.getCoding();
         // Creates query to retrieve the instance of Composition
@@ -57,21 +52,44 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
             // Invokes operation $document to create PS Bundle
             Parameters patientSummary =
                     fhirClient.operation()
-                    .onInstance(comp.getResource().getIdElement())
-                    .named("$document")
-                    .withNoParameters(Parameters.class)
-                    .useHttpGet()
-                    .execute();
+                            .onInstance(comp.getResource().getIdElement())
+                            .named("$document")
+                            .withNoParameters(Parameters.class)
+                            .useHttpGet()
+                            .execute();
 
-            return patientSummary.getParameterFirstRep().getResource();
+            return (Bundle)patientSummary.getParameterFirstRep().getResource();
         }
 
         return new Bundle();
     }
 
+    @Override
+    protected Bundle searchFirstPageOfUnstructuredData(Arguments args) {
+        Log.d(getClass().getSimpleName(), "Retrieving first page of Unstructured - " + HealthRecordType.PATIENT_SUMMARY);
+
+        return new Bundle();
+    }
+
+    /**
+     *
+     * @param format
+     * @return
+     */
+    @Override
+    public Resource getLast(ResponseFormat format) {
+        Log.d(getClass().getSimpleName(), "Starting execution of method getLast()");
+
+        // Starts the execution of the search
+        if (format == ResponseFormat.STRUCTURED_UNCONVERTED) {
+            return searchFirstPageOfStructuredData(new Arguments());
+        } else
+            return null;
+    }
+
     /*
     private Resource oldGetLast() {
-        Log.d(getClass().getName(), "Starting execution of method getLast()");
+        Log.d(getClass().getSimpleName(), "Starting execution of method getLast()");
 
         Coding psCode = LoincCodes.PATIENT_SUMMARY.getCoding();
 

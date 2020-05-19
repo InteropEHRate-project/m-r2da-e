@@ -28,9 +28,9 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
     private int total;
 
     private final ProgressiveExecutor executor;
-    private Bundle cache;
-    private int cacheSize;
-    private int cacheIndex = 0;
+    private Bundle currentBundle;
+    private int currentBundleSize;
+    private int currentBundleIndex = 0;
 
     public LazyHealthRecordBundle(ProgressiveExecutor executor) {
         this.executor = executor;
@@ -44,36 +44,36 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
     @Override
     public int getTotal(HealthRecordType type) {
         // TODO: controllare che sia giusto, perche questo corrrisponde solo al corrente
-        return cache.getTotal();
+        return currentBundle.getTotal();
     }
 
     @Override
     public boolean hasNext(HealthRecordType type) {
-        if (cacheIndex == cacheSize) {
+        if (currentBundleIndex == currentBundleSize) {
             // executes next step of query
             try {
-                cache = executor.next(type);
-                if (cache == null)
+                currentBundle = executor.next(type);
+                if (currentBundle == null)
                     return false;
                 else {
-                    cacheSize = cache.getEntry().size();
-                    cacheIndex = 0;
+                    currentBundleSize = currentBundle.getEntry().size();
+                    currentBundleIndex = 0;
                 }
             } catch (Exception e) {
-                Log.e(getClass().getName(), "Exception in method executor.next()", e);
+                Log.e(getClass().getSimpleName(), "Exception in method executor.next()", e);
                 throw new MR2DException(e);
             }
         }
 
-        return (cacheIndex < cacheSize);
+        return (currentBundleIndex < currentBundleSize);
     }
 
     @WorkerThread
     @Override
     public Resource next(HealthRecordType type) {
         if (hasNext(type)) {
-            Resource r = cache.getEntry().get(cacheIndex++).getResource();
-            r.setUserData(HealthRecordType.class.getName(), cache.getUserData(HealthRecordType.class.getName()));
+            Resource r = currentBundle.getEntry().get(currentBundleIndex++).getResource();
+            r.setUserData(HealthRecordType.class.getName(), currentBundle.getUserData(HealthRecordType.class.getName()));
             return r;
         } else
             throw new IllegalStateException("No more objects to retrieve from LazyHealthRecordBundle.");

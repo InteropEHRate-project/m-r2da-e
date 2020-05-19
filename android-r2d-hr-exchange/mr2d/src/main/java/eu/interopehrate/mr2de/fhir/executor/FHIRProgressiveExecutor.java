@@ -12,6 +12,7 @@ import java.util.Map;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import eu.interopehrate.mr2de.api.HealthRecordBundle;
+import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.fhir.ExceptionDetector;
 import eu.interopehrate.mr2de.fhir.dao.FHIRDaoFactory;
 import eu.interopehrate.mr2de.r2d.executor.LazyHealthRecordBundle;
@@ -31,6 +32,7 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
 
     private final IGenericClient fhirClient;
     private HealthRecordType[] hrTypes;
+    private ResponseFormat format;
     private int currentHrTypesIdx;
     private Arguments args;
 
@@ -41,9 +43,10 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
      * @param fhirClient
      * @param hrTypes
      */
-    public FHIRProgressiveExecutor(IGenericClient fhirClient, HealthRecordType[] hrTypes) {
+    public FHIRProgressiveExecutor(IGenericClient fhirClient, HealthRecordType[] hrTypes, ResponseFormat format) {
         this.fhirClient = fhirClient;
         this.hrTypes = hrTypes;
+        this.format = format;
         // HashMap initialization
         Arrays.stream(this.hrTypes).forEach(type ->
                 cache.put(type, new CacheEntry(FHIRDaoFactory.create(fhirClient, type)))
@@ -65,42 +68,62 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
     @Override
     @WorkerThread
     public Bundle next(HealthRecordType type) {
+        Log.d(getClass().getSimpleName(), "Started method next() for type: " + type);
+
         if (Arrays.binarySearch(hrTypes, type) < 0)
-            throw new IllegalArgumentException("Provided HealthRecordType is not present in this search init parameters.");
+            throw new IllegalArgumentException("The provided HealthRecordType " + type + " is not present in this search init parameters.");
 
         // Retrievs item from cache
         CacheEntry entry = cache.get(type);
-        // Checks if type has alreaby been completely fetched
         if (entry.isCompleted()) {
-            Log.d(getClass().getName(), "No more records to be fetched for type: " + type);
+            // Checks if type has alreaby been completely fetched
+            Log.d(getClass().getSimpleName(), "No more records to be fetched for type: " + type);
             return null;
         }
 
-        // Entry is present and has not been completed
         if (entry.getBundle() == null) {
-            Log.d(getClass().getName(), "Retrieving first page of current type: " + type);
-            // Retrieves first page of current query, MUST NOT BE EXECUTED IN MAIN THREAD
+            // Entry is present but has not been started
+            // Log.d(getClass().getSimpleName(), "Loading first page of current type: " + type);
+            // Retrieves first page of current query
             try {
-                Bundle firstBundle = entry.getDao().search(args);
-                firstBundle.setUserData(HealthRecordType.class.getName(), type);
-                entry.setBundle(firstBundle);
-                if (firstBundle.isEmpty() || firstBundle.getLink(Bundle.LINK_NEXT) == null)
-                    entry.setCompleted();
+                // Starts the query, a DAO may needs to execute more than one query
+                // to get results, depending on the response format requested by client
+                // and from the amount of pages of each format.
+                Bundle currentBundle = entry.getDao().search(args, format);
+                if (entry.getDao().isSearchComplete())
+                    return  currentBundle;
 
-                return firstBundle;
+                while (currentBundle.getEntry().size() == 0) {
+                    currentBundle = entry.getDao().nextPage();
+                    if (entry.getDao().isSearchComplete()) {
+                        entry.setCompleted();
+                        break;
+                    }
+                }
+
+                currentBundle.setUserData(HealthRecordType.class.getName(), type);
+                entry.setBundle(currentBundle);
+
+                return currentBundle;
             } catch (Exception e) {
                 Log.e(getClass().getName(), "Exception in method next()", e);
                 throw ExceptionDetector.detectException(e);
             }
         } else if (entry.getBundle().getLink(Bundle.LINK_NEXT) != null) {
-            Log.d(getClass().getName(), "Retrieving next page of current type: " + type);
-            // Retrieves next page of current query, MUST NOT BE EXECUTED IN MAIN THREAD
+            // Entry is present and has been started
+            // Log.d(getClass().getSimpleName(), "Retrieving next page of current type: " + type);
             try {
-                Bundle nextBundle = entry.getDao().nextPage(entry.getBundle());
+                // Retrieves next page of current query, MUST NOT BE EXECUTED IN MAIN THREAD
+                Bundle nextBundle = entry.getDao().nextPage();
+                while (nextBundle.getEntry().size() == 0) {
+                    nextBundle = entry.getDao().nextPage();
+                    if (entry.getDao().isSearchComplete()) {
+                        entry.setCompleted();
+                        continue;
+                    }
+                }
                 nextBundle.setUserData(HealthRecordType.class.getName(), type);
                 entry.setBundle(nextBundle);
-                if (nextBundle.isEmpty() || nextBundle.getLink(Bundle.LINK_NEXT) == null)
-                    entry.setCompleted();
 
                 return nextBundle;
             } catch (Exception e) {
@@ -108,7 +131,7 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
                 throw ExceptionDetector.detectException(e);
             }
         } else {
-            Log.d(getClass().getName(), "No more records to be fetched for type: " + type);
+            Log.d(getClass().getSimpleName(), "No more records to be fetched for type: " + type);
             entry.setCompleted();
             return null;
         }

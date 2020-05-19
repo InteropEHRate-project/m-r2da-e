@@ -40,7 +40,9 @@ class MR2DOverLocal implements MR2D {
 
 
     @Override
-    public HealthRecordBundle getRecords(HealthRecordType[] hrTypes, Date from, ResponseFormat responseFormat) throws MR2DException {
+    public HealthRecordBundle getRecords(@NonNull Date from,
+                                         @NonNull ResponseFormat responseFormat,
+                                         @NonNull HealthRecordType ...hrTypes) {
         Log.d(getClass().getName(), "Execution of method getRecords() STARTED.");
         Bundle ps = (Bundle)getLastRecord(HealthRecordType.PATIENT_SUMMARY, responseFormat);
 
@@ -51,15 +53,13 @@ class MR2DOverLocal implements MR2D {
     @Override
     public HealthRecordBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
         Log.d(getClass().getName(), "Execution of method getAllRecords() STARTED.");
-        HealthRecordBundle hrb = getRecords(HealthRecordType.values(), from, responseFormat);
+        HealthRecordBundle hrb = getRecords(from, responseFormat, HealthRecordType.values());
         Log.d(getClass().getName(), "Execution of method getAllRecords() COMPLETED.");
         return hrb;
     }
 
-    @NonNull
     @Override
-    @WorkerThread
-    public Resource getLastRecord(@NonNull HealthRecordType rType,@NonNull ResponseFormat responseFormat) {
+    public Resource getLastRecord(@NonNull HealthRecordType rType, @NonNull ResponseFormat responseFormat) {
         Log.d(getClass().getName(), "Execution of method getLastResource() STARTED.");
 
         Bundle bundle = new Bundle();
@@ -86,12 +86,10 @@ class MR2DOverLocal implements MR2D {
         return bundle;
     }
 
-    @NonNull
     @Override
-    @WorkerThread
-    public Resource getRecord(@NonNull String resId, @NonNull ResponseFormat responseFormat) throws MR2DException {
+    public Resource getRecord(@NonNull String resId) throws MR2DException {
         Log.d(getClass().getName(), "Execution of method getRecord() STARTED.");
-        Resource r = getLastRecord(HealthRecordType.PATIENT_SUMMARY, responseFormat);
+        Resource r = getLastRecord(HealthRecordType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
         Log.d(getClass().getName(), "Execution of method getRecord() COMPLETED.");
         return r;
     }

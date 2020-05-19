@@ -2,7 +2,7 @@
 <ncplist xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ncp country="ITA" supportsFHIR="true" supportsEHDSI="false">
-        <fhir>http://213.249.46.205:8080/NCP/fhir/</fhir>
+        <fhir>http://10.0.2.2:8080/NCP/fhir/</fhir>
         <ehdsi></ehdsi>
         <iam>http://213.249.46.205:8443</iam>
     </ncp>
