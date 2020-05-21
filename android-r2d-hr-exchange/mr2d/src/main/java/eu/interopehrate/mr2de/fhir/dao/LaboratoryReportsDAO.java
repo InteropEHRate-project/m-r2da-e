@@ -11,13 +11,11 @@ import java.util.Date;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2de.annotations.HealthRecordDAOConfig;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 
-@HealthRecordDAOConfig(type= HealthRecordType.LABORATORY_REPORT, format= ResponseFormat.STRUCTURED_UNCONVERTED)
 public class LaboratoryReportsDAO extends GenericFHIRDAO {
     private static final String LAB_CODE = "LAB";
 

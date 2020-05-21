@@ -2,21 +2,21 @@
 <ncplist xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ncp country="ITA" supportsFHIR="true" supportsEHDSI="false">
-        <fhir>http://10.0.2.2:8080/NCP/fhir/</fhir>
+        <fhir>http://213.249.46.205:8080/NCP/fhir/</fhir>
         <ehdsi></ehdsi>
-        <iam>http://213.249.46.205:8443</iam>
+        <iam>http://217.172.12.180</iam>
     </ncp>
 
     <ncp country="BEL" supportsFHIR="true" supportsEHDSI="false">
         <fhir>http://213.249.46.205:8080/NCP/fhir/</fhir>
         <ehdsi></ehdsi>
-        <iam>http://213.249.46.205:8443</iam>
+        <iam>http://217.172.12.180</iam>
     </ncp>
 
     <ncp country="GRC" supportsFHIR="true" supportsEHDSI="false">
         <fhir>http://213.249.46.205:8080/NCP/fhir/</fhir>
         <ehdsi></ehdsi>
-        <iam>http://213.249.46.205:8443</iam>
+        <iam>http://217.172.12.180</iam>
     </ncp>
 
     <!-- Fake NCP used for switching MR2DE working locally for demo purposes only (10.0.2.2/213.249.46.205)-->

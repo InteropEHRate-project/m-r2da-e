@@ -24,7 +24,8 @@ public interface AuthenticationKeycloak {
      * @param grantType,
      * @param username
      * @param password
-     * @param client_id
+     * @param clientId
+     * @param clientSecret
      *
      */
 
@@ -34,15 +35,16 @@ public interface AuthenticationKeycloak {
     Call<AccessTokenResponce> requestAuthToken(@Field("grant_type") String grantType,
                                                @Field("username") String username,
                                                @Field("password") String password,
-                                               @Field("client_id") String client_id);
+                                               @Field("client_id") String clientId,
+                                               @Field("client_secret") String clientSecret);
 
     /**
      *
      * Responsible for logout the active session
      *
      * @param grantType,
-     * @param refresh_token
-     * @param client_id
+     * @param refreshToken
+     * @param clientId
      *
      */
 
@@ -50,6 +52,6 @@ public interface AuthenticationKeycloak {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("/auth/realms/interopEHRate/protocol/openid-connect/logout")
     Call<ResponseBody> logout(@Field("grant_type") String grantType,
-                              @Field("refresh_token") String refresh_token,
-                              @Field("client_id") String client_id);
+                              @Field("refresh_token") String refreshToken,
+                              @Field("client_id") String clientId);
 }

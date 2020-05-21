@@ -10,7 +10,6 @@ import java.lang.reflect.Constructor;
 import java.util.Set;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import eu.interopehrate.mr2de.annotations.HealthRecordDAOConfig;
 import eu.interopehrate.mr2de.api.HealthRecordType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.r2d.dao.HealthRecordDAO;

@@ -30,6 +30,7 @@ class MR2DSMOverKeycloak implements MR2DSM {
     }
 
     //TODO: Exception handling
+    // TODO: better management of clientID and clientSecret
     @Override
     public void login(String username, String password) throws MR2DSecurityException {
         Retrofit.Builder builder = new Retrofit.Builder();
@@ -39,17 +40,20 @@ class MR2DSMOverKeycloak implements MR2DSM {
                 .build();
         postsService = retrofitKeycloak.create(AuthenticationKeycloak.class);
 
-        Call<AccessTokenResponce> call = postsService.requestAuthToken("password",username,password,"S-EHR");
+        Call<AccessTokenResponce> call = postsService.requestAuthToken("password",
+                username, password,"S-EHR", "f05b9442-0fac-4c33-81d5-026366e54f1c");
 
         call.enqueue(new Callback<AccessTokenResponce>() {
             @Override
             public void onResponse(Call<AccessTokenResponce> call, Response<AccessTokenResponce> response) {
-                String accessToken = response.body().getAccess_token().toString();
-                String refreshToken = response.body().getRefresh_token().toString();
-                Log.d(getClass().getName(), accessToken);
-                Log.d(getClass().getName(), refreshToken);
-                storeToken(accessToken);
-                storeRefreshToken(refreshToken);
+                if (response.isSuccessful()) {
+                    String accessToken = response.body().getAccess_token().toString();
+                    String refreshToken = response.body().getRefresh_token().toString();
+                    Log.d(getClass().getName(), accessToken);
+                    storeToken(accessToken);
+                    storeRefreshToken(refreshToken);
+                } else
+                    throw new MR2DSecurityException("Error " + response.code() + ": " + response.message());
             }
 
             @Override
