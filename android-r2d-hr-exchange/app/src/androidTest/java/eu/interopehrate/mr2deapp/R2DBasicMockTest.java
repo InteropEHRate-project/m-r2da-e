@@ -36,7 +36,7 @@ public class R2DBasicMockTest {
     @Test
     public void getLastRecordForPatientSummaryOfMarioRossi() {
         Bundle bundle = (Bundle)marioRossiR2D.getLastRecord(
-                HealthRecordType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_CONVERTED);
+                HealthRecordType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
 
         Resource res = bundle.getEntryFirstRep().getResource();
         assertEquals("Composition", res.getResourceType().name());
@@ -57,7 +57,7 @@ public class R2DBasicMockTest {
 
     @Test
     public void getAllRecordsForForPatientSummaryOfMarioRossi() {
-        HealthRecordBundle b = marioRossiR2D.getAllRecords(null, ResponseFormat.STRUCTURED_CONVERTED);
+        HealthRecordBundle b = marioRossiR2D.getAllRecords(null, ResponseFormat.ALL);
 
         int counter = 0;
         for (HealthRecordType t: b.getHealthRecordTypes()) {

@@ -35,6 +35,7 @@ public class LaboratoryReportsDAO extends GenericFHIRDAO {
                 .search()
                 .forResource(DiagnosticReport.class)
                 .where(DiagnosticReport.CATEGORY.exactly().code(LAB_CODE))
+                .and(DiagnosticReport.STATUS.exactly().code(DiagnosticReport.DiagnosticReportStatus.FINAL.toString()))
                 .sort().descending(DiagnosticReport.DATE)
                 .include(DiagnosticReport.INCLUDE_RESULT)
                 .accept(GenericFHIRDAO.ACCEPT_JSON)

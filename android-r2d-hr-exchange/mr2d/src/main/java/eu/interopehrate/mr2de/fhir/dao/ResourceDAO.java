@@ -34,11 +34,12 @@ public class ResourceDAO {
      * @return
      */
     public Resource read(String resourceURL) {
-        Log.d(getClass().getName(), "Starting execution of method read()");
+        Log.d(getClass().getSimpleName(), "Starting execution of method read()");
         String[] tokens = resourceURL.split("/");
         if (tokens.length < 2)
             throw new IllegalArgumentException("Provided id is not a valid FHIR id: " + resourceURL);
 
+        Log.d(getClass().getName(), "Retrieving resource with URL: " + resourceURL);
         return (Resource)fhirClient.read()
                 .resource(tokens[tokens.length - 2])
                 .withUrl(resourceURL)

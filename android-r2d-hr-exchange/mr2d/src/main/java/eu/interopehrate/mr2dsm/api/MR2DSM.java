@@ -1,5 +1,7 @@
 package eu.interopehrate.mr2dsm.api;
 
+import androidx.annotation.WorkerThread;
+
 import eu.interopehrate.mr2d.exceptions.MR2DSecurityException;
 
 public interface MR2DSM {
@@ -11,11 +13,13 @@ public interface MR2DSM {
      * @param password
      *
      */
+    @WorkerThread
     void login(String username, String password) throws MR2DSecurityException;
 
     /**
      * Responsible for logout
      */
+    @WorkerThread
     void logout() throws MR2DSecurityException;
 
     /**

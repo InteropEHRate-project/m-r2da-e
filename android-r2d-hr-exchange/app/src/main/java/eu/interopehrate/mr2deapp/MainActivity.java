@@ -6,11 +6,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -23,6 +21,7 @@ import org.hl7.fhir.r4.model.Resource;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.MR2DFactory;
@@ -47,20 +46,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     // Creating a Patient for connecting to MR2D
-                    Patient p = new Patient();
 
                     // Sets patient's reference NCP
-                    if (((Switch)findViewById(R.id.fakeSwitch)).isChecked())
+                    if (((Switch)findViewById(R.id.fakeSwitch)).isChecked()) {
+                        Patient p = new Patient();
                         p.addAddress().setCountry("FKE");
-                    else
-                        p.addAddress().setCountry("ITA");
-
-                    // Creates an instance of MR2D
-                    mr2d = MR2DFactory.create(p);
+                        mr2d = MR2DFactory.create(p);
+                    } else
+                        mr2d = MR2DFactory.create(Locale.ITALY);
 
                     // Disable all buttons
                     findViewById(R.id.login).setEnabled(true);
-                    findViewById(R.id.getToken).setEnabled(false);
                     findViewById(R.id.getLastButton).setEnabled(false);
                     findViewById(R.id.getAllButton).setEnabled(false);
                     findViewById(R.id.getRecordButton).setEnabled(false);
@@ -76,14 +72,7 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mr2d.login("mario.rossi","interopehrate");
-                findViewById(R.id.logout).setEnabled(true);
-                findViewById(R.id.getToken).setEnabled(true);
-                findViewById(R.id.getLastButton).setEnabled(true);
-                findViewById(R.id.getAllButton).setEnabled(true);
-                findViewById(R.id.getRecordButton).setEnabled(true);
-                findViewById(R.id.resIdText).setEnabled(true);
-                findViewById(R.id.login).setEnabled(false);
+                (new Login()).execute();
             }
         });
 
@@ -91,22 +80,7 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mr2d.logout();
-                findViewById(R.id.login).setEnabled(true);
-                findViewById(R.id.getToken).setEnabled(false);
-                findViewById(R.id.getLastButton).setEnabled(false);
-                findViewById(R.id.getAllButton).setEnabled(false);
-                findViewById(R.id.getRecordButton).setEnabled(false);
-                findViewById(R.id.resIdText).setEnabled(false);
-                findViewById(R.id.logout).setEnabled(false);
-            }
-        });
-
-        b = findViewById(R.id.getToken);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("Token", mr2d.getToken());
+                (new Logout()).execute();
             }
         });
 
@@ -139,10 +113,58 @@ public class MainActivity extends AppCompatActivity {
                     (new GetResourceById()).execute(resId);
             }
         });
+
     }
 
     /*
-     * AsyncTask for getting Patient Summary: method MR2D.getLastRecord()
+     * ASYNC TASK #1: method MR2D.login()
+     */
+    private class Login extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... objects) {
+            mr2d.login("mario.rossi","interopehrate");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (mr2d.isAuthenticated()) {
+                findViewById(R.id.logout).setEnabled(true);
+                findViewById(R.id.getLastButton).setEnabled(true);
+                findViewById(R.id.getAllButton).setEnabled(true);
+                findViewById(R.id.getRecordButton).setEnabled(true);
+                findViewById(R.id.resIdText).setEnabled(true);
+                findViewById(R.id.login).setEnabled(false);
+            }
+        }
+    }
+
+    /*
+     * ASYNC TASK #2: method MR2D.logout()
+     */
+    private class Logout extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... objects) {
+            mr2d.logout();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (!mr2d.isAuthenticated()) {
+                findViewById(R.id.login).setEnabled(true);
+                findViewById(R.id.getLastButton).setEnabled(false);
+                findViewById(R.id.getAllButton).setEnabled(false);
+                findViewById(R.id.getRecordButton).setEnabled(false);
+                findViewById(R.id.resIdText).setEnabled(false);
+                findViewById(R.id.logout).setEnabled(false);
+            }
+        }
+    }
+
+
+    /*
+     * ASYNC TASK #3: method MR2D.getLastRecord() for PATIENT_SUMMARY
      */
     private class GetPatientSummary extends AsyncTask<Object, Void, org.hl7.fhir.r4.model.Bundle> {
         @Override
@@ -174,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-     * AsyncTask for getting a specific Resource: method MR2D.getRecord()
+     * ASYNC TASK #4 method MR2D.getRecord() for an instance of Patient/
      */
     private class GetResourceById extends AsyncTask<String, Void, Resource> {
         @Override
@@ -206,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /*
-     * AsyncTask for getting a set of heterogeneous health records: method MR2D.getRecords()
+     * ASYNC TASK #5: method MR2D.getRecords() for all type and all formats
      */
     private class GetRecords extends AsyncTask<Object, HealthRecordBundle, HealthRecordBundle> {
         private int numRecords = 0;
@@ -214,37 +236,6 @@ public class MainActivity extends AppCompatActivity {
         private HealthRecordType currentType;
         private ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         private TextView progressLabel = (TextView) findViewById(R.id.progressLabel);
-
-        @Override
-        /*
-         * Used to write the total number of records downloaded
-         * at the end of the "doInBackground" method
-         */
-        protected void onPostExecute(HealthRecordBundle bundle) {
-            progressLabel.setText("Downloaded " +  totalRecords + " records.");
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressLabel.setText("Starting download...");
-        }
-
-        @Override
-        /*
-         * Used to update the progress bar. It shows the type whose download
-         * is running and the number of records downloaded compared to the
-         * total.
-         */
-        protected void onProgressUpdate(HealthRecordBundle... bundles) {
-            if (bundles[0] == null)
-                return;
-
-            progressLabel.setText("Downloading " + currentType + "...");
-            if (numRecords == 1) // sets the max to the progress bar
-                progressBar.setMax(bundles[0].getTotal(currentType));
-
-            progressBar.setProgress(numRecords);
-        }
 
         @Override
         /*
@@ -283,6 +274,37 @@ public class MainActivity extends AppCompatActivity {
             }
 
             return bundle;
+        }
+
+        @Override
+        /*
+         * Used to write the total number of records downloaded
+         * at the end of the "doInBackground" method
+         */
+        protected void onPostExecute(HealthRecordBundle bundle) {
+            progressLabel.setText("Downloaded " +  totalRecords + " records.");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressLabel.setText("Starting download...");
+        }
+
+        @Override
+        /*
+         * Used to update the progress bar. It shows the type whose download
+         * is running and the number of records downloaded compared to the
+         * total.
+         */
+        protected void onProgressUpdate(HealthRecordBundle... bundles) {
+            if (bundles[0] == null)
+                return;
+
+            progressLabel.setText("Downloading " + currentType + "...");
+            if (numRecords == 1) // sets the max to the progress bar
+                progressBar.setMax(bundles[0].getTotal(currentType));
+
+            progressBar.setProgress(numRecords);
         }
     }
 

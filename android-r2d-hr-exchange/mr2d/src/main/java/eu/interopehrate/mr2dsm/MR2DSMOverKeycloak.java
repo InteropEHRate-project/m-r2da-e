@@ -2,6 +2,10 @@ package eu.interopehrate.mr2dsm;
 
 import android.util.Log;
 
+import androidx.annotation.WorkerThread;
+
+import java.io.IOException;
+
 import eu.interopehrate.mr2d.exceptions.MR2DSecurityException;
 import eu.interopehrate.mr2dsm.api.MR2DSM;
 import eu.interopehrate.mr2dsm.model.AccessTokenResponce;
@@ -20,29 +24,44 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *	    Description: Implementation of MR2DSM using Keycloak as authentication server
  */
 class MR2DSMOverKeycloak implements MR2DSM {
+    private static final String CLIENT_NAME = "S-EHR";
+    private static final String CLIENT_SECRET = "f05b9442-0fac-4c33-81d5-026366e54f1c";
+
     private AuthenticationKeycloak postsService;
     private String keycloakURL;
     private String accessToken;
     private String refreshToken;
+    private Retrofit retrofitKeycloak;
 
     MR2DSMOverKeycloak(String keycloakURL) {
+        // Stores Keycloack server endpoint
         this.keycloakURL = keycloakURL;
     }
 
-    //TODO: Exception handling
+    // TODO: Exception handling
     // TODO: better management of clientID and clientSecret
     @Override
+    @WorkerThread
     public void login(String username, String password) throws MR2DSecurityException {
-        Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl(keycloakURL);
-        builder.addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofitKeycloak = builder
-                .build();
+        Log.d(getClass().getSimpleName(), "Executing login()");
+        if (retrofitKeycloak == null)
+            loadRetrofit();
+
+        // creates an instance of AuthenticationKeycloak
         postsService = retrofitKeycloak.create(AuthenticationKeycloak.class);
 
-        Call<AccessTokenResponce> call = postsService.requestAuthToken("password",
-                username, password,"S-EHR", "f05b9442-0fac-4c33-81d5-026366e54f1c");
+        // Executes a synchronous call to the REST
+        try {
+            Call<AccessTokenResponce> call = postsService.requestAuthToken("password", username,
+                    password, CLIENT_NAME, CLIENT_SECRET);
+            AccessTokenResponce token = call.execute().body();
+            accessToken = token.getAccess_token();
+            refreshToken = token.getRefresh_token();
+        } catch (IOException e) {
+            throw new MR2DSecurityException(e);
+        }
 
+        /*
         call.enqueue(new Callback<AccessTokenResponce>() {
             @Override
             public void onResponse(Call<AccessTokenResponce> call, Response<AccessTokenResponce> response) {
@@ -58,25 +77,33 @@ class MR2DSMOverKeycloak implements MR2DSM {
 
             @Override
             public void onFailure(Call<AccessTokenResponce> call, Throwable t) {
-                //TODO: Exception handling
                 Log.e(getClass().getName(), t.getMessage());
             }
         });
+         */
+
     }
 
     //TODO: Exception handling
     @Override
+    @WorkerThread
     public void logout() throws MR2DSecurityException {
-        Log.d(getClass().getName(), "Executing logout()");
-        Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl(keycloakURL);
-        builder.addConverterFactory(GsonConverterFactory.create());
-        Retrofit retrofitKeycloak = builder
-                .build();
+        Log.d(getClass().getSimpleName(), "Executing logout()");
+        if (retrofitKeycloak == null)
+            loadRetrofit();
+
         postsService = retrofitKeycloak.create(AuthenticationKeycloak.class);
 
-        Call call = postsService.logout("refresh_token",refreshToken,"S-EHR");
+        try {
+            Call call = postsService.logout("refresh_token",refreshToken, CLIENT_NAME);
+            call.execute().body();
+            accessToken = null;
+            refreshToken = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        /*
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -89,7 +116,7 @@ class MR2DSMOverKeycloak implements MR2DSM {
                 Log.e(getClass().getName(), t.getMessage());
             }
         });
-        this.accessToken = null;
+         */
     }
 
     public String getToken() {
@@ -100,14 +127,11 @@ class MR2DSMOverKeycloak implements MR2DSM {
         return refreshToken;
     }
 
-    private void storeToken(String token) {
-        Log.d("MSSG storeToken", token);
-        this.accessToken = token;
+    private void loadRetrofit() {
+        // Creates the Retrofit builders
+        Retrofit.Builder builder = new Retrofit.Builder();
+        builder.baseUrl(keycloakURL);
+        builder.addConverterFactory(GsonConverterFactory.create());
+        retrofitKeycloak = builder.build();
     }
-
-    private void storeRefreshToken(String refreshToken) {
-        Log.d("MSSG storeRefreshToken", refreshToken);
-        this.refreshToken = refreshToken;
-    }
-    
 }

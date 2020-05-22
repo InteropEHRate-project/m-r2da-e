@@ -22,7 +22,7 @@
     <LinearLayout
         android:id="@+id/linearLayout_1"
         android:layout_width="336dp"
-        android:layout_height="133dp"
+        android:layout_height="206dp"
         android:layout_marginTop="30dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,24 +48,6 @@
             android:layout_height="50dp"
             android:text="Instantiate MR2DE" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayout_2"
-        android:layout_width="338dp"
-        android:layout_height="339dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout_1"
-        app:layout_constraintVertical_bias="0.445">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <Button
             android:id="@+id/login"
             android:layout_width="match_parent"
@@ -80,12 +62,22 @@
             android:enabled="false"
             android:text="Logout()" />
 
-        <Button
-            android:id="@+id/getToken"
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_2"
+        android:layout_width="338dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_1">
+
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:enabled="false"
-            android:text="Get_Token()" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/getLastButton"
@@ -93,10 +85,6 @@
             android:layout_height="50dp"
             android:enabled="false"
             android:text="Get_Last_PatientSummary()" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
 
         <Button
             android:id="@+id/getAllButton"
@@ -114,10 +102,6 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <Space
             android:layout_width="match_parent"
             android:layout_height="20dp" />
 
