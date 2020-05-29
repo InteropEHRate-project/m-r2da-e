@@ -58,7 +58,10 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
                             .useHttpGet()
                             .execute();
 
-            return (Bundle)patientSummary.getParameterFirstRep().getResource();
+            Bundle ps = (Bundle)patientSummary.getParameterFirstRep().getResource();
+            // IMPORTANT: Sets total equals to size of contained entries
+            ps.setTotal(ps.getEntry().size());
+            return ps;
         }
 
         return new Bundle();

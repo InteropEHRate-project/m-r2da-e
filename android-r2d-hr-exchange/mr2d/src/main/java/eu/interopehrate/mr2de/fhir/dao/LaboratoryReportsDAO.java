@@ -31,11 +31,13 @@ public class LaboratoryReportsDAO extends GenericFHIRDAO {
     protected Bundle searchFirstPageOfStructuredData(Arguments args) {
         Log.d(getClass().getSimpleName(), "Retrieving first page of Structured - " + HealthRecordType.LABORATORY_REPORT);
 
+        DiagnosticReport.DiagnosticReportStatus.FINAL.getDisplay();
+
         IQuery<Bundle> q = fhirClient
                 .search()
                 .forResource(DiagnosticReport.class)
                 .where(DiagnosticReport.CATEGORY.exactly().code(LAB_CODE))
-                .and(DiagnosticReport.STATUS.exactly().code(DiagnosticReport.DiagnosticReportStatus.FINAL.toString()))
+                .and(DiagnosticReport.STATUS.exactly().code(DiagnosticReport.DiagnosticReportStatus.FINAL.toCode()))
                 .sort().descending(DiagnosticReport.DATE)
                 .include(DiagnosticReport.INCLUDE_RESULT)
                 .accept(GenericFHIRDAO.ACCEPT_JSON)

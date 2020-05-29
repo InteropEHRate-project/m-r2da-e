@@ -56,15 +56,14 @@ class MR2DOverFHIR implements MR2D {
         fhirContext.setPerformanceOptions(PerformanceOptionsEnum.DEFERRED_MODEL_SCANNING);
 
         // Creates the RestfulClientFactory for connecting to proxy
-        /*
-        R2DHttpRestfulClientFactory httpFactory = new R2DHttpRestfulClientFactory(fhirContext);
-        if (BuildConfig.DEBUG) {
+
+        //R2DHttpRestfulClientFactory httpFactory = new R2DHttpRestfulClientFactory(fhirContext);
+        // if (BuildConfig.DEBUG) {
             // Only for testing the app inside eng infrastructure
             //httpFactory.setProxy("proxy.eng.it", 3128);
-            httpFactory.setProxy("10.0.2.2", 13128);
-        }
-        fhirContext.setRestfulClientFactory(httpFactory);
-        */
+        //    httpFactory.setProxy("10.0.2.2", 13128);
+        // }
+        //fhirContext.setRestfulClientFactory(httpFactory);
 
         // TODO: investigate if this performance setting is ok
         fhirContext.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);

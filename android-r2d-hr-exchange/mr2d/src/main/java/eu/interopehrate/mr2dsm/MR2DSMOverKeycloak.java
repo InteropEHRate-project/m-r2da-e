@@ -57,6 +57,7 @@ class MR2DSMOverKeycloak implements MR2DSM {
             AccessTokenResponce token = call.execute().body();
             accessToken = token.getAccess_token();
             refreshToken = token.getRefresh_token();
+            Log.d(getClass().getSimpleName(), "Succesfully executed login()");
         } catch (IOException e) {
             throw new MR2DSecurityException(e);
         }
@@ -99,6 +100,7 @@ class MR2DSMOverKeycloak implements MR2DSM {
             call.execute().body();
             accessToken = null;
             refreshToken = null;
+            Log.d(getClass().getSimpleName(), "Succesfully executed logout()");
         } catch (IOException e) {
             e.printStackTrace();
         }

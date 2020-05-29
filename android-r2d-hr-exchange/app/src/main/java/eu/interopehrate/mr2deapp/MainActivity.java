@@ -71,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
         b = findViewById(R.id.login);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
+            // "mario.rossi"
+            // "carla.verdi"
             public void onClick(View view) {
-                (new Login()).execute();
+                (new Login()).execute("carla.verdi");
             }
         });
 
@@ -97,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 GregorianCalendar gc = new GregorianCalendar(2019, Calendar.DECEMBER, 2);
-                (new GetRecords()).execute(gc.getTime());
+                (new GetRecords()).execute();
+                //(new GetRecords()).execute(gc.getTime());
             }
         });
 
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     private class Login extends AsyncTask<Object, Void, Void> {
         @Override
         protected Void doInBackground(Object... objects) {
-            mr2d.login("mario.rossi","interopehrate");
+            mr2d.login(objects[0].toString(),"interopehrate");
             return null;
         }
 
@@ -250,17 +253,18 @@ public class MainActivity extends AppCompatActivity {
             try {
                 // executes method getAllRecords providing the starting date
                 // bundle = MainActivity.this.mr2d.getAllRecords((Date)args[0], ResponseFormat.ALL);
-                bundle = MainActivity.this.mr2d.getRecords((Date)args[0], ResponseFormat.ALL);
+                bundle = MainActivity.this.mr2d.getRecords(null, ResponseFormat.ALL);
 
                 for (HealthRecordType t : bundle.getHealthRecordTypes()) {
                     numRecords = 0;
                     currentType = t;
+                    Log.d(getClass().getSimpleName(),"Tipo corrente: " + currentType);
                     while (bundle.hasNext(currentType)) {
                         Resource r = bundle.next(currentType);
                         // Log.d(getClass().getName(), r.getId());
                         // simulate saving resource to DB
                         try {
-                            Thread.sleep(1);
+                            Thread.sleep(10);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
