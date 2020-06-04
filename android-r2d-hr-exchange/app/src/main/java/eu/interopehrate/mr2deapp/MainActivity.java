@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             // "mario.rossi"
             // "carla.verdi"
             public void onClick(View view) {
-                (new Login()).execute("carla.verdi");
+                (new Login()).execute("mario.rossi");
             }
         });
 
@@ -125,7 +125,11 @@ public class MainActivity extends AppCompatActivity {
     private class Login extends AsyncTask<Object, Void, Void> {
         @Override
         protected Void doInBackground(Object... objects) {
-            mr2d.login(objects[0].toString(),"interopehrate");
+            try {
+                mr2d.login(objects[0].toString(), "interopehrate");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
@@ -253,7 +257,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 // executes method getAllRecords providing the starting date
                 // bundle = MainActivity.this.mr2d.getAllRecords((Date)args[0], ResponseFormat.ALL);
-                bundle = MainActivity.this.mr2d.getRecords(null, ResponseFormat.ALL);
+                bundle = MainActivity.this.mr2d.getRecords(null,
+                        ResponseFormat.ALL);
 
                 for (HealthRecordType t : bundle.getHealthRecordTypes()) {
                     numRecords = 0;

@@ -135,10 +135,11 @@ public abstract class GenericFHIRDAO implements HealthRecordDAO {
         } else
             return null;
 
-        if (mostRecentBundle.getEntry().size() > 0)
-            return mostRecentBundle.getEntryFirstRep().getResource();
+        //
+        // if (mostRecentBundle.getEntry().size() > 0)
+        //    return mostRecentBundle.getEntryFirstRep().getResource();
 
-        return null;
+        return mostRecentBundle;
     }
 
     /**

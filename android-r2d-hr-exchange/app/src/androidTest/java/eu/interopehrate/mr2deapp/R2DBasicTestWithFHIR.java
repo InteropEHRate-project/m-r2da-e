@@ -5,11 +5,11 @@ import android.util.Log;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Composition;
+import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Resource;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -30,26 +30,27 @@ import static org.junit.Assert.*;
  */
 public class R2DBasicTestWithFHIR {
 
-    private static MR2D itaR2D;
+    private static MR2D marioRossiR2D;
+    private static MR2D carlaVerdiR2D;
 
     @BeforeClass
     public static void setUp() throws Exception {
         Log.d(R2DBasicTestWithFHIR.class.getSimpleName(), "Executing setup()");
-        itaR2D = MR2DFactory.create(Locale.ITALY);
-        itaR2D.login("mario.rossi","interopehrate");
+        marioRossiR2D = MR2DFactory.create(Locale.ITALY);
+        marioRossiR2D.login("mario.rossi","interopehrate");
     }
 
     @AfterClass
     public static void close() throws Exception {
         Log.d(R2DBasicTestWithFHIR.class.getSimpleName(), "Executing close()");
-        if (itaR2D != null)
-            itaR2D.logout();
+        if (marioRossiR2D != null)
+            marioRossiR2D.logout();
     }
 
     @Test
     public void getLastPatientSummaryOfMarioRossi() {
         Log.d(getClass().getSimpleName(), "Executing getLastPatientSummaryOfMarioRossi()");
-        Bundle bundle = (Bundle) itaR2D.getLastRecord(
+        Bundle bundle = (Bundle) marioRossiR2D.getLastRecord(
                 HealthRecordType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
 
         Resource res = bundle.getEntryFirstRep().getResource();
@@ -70,25 +71,49 @@ public class R2DBasicTestWithFHIR {
     }
 
     @Test
+    public void getLastLaboratoryResultForPatientMarioRossi() {
+        Log.d(getClass().getSimpleName(), "Executing getLastPatientSummaryOfMarioRossi()");
+        Bundle bundle = (Bundle) marioRossiR2D.getLastRecord(
+                HealthRecordType.LABORATORY_REPORT, ResponseFormat.STRUCTURED_UNCONVERTED);
+
+        Resource res = bundle.getEntryFirstRep().getResource();
+        assertEquals("DiagnosticReport", res.getResourceType().name());
+
+        DiagnosticReport dr = (DiagnosticReport)res;
+        assertTrue(dr.getResult().size() == 38);
+    }
+
+    @Test
     public void getLaboratoryResultsForForPatientSummaryOfMarioRossi() {
-        HealthRecordBundle b = itaR2D.getRecords(null,
-                ResponseFormat.STRUCTURED_UNCONVERTED,
+        HealthRecordBundle b = marioRossiR2D.getRecords(null,
+                ResponseFormat.ALL,
                 HealthRecordType.LABORATORY_REPORT);
 
         int counter = 0;
+        int drCounter = 0;
+        int obsCounter = 0;
+        Resource r;
+
         for (HealthRecordType t: b.getHealthRecordTypes()) {
             while (b.hasNext(t)) {
-                b.next(t);
+                r = b.next(t);
+                if (r instanceof DiagnosticReport)
+                    drCounter++;
+                else if (r instanceof Observation)
+                    obsCounter++;
+
                 counter++;
             }
         }
 
-        assertTrue(counter > 1);
+        assertTrue(counter == 50);
+        assertTrue(drCounter == 2);
+        assertTrue(obsCounter == 48);
     }
 
     @Test
     public void getRecordForPatientMarioRossi() {
-        Resource res = itaR2D.getRecord("Patient/31");
+        Resource res = marioRossiR2D.getRecord("Patient/31");
 
         assertEquals("Patient", res.getResourceType().name());
 

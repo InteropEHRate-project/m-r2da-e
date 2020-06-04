@@ -82,25 +82,24 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
         }
 
         if (entry.getBundle() == null) {
-            // Entry is present but has not been started
-            // Log.d(getClass().getSimpleName(), "Loading first page of current type: " + type);
-            // Retrieves first page of current query
+            // Entry is present but has not been started, retrieves first page of current query
             try {
                 // Starts the query, a DAO may needs to execute more than one query
                 // to get results, depending on the response format requested by client
                 // and from the amount of pages of each format.
                 Bundle currentBundle = entry.getDao().search(args, format);
-                if (entry.getDao().isSearchComplete())
-                    return  currentBundle;
-
-                while (currentBundle.getEntry().size() == 0) {
-                    currentBundle = entry.getDao().nextPage();
-                    if (entry.getDao().isSearchComplete()) {
-                        entry.setCompleted();
-                        break;
+                if (entry.getDao().isSearchComplete()) // checks if search is finished
+                    entry.setCompleted();
+                else {
+                    // checks if returned bundle has more than 0 records
+                    while (currentBundle.getEntry().size() == 0) {
+                        currentBundle = entry.getDao().nextPage();
+                        if (entry.getDao().isSearchComplete()) {
+                            entry.setCompleted();
+                            break;
+                        }
                     }
                 }
-
                 currentBundle.setUserData(HealthRecordType.class.getName(), type);
                 entry.setBundle(currentBundle);
 
@@ -109,17 +108,20 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
                 Log.e(getClass().getName(), "Exception in method next()", e);
                 throw ExceptionDetector.detectException(e);
             }
-        } else if (entry.getBundle().getLink(Bundle.LINK_NEXT) != null) {
+        } else {
             // Entry is present and has been started
-            // Log.d(getClass().getSimpleName(), "Retrieving next page of current type: " + type);
             try {
                 // Retrieves next page of current query, MUST NOT BE EXECUTED IN MAIN THREAD
                 Bundle nextBundle = entry.getDao().nextPage();
-                while (nextBundle.getEntry().size() == 0) {
-                    nextBundle = entry.getDao().nextPage();
-                    if (entry.getDao().isSearchComplete()) {
-                        entry.setCompleted();
-                        continue;
+                if (entry.getDao().isSearchComplete()) // checks if search is finished
+                    entry.setCompleted();
+                else {
+                    while (nextBundle.getEntry().size() == 0) {
+                        nextBundle = entry.getDao().nextPage();
+                        if (entry.getDao().isSearchComplete()) {
+                            entry.setCompleted();
+                            break;
+                        }
                     }
                 }
                 nextBundle.setUserData(HealthRecordType.class.getName(), type);
@@ -130,11 +132,11 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
                 Log.e(getClass().getName(), "Exception in method next()", e);
                 throw ExceptionDetector.detectException(e);
             }
-        } else {
+        } /*else {
             Log.d(getClass().getSimpleName(), "No more records to be fetched for type: " + type);
             entry.setCompleted();
             return null;
-        }
+        }*/
     }
 
 

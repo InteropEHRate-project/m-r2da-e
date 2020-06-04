@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 class MR2DSMOverKeycloak implements MR2DSM {
     private static final String CLIENT_NAME = "S-EHR";
-    private static final String CLIENT_SECRET = "f05b9442-0fac-4c33-81d5-026366e54f1c";
+    private static final String CLIENT_SECRET = "864452c3-3bc1-4f09-ad06-b3c4dde0ee7b";
 
     private AuthenticationKeycloak postsService;
     private String keycloakURL;
@@ -51,15 +51,29 @@ class MR2DSMOverKeycloak implements MR2DSM {
         postsService = retrofitKeycloak.create(AuthenticationKeycloak.class);
 
         // Executes a synchronous call to the REST
+        Response<AccessTokenResponce> response = null;
         try {
             Call<AccessTokenResponce> call = postsService.requestAuthToken("password", username,
                     password, CLIENT_NAME, CLIENT_SECRET);
-            AccessTokenResponce token = call.execute().body();
-            accessToken = token.getAccess_token();
-            refreshToken = token.getRefresh_token();
-            Log.d(getClass().getSimpleName(), "Succesfully executed login()");
-        } catch (IOException e) {
+            response = call.execute();
+        } catch (Exception e) {
             throw new MR2DSecurityException(e);
+        }
+
+        // Checks response to determine if it has been OK or KO
+        if (response.isSuccessful()) {
+            accessToken = response.body().getAccess_token();
+            refreshToken = response.body().getRefresh_token();
+            Log.d(getClass().getSimpleName(), "Succesfully executed login()");
+        } else {
+            String errorMsg = null;
+            try {
+                errorMsg = response.errorBody().string();
+                Log.e(getClass().getSimpleName(), "Login failed: " + errorMsg);
+                throw new MR2DSecurityException(errorMsg);
+            } catch (IOException e) {
+                throw new MR2DSecurityException(e);
+            }
         }
 
         /*
