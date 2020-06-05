@@ -1,4 +1,27 @@
 <resources>
-    <string name="app_name">android-r2d-hr-exchange</string>
+    <string name="app_name">MR2D test app</string>
+    <string name="title_activity_login">MR2D Login</string>
+    <string name="prompt_username">Username</string>
+    <string name="action_sign_in">Login</string>
+    <string name="action_sign_out">Logout</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="countries">
+        <item>Italy</item>
+        <item>Belgium</item>
+        <item>Greece</item>
+        <item>Fake</item>
+    </string-array>
+
+    <string-array name="users">
+        <item>mario.rossi</item>
+        <item>carla.verdi</item>
+    </string-array>
+
+    <string-array name="formats">
+        <item>STRUCTURED_UNCONVERTED</item>
+        <item>UNSTRUCTURED</item>
+        <item>ALL</item>
+    </string-array>
+
 </resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginActivity">
+
+    <activity
+        android:id="@+id/MR2DActivity"
+        android:name="eu.interopehrate.mr2deapp.MR2DActivity"
+        android:label="activity_m_r2_d"
+        tools:layout="@layout/activity_m_r2_d" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="eu.interopehrate.mr2deapp.ui.login.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+</navigation>

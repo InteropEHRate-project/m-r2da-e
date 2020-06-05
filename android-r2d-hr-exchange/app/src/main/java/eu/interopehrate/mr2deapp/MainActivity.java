@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -18,9 +19,11 @@ import org.hl7.fhir.r4.model.Composition;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Resource;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
@@ -39,45 +42,37 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Button for MR2D instantiation
-        Button b = findViewById(R.id.createButton);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    // Creating a Patient for connecting to MR2D
-
-                    // Sets patient's reference NCP
-                    if (((Switch)findViewById(R.id.fakeSwitch)).isChecked()) {
-                        Patient p = new Patient();
-                        p.addAddress().setCountry("FKE");
-                        mr2d = MR2DFactory.create(p);
-                    } else
-                        mr2d = MR2DFactory.create(Locale.ITALY);
-
-                    // Disable all buttons
-                    findViewById(R.id.login).setEnabled(true);
-                    findViewById(R.id.getLastButton).setEnabled(false);
-                    findViewById(R.id.getAllButton).setEnabled(false);
-                    findViewById(R.id.getRecordButton).setEnabled(false);
-                    findViewById(R.id.resIdText).setEnabled(false);
-                    findViewById(R.id.logout).setEnabled(false);
-                } catch (MR2DException e) {
-                    Log.e(getClass().getName(), "Error while loading MR2D", e);
-                }
-            }
-        });
-
-        b = findViewById(R.id.login);
+        // Login Button
+        Button b = findViewById(R.id.login);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             // "mario.rossi"
             // "carla.verdi"
             public void onClick(View view) {
-                (new Login()).execute("mario.rossi");
+                Spinner users = (Spinner)findViewById(R.id.users);
+                Spinner countries = (Spinner)findViewById(R.id.countries);
+
+                String selectedUser = (String)users.getSelectedItem();
+                String selectedCountry = (String)countries.getSelectedItem();
+
+                Patient p = new Patient();
+                if ("fake".equalsIgnoreCase(selectedCountry))
+                    p.addAddress().setCountry("FKE");
+                else if ("italy".equalsIgnoreCase(selectedCountry))
+                    p.addAddress().setCountry("ITA");
+                else if ("belgium".equalsIgnoreCase(selectedCountry))
+                    p.addAddress().setCountry("BEL");
+                else if ("greece".equalsIgnoreCase(selectedCountry))
+                    p.addAddress().setCountry("GRC");
+
+                // Instantiate MR2D library
+                mr2d = MR2DFactory.create(p);
+                // invokes login()
+               (new Login()).execute(selectedUser);
             }
         });
 
+        // Logout button
         b = findViewById(R.id.logout);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,34 +81,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        b = findViewById(R.id.getLastButton);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                (new GetPatientSummary()).execute(HealthRecordType.PATIENT_SUMMARY);
-            }
-        });
-
         b = findViewById(R.id.getAllButton);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GregorianCalendar gc = new GregorianCalendar(2019, Calendar.DECEMBER, 2);
-                (new GetRecords()).execute();
-                //(new GetRecords()).execute(gc.getTime());
-            }
-        });
+                Switch switchPS = (Switch)findViewById(R.id.switchPS);
+                Switch switchLabRes = (Switch)findViewById(R.id.switchLabRes);
 
-        b = findViewById(R.id.getRecordButton);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String resId = ((EditText)findViewById(R.id.resIdText)).getText().toString();
-                if (resId != null && resId.isEmpty())
-                    Snackbar.make(findViewById(R.id.getRecordButton), "Type resource id in input field", Snackbar.LENGTH_LONG)
-                            .show();
-                else
-                    (new GetResourceById()).execute(resId);
+                // Handles selected types
+                List<HealthRecordType> types = new ArrayList<>();
+                if (switchPS.isChecked())
+                    types.add(HealthRecordType.PATIENT_SUMMARY);
+                if (switchLabRes.isChecked())
+                    types.add(HealthRecordType.LABORATORY_REPORT);
+
+                // Handles selected format
+                Spinner formats = (Spinner)findViewById(R.id.formats);
+                ResponseFormat format = ResponseFormat.valueOf(formats.getSelectedItem().toString());
+
+                (new GetRecords()).execute(types.toArray(new HealthRecordType[types.size()]), format);
+                //(new GetRecords()).execute(gc.getTime());
             }
         });
 
@@ -137,10 +125,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             if (mr2d.isAuthenticated()) {
                 findViewById(R.id.logout).setEnabled(true);
-                findViewById(R.id.getLastButton).setEnabled(true);
                 findViewById(R.id.getAllButton).setEnabled(true);
-                findViewById(R.id.getRecordButton).setEnabled(true);
-                findViewById(R.id.resIdText).setEnabled(true);
                 findViewById(R.id.login).setEnabled(false);
             }
         }
@@ -160,79 +145,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             if (!mr2d.isAuthenticated()) {
                 findViewById(R.id.login).setEnabled(true);
-                findViewById(R.id.getLastButton).setEnabled(false);
                 findViewById(R.id.getAllButton).setEnabled(false);
-                findViewById(R.id.getRecordButton).setEnabled(false);
-                findViewById(R.id.resIdText).setEnabled(false);
                 findViewById(R.id.logout).setEnabled(false);
             }
         }
     }
-
-
-    /*
-     * ASYNC TASK #3: method MR2D.getLastRecord() for PATIENT_SUMMARY
-     */
-    private class GetPatientSummary extends AsyncTask<Object, Void, org.hl7.fhir.r4.model.Bundle> {
-        @Override
-        protected org.hl7.fhir.r4.model.Bundle doInBackground(Object[] args) {
-            try {
-                return (org.hl7.fhir.r4.model.Bundle)MainActivity.this.mr2d.
-                        getLastRecord((HealthRecordType)args[0], ResponseFormat.STRUCTURED_UNCONVERTED);
-            } catch (MR2DException e) {
-                Log.e(getClass().getName(), "Error while interacting with NCP", e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(org.hl7.fhir.r4.model.Bundle psBundle) {
-            StringBuilder sb = new StringBuilder();
-            if (psBundle == null || psBundle.getEntry().size() == 0)
-                sb.append("No last resource found.");
-            else {
-                Composition ps = (Composition)psBundle.getEntryFirstRep().getResource();
-                sb.append("Retrieved Patient Summary with title: ").append(ps.getTitle());
-            }
-
-            Snackbar.make(findViewById(R.id.getRecordButton), sb.toString(), Snackbar.LENGTH_LONG)
-                    .show();
-        }
-    }
-
-
-    /*
-     * ASYNC TASK #4 method MR2D.getRecord() for an instance of Patient/
-     */
-    private class GetResourceById extends AsyncTask<String, Void, Resource> {
-        @Override
-        protected Resource doInBackground(String[] args) {
-            try {
-                return MainActivity.this.mr2d.getRecord(args[0]);
-            } catch (MR2DException e) {
-                Log.e(getClass().getName(), "Error while interacting with NCP", e);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Resource resource) {
-            StringBuilder sb = new StringBuilder();
-            if (resource == null)
-                sb.append("No resource found for provided id.");
-            else {
-                sb.append("Retrieved resource of type: '")
-                        .append(resource.getResourceType().getPath())
-                        .append("' with id: ").append(resource.getId());
-            }
-
-            Snackbar.make(findViewById(R.id.getRecordButton), sb.toString(), Snackbar.LENGTH_LONG)
-                    .show();
-        }
-    }
-
 
     /*
      * ASYNC TASK #5: method MR2D.getRecords() for all type and all formats
@@ -249,7 +166,11 @@ public class MainActivity extends AppCompatActivity {
          * Executes the getAllRecords methods, that may cause the submission
          * of an undefined number of REST invocations to the server. Invocations
          * are executed in a lazy way during iterations of results. This is the reason
-         * also the oteration must be performed in the "doInBackground" method.
+         * why the iteration operation must be performed in the "doInBackground" method.
+         *
+         * args[0] = array of HealthRecordType
+         * args[1] = instance of ResponseFormat
+         * args[2] = optional Date
          */
         protected HealthRecordBundle doInBackground(Object... args) {
             HealthRecordBundle bundle = null;
@@ -258,12 +179,13 @@ public class MainActivity extends AppCompatActivity {
                 // executes method getAllRecords providing the starting date
                 // bundle = MainActivity.this.mr2d.getAllRecords((Date)args[0], ResponseFormat.ALL);
                 bundle = MainActivity.this.mr2d.getRecords(null,
-                        ResponseFormat.ALL);
+                        (ResponseFormat) args[1],
+                        (HealthRecordType[]) args[0]);
 
                 for (HealthRecordType t : bundle.getHealthRecordTypes()) {
                     numRecords = 0;
                     currentType = t;
-                    Log.d(getClass().getSimpleName(),"Tipo corrente: " + currentType);
+//                    Log.d(getClass().getSimpleName(),"Tipo corrente: " + currentType);
                     while (bundle.hasNext(currentType)) {
                         Resource r = bundle.next(currentType);
                         // Log.d(getClass().getName(), r.getId());

@@ -6,90 +6,107 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MR2D Test App"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/linearLayout_1"
-        android:layout_width="336dp"
-        android:layout_height="206dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="340dp"
+        android:layout_height="173dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-        <Switch
-            android:id="@+id/fakeSwitch"
+        <Spinner
+            android:id="@+id/users"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:text=" Fake mode"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_height="46dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="24dp"
+            android:entries="@array/users" />
 
-        <Space
+        <Spinner
+            android:id="@+id/countries"
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="46dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="0dp"
+            android:entries="@array/countries"
+            app:layout_constraintBottom_toTopOf="@+id/login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.485"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <Button
-            android:id="@+id/createButton"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Instantiate MR2DE" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="24dp"
+            android:isScrollContainer="false"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/login"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:enabled="false"
-            android:text="Login()" />
+            <Button
+                android:id="@+id/login"
+                android:layout_width="120dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="0dp"
+                android:text="@string/action_sign_in" />
 
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:enabled="false"
-            android:text="Logout()" />
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="120dp"
+                android:layout_height="46dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="24dp"
+                android:enabled="false"
+                android:text="@string/action_sign_out" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout_2"
-        android:layout_width="338dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="343dp"
+        android:layout_height="267dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout_1">
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
 
-        <Space
+        <Switch
+            android:id="@+id/switchPS"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="46dp"
+            android:text="Patient Summary" />
 
-        <Button
-            android:id="@+id/getLastButton"
+        <Switch
+            android:id="@+id/switchLabRes"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:enabled="false"
-            android:text="Get_Last_PatientSummary()" />
+            android:layout_height="46dp"
+            android:text="Laboratory Results" />
+
+        <Spinner
+            android:id="@+id/formats"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:entries="@array/formats" />
 
         <Button
             android:id="@+id/getAllButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginTop="12dp"
             android:enabled="false"
             android:text="Get_All_Records()" />
 
@@ -103,28 +120,42 @@
             android:id="@+id/progressBar"
             style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
-        <Button
-            android:id="@+id/getRecordButton"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:enabled="false"
-            android:text="Get_Record()" />
-
-        <EditText
-            android:id="@+id/resIdText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:enabled="false"
-            android:inputType="textUri"
-            android:text="Patient/1023" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="24dp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Test GetRecords()"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Test Login()"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="409dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="30dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_1"
+        tools:layout_editor_absoluteX="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
