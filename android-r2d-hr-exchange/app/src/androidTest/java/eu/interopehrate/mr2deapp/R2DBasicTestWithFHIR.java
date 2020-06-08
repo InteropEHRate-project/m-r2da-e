@@ -84,7 +84,7 @@ public class R2DBasicTestWithFHIR {
     }
 
     @Test
-    public void getLaboratoryResultsForForPatientSummaryOfMarioRossi() {
+    public void getLaboratoryResultsForPatientSummaryOfMarioRossi() {
         HealthRecordBundle b = marioRossiR2D.getRecords(null,
                 ResponseFormat.ALL,
                 HealthRecordType.LABORATORY_REPORT);

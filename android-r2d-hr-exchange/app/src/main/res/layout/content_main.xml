@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -75,8 +76,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout_2"
-        android:layout_width="343dp"
-        android:layout_height="267dp"
+        android:layout_width="347dp"
+        android:layout_height="327dp"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,12 +89,14 @@
             android:id="@+id/switchPS"
             android:layout_width="match_parent"
             android:layout_height="46dp"
+            android:checked="true"
             android:text="Patient Summary" />
 
         <Switch
             android:id="@+id/switchLabRes"
             android:layout_width="match_parent"
             android:layout_height="46dp"
+            android:checked="true"
             android:text="Laboratory Results" />
 
         <Spinner
@@ -101,6 +104,13 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:entries="@array/formats" />
+
+        <EditText
+            android:id="@+id/dateTxt"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:ems="10"
+            android:inputType="date" />
 
         <Button
             android:id="@+id/getAllButton"
@@ -128,7 +138,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         android:text="Test GetRecords()"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -153,7 +163,7 @@
         android:id="@+id/divider2"
         android:layout_width="409dp"
         android:layout_height="2dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout_1"
         tools:layout_editor_absoluteX="1dp" />

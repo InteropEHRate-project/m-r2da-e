@@ -19,6 +19,8 @@ import org.hl7.fhir.r4.model.Composition;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Resource;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,6 +38,7 @@ import eu.interopehrate.mr2de.api.ResponseFormat;
 public class MainActivity extends AppCompatActivity {
 
     private MR2D mr2d;
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("d/M/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +88,27 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GregorianCalendar gc = new GregorianCalendar(2019, Calendar.DECEMBER, 2);
                 Switch switchPS = (Switch)findViewById(R.id.switchPS);
                 Switch switchLabRes = (Switch)findViewById(R.id.switchLabRes);
+                TextView dateTxt = (TextView)findViewById(R.id.dateTxt);
 
-                // Handles selected types
+                // Checks if at least one Switch has been checked
+                if (!switchPS.isChecked() && !switchLabRes.isChecked()) {
+                    Snackbar snackbar = Snackbar
+                            .make(findViewById(R.id.getAllButton), "Choose at least one type of HealthRecord", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    return;
+                }
+
+                // Checks to see if a date has been provided by the user
+                Date date = null;
+                try {
+                    date = dateFormatter.parse(dateTxt.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                // Handles selected HealthRecordType types
                 List<HealthRecordType> types = new ArrayList<>();
                 if (switchPS.isChecked())
                     types.add(HealthRecordType.PATIENT_SUMMARY);
@@ -100,11 +119,9 @@ public class MainActivity extends AppCompatActivity {
                 Spinner formats = (Spinner)findViewById(R.id.formats);
                 ResponseFormat format = ResponseFormat.valueOf(formats.getSelectedItem().toString());
 
-                (new GetRecords()).execute(types.toArray(new HealthRecordType[types.size()]), format);
-                //(new GetRecords()).execute(gc.getTime());
+                (new GetRecords()).execute(date, format, types.toArray(new HealthRecordType[types.size()]));
             }
         });
-
     }
 
     /*
@@ -178,9 +195,9 @@ public class MainActivity extends AppCompatActivity {
             try {
                 // executes method getAllRecords providing the starting date
                 // bundle = MainActivity.this.mr2d.getAllRecords((Date)args[0], ResponseFormat.ALL);
-                bundle = MainActivity.this.mr2d.getRecords(null,
+                bundle = MainActivity.this.mr2d.getRecords((Date)args[0],
                         (ResponseFormat) args[1],
-                        (HealthRecordType[]) args[0]);
+                        (HealthRecordType[]) args[2]);
 
                 for (HealthRecordType t : bundle.getHealthRecordTypes()) {
                     numRecords = 0;
