@@ -54,7 +54,7 @@ public class LaboratoryReportsDAO extends GenericFHIRDAO {
         Log.d(getClass().getSimpleName(), results.getLink(Bundle.LINK_SELF).getUrl());
 
         // IMPORTANT: Sets total equals to size of contained entries
-        results.setTotal(results.getEntry().size());
+        // results.setTotal(results.getEntry().size());
 
         return results;
     }

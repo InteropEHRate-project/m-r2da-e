@@ -44,7 +44,7 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
     @Override
     public int getTotal(HealthRecordType type) {
         // TODO: controllare che sia giusto, perche questo corrrisponde solo al corrente
-        return currentBundle.getTotal();
+        return currentBundle.getEntry().size();
     }
 
     @Override
