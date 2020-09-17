@@ -87,7 +87,8 @@ public final class MR2DSMFactory {
         if (ncpDesc == null)
             throw new MR2DException("No NCP descriptor found for country: " + country);
 
-        return new MR2DSMOverKeycloak(ncpDesc.getIamEndpoint());
+        //return new MR2DSMOverKeycloak(ncpDesc.getIamEndpoint());
+        return new MR2DSMOverEidas(ncpDesc.getIamEndpoint());
     }
 
 }
