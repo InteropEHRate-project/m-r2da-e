@@ -18,9 +18,9 @@ public class ExampleBuilder {
     private String username;
     private String password;
 
-    public ExampleBuilder() {
-        this.username = "xavi";
-        this.password = "creus";
+    public ExampleBuilder(String username, String password) {
+        this.username = username;// "xavi";
+        this.password = password; // "creus";
     }
 
 

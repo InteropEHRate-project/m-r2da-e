@@ -21,11 +21,9 @@ import java.util.regex.Pattern;
 
 import eu.interopehrate.mr2d.exceptions.MR2DSecurityException;
 import eu.interopehrate.mr2dsm.api.MR2DSM;
-import eu.interopehrate.mr2dsm.model.AccessTokenResponce;
 import eu.interopehrate.mr2dsm.rest.AuthenticationKeycloak;
 
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -39,15 +37,13 @@ class MR2DSMOverEidas implements MR2DSM {
     private static final String CLIENT_NAME = "S-EHR";
     private static final String CLIENT_SECRET = "864452c3-3bc1-4f09-ad06-b3c4dde0ee7b";
 
-    private AuthenticationKeycloak postsService;
-    private String keycloakURL;
+    private String eIDASURL;
     private String accessToken;
     private String refreshToken;
-    private Retrofit retrofitKeycloak;
 
-    MR2DSMOverEidas(String keycloakURL) {
-        // Stores Keycloack server endpoint
-        this.keycloakURL = keycloakURL;
+    MR2DSMOverEidas(String eIDASURL) {
+        // Stores eIDAS server endpoint
+        this.eIDASURL = eIDASURL;
     }
 
     // TODO: Exception handling
@@ -58,19 +54,12 @@ class MR2DSMOverEidas implements MR2DSM {
     public void login(String username, String password) throws MR2DSecurityException {
 
         //Connection to local or cloud instance of Eidas Node
-        String connectionUrl = "http://212.101.173.84:8080/IdP/Response";
+        String connectionUrl = eIDASURL;
 
         Log.d(getClass().getSimpleName(), "Executing login()");
-        if (retrofitKeycloak == null)
-            loadRetrofit();
 
         try {
-            ExampleBuilder example = new ExampleBuilder();
-
-            //Insert wrong password if the user is not mario.rossi
-            if (!username.equals("mario.rossi")){
-                example.setPassword("wrong");
-            }
+            ExampleBuilder example = new ExampleBuilder(username,password);
 
             example.generateSmsspTokenRequest(connectionUrl);
 
@@ -124,21 +113,6 @@ class MR2DSMOverEidas implements MR2DSM {
             //Only produce jwt if the Authentication process was succesfull
             if (authenticated) {
                 Log.d(getClass().getSimpleName(), "Successfully executed login()");
-                if (retrofitKeycloak == null)
-                    loadRetrofit();
-                postsService = retrofitKeycloak.create(AuthenticationKeycloak.class);
-
-/*                // Executes a synchronous call to the REST
-                Response<AccessTokenResponce> oldresponse = null;
-                try {
-                    Call<AccessTokenResponce> call = postsService.requestAuthToken("password", username,
-                            password, CLIENT_NAME, CLIENT_SECRET);
-                    oldresponse = call.execute();
-                } catch (Exception e) {
-                    throw new MR2DSecurityException(e);
-                }
-                accessToken = oldresponse.body().getAccess_token();
-                refreshToken = oldresponse.body().getRefresh_token();*/
 
                 //Create our custom jwt
                 JWT jwt = new JWT(SignatureAlgorithm.HS256, "ddd"+res.getId().toString(), "mitsos", 5000000L);
@@ -164,20 +138,10 @@ class MR2DSMOverEidas implements MR2DSM {
     @WorkerThread
     public void logout() throws MR2DSecurityException {
         Log.d(getClass().getSimpleName(), "Executing logout()");
-        if (retrofitKeycloak == null)
-            loadRetrofit();
 
-        postsService = retrofitKeycloak.create(AuthenticationKeycloak.class);
-
-        try {
-            Call call = postsService.logout("refresh_token",refreshToken, CLIENT_NAME);
-            call.execute().body();
-            accessToken = null;
-            refreshToken = null;
-            Log.d(getClass().getSimpleName(), "Succesfully executed logout()");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        accessToken = null;
+        refreshToken = null;
+        Log.d(getClass().getSimpleName(), "Succesfully executed logout()");
     }
 
     public String getToken() {
@@ -188,11 +152,4 @@ class MR2DSMOverEidas implements MR2DSM {
         return refreshToken;
     }
 
-    private void loadRetrofit() {
-        // Creates the Retrofit builders
-        Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl(keycloakURL);
-        builder.addConverterFactory(GsonConverterFactory.create());
-        retrofitKeycloak = builder.build();
-    }
 }
