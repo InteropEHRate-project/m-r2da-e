@@ -7,6 +7,8 @@ version="0.2.2"
 configurations {
     all*.exclude group: 'org.codehaus.woodstox'
     all*.exclude group: 'org.apache.httpcomponents'
+    all*.exclude group: 'xpp3'
+    all*.exclude group: 'commons-logging'
 }
 
 android {
@@ -34,10 +36,17 @@ dependencies {
     api "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$FHIR_VERSION"
 
     implementation "androidx.annotation:annotation:1.1.0"
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.1'
     implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.1'
     implementation 'org.reflections:reflections:0.9.12'
+
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+    implementation 'xerces:xercesImpl:2.12.0'
 }
 
 /*

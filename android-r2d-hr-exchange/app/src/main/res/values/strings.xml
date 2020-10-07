@@ -16,6 +16,7 @@
     <string-array name="users">
         <item>mario.rossi</item>
         <item>carla.verdi</item>
+        <item>xavi</item>
     </string-array>
 
     <string-array name="formats">

@@ -129,7 +129,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Object... objects) {
             try {
-                mr2d.login(objects[0].toString(), "interopehrate");
+                String password = "worng";
+                if(objects[0].toString().equals("mario.rossi"))
+                    password = "interopehrate";
+                else if (objects[0].toString().equals("xavi"))
+                    password = "creus";
+                mr2d.login(objects[0].toString(), password);
             } catch (Exception e) {
                 Log.e(getClass().getName(), "Error during login()", e);
             }
