@@ -88,27 +88,34 @@
         <Switch
             android:id="@+id/switchPS"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:checked="true"
             android:text="Patient Summary" />
 
         <Switch
             android:id="@+id/switchLabRes"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:checked="true"
             android:text="Laboratory Results" />
+
+        <Switch
+            android:id="@+id/switchMedImg"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:checked="true"
+            android:text="Medical Images" />
 
         <Spinner
             android:id="@+id/formats"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:entries="@array/formats" />
 
         <EditText
             android:id="@+id/dateTxt"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:ems="10"
             android:inputType="date" />
 

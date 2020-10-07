@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -15,18 +14,14 @@ import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.hl7.fhir.r4.model.Composition;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Resource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.MR2DFactory;
@@ -90,10 +85,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Switch switchPS = (Switch)findViewById(R.id.switchPS);
                 Switch switchLabRes = (Switch)findViewById(R.id.switchLabRes);
+                Switch switchMedImg = (Switch)findViewById(R.id.switchMedImg);
                 TextView dateTxt = (TextView)findViewById(R.id.dateTxt);
 
                 // Checks if at least one Switch has been checked
-                if (!switchPS.isChecked() && !switchLabRes.isChecked()) {
+                if (!switchPS.isChecked() && !switchLabRes.isChecked() && !switchMedImg.isChecked()) {
                     Snackbar snackbar = Snackbar
                             .make(findViewById(R.id.getAllButton), "Choose at least one type of HealthRecord", Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     date = dateFormatter.parse(dateTxt.getText().toString());
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    // Log.d(getClass().getName(), "No valid date to parse.", e);
                 }
 
                 // Handles selected HealthRecordType types
@@ -113,7 +109,9 @@ public class MainActivity extends AppCompatActivity {
                 if (switchPS.isChecked())
                     types.add(HealthRecordType.PATIENT_SUMMARY);
                 if (switchLabRes.isChecked())
-                    types.add(HealthRecordType.LABORATORY_REPORT);
+                    types.add(HealthRecordType.LABORATORY_RESULT);
+                if (switchMedImg.isChecked())
+                    types.add(HealthRecordType.MEDICAL_IMAGE);
 
                 // Handles selected format
                 Spinner formats = (Spinner)findViewById(R.id.formats);
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 mr2d.login(objects[0].toString(), "interopehrate");
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(getClass().getName(), "Error during login()", e);
             }
             return null;
         }
@@ -198,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle = MainActivity.this.mr2d.getRecords((Date)args[0],
                         (ResponseFormat) args[1],
                         (HealthRecordType[]) args[2]);
+                totalRecords = 0;
 
                 for (HealthRecordType t : bundle.getHealthRecordTypes()) {
                     numRecords = 0;
@@ -208,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                         // Log.d(getClass().getName(), r.getId());
                         // simulate saving resource to DB
                         try {
-                            Thread.sleep(10);
+                            Thread.sleep(5);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

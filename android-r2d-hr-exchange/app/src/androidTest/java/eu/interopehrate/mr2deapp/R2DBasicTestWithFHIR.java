@@ -6,6 +6,7 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Composition;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.Media;
 import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Resource;
@@ -74,20 +75,20 @@ public class R2DBasicTestWithFHIR {
     public void getLastLaboratoryResultForPatientMarioRossi() {
         Log.d(getClass().getSimpleName(), "Executing getLastPatientSummaryOfMarioRossi()");
         Bundle bundle = (Bundle) marioRossiR2D.getLastRecord(
-                HealthRecordType.LABORATORY_REPORT, ResponseFormat.STRUCTURED_UNCONVERTED);
+                HealthRecordType.LABORATORY_RESULT, ResponseFormat.STRUCTURED_UNCONVERTED);
 
         Resource res = bundle.getEntryFirstRep().getResource();
         assertEquals("DiagnosticReport", res.getResourceType().name());
 
         DiagnosticReport dr = (DiagnosticReport)res;
-        assertTrue(dr.getResult().size() == 38);
+        assertTrue(dr.getResult().size() == 41);
     }
 
     @Test
-    public void getLaboratoryResultsForPatientSummaryOfMarioRossi() {
+    public void getLaboratoryResultsForPatientMarioRossi() {
         HealthRecordBundle b = marioRossiR2D.getRecords(null,
                 ResponseFormat.ALL,
-                HealthRecordType.LABORATORY_REPORT);
+                HealthRecordType.LABORATORY_RESULT);
 
         int counter = 0;
         int drCounter = 0;
@@ -106,9 +107,37 @@ public class R2DBasicTestWithFHIR {
             }
         }
 
-        assertTrue(counter == 50);
+        assertTrue(counter == 81);
         assertTrue(drCounter == 2);
-        assertTrue(obsCounter == 48);
+        assertTrue(obsCounter == 79);
+    }
+
+    @Test
+    public void getMedicalImagesForPatientMarioRossi() {
+        HealthRecordBundle b = marioRossiR2D.getRecords(null,
+                ResponseFormat.ALL,
+                HealthRecordType.MEDICAL_IMAGE);
+
+        int counter = 0;
+        int drCounter = 0;
+        int mediaCounter = 0;
+        Resource r;
+
+        for (HealthRecordType t: b.getHealthRecordTypes()) {
+            while (b.hasNext(t)) {
+                r = b.next(t);
+                if (r instanceof DiagnosticReport)
+                    drCounter++;
+                else if (r instanceof Media)
+                    mediaCounter++;
+
+                counter++;
+            }
+        }
+
+        assertTrue(counter == 1);
+        assertTrue(drCounter == 1);
+        // assertTrue(mediaCounter == 1);
     }
 
     @Test
