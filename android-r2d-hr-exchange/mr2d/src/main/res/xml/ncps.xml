@@ -16,7 +16,7 @@
     <ncp country="GRC" supportsFHIR="true" supportsEHDSI="false">
         <fhir>http://213.249.46.205:8080/NCP/fhir/</fhir>
         <ehdsi></ehdsi>
-        <iam>http://212.101.173.84:8080/IdP/Response/</iam>
+        <iam>http://212.101.173.84:8080/SP/</iam>
     </ncp>
 
     <!-- Fake NCP used for switching MR2DE working locally for demo purposes only (10.0.2.2/213.249.46.205)-->
