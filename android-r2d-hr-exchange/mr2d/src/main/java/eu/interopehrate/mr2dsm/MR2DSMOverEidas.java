@@ -48,7 +48,7 @@ class MR2DSMOverEidas implements MR2DSM {
 
     // TODO: Exception handling
     // TODO: better management of clientID and clientSecret
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     @WorkerThread
     public void login(String username, String password) throws MR2DSecurityException {
@@ -78,56 +78,47 @@ class MR2DSMOverEidas implements MR2DSM {
             String results = connector.getResponse(entity);
             System.out.println(results);
 
-            //Check if the response is a document starting with <!DOCTYPE
-            if (results.startsWith("<!")){
+            if (results.contains("error")){
+                System.out.println("An authentication error has occurred - make sure the user credentials are correct");
+            }
+            else {
+                JWT jwt = new JWT();
+                Claims jwtClaims = jwt.decode(results);
+                String assertion = jwtClaims.get("assertion").toString();
+                String encryptedData = jwtClaims.get("attributes").toString();
+                String data = jwt.decode(encryptedData).get("data3").toString();
+                data = data. replaceAll("\n","");
+                data = data. replaceAll("\r","");
+
                 //Extract only the response part with REGEX
-                Pattern pattern = Pattern.compile("(?<=\"response\" : )(.*)(?=\\})");
-                Matcher matcher = pattern.matcher(results);
-                if (matcher.find()) results = matcher.group(1);
-            }
-            //Else, it's a custom response from a pre-configured server
-            else {
-                //Prepare response to be converted to Java Object
-                results = results.substring(1, results.length() - 1).replace("\"response\":", "");}
+                Pattern pattern = Pattern.compile("(?<=\"response\" : )(.*)(?=}</textarea)");
+                Matcher matcher = pattern.matcher(data);
+                if (matcher.find()) data = matcher.group(1);
 
-            //Map JSON to JAVA object
-            eu.interopehrate.mr2dsm.model.Response res = new ObjectMapper().readValue(results, eu.interopehrate.mr2dsm.model.Response.class);
 
-            //Check whether the response has the authentication status as a code or a sub_code
-            if (res.getStatus().getSub_status_code() != null){
-                System.out.println("Response with id: " + res.getId() +
-                        "\n and status " + res.getStatus().getSub_status_code() +
-                        "\n and issuer:" + res.getIssuer());}
-            else {
-                System.out.println("Response with id " + res.getId() +
-                        "\n and status " + res.getStatus().getStatus_code() +
-                        //Pretty print for the attributes of the JSON response
-                        "\n and with attributes " + new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(res.getAttribute_list()));
-            }
+                //Map JSON to JAVA object
+                Response res = new ObjectMapper().readValue(data, Response.class);
 
-            //Check if the user was authenticated
-            boolean authenticated = false;
-            if (res.getStatus().getSub_status_code() != null && res.getStatus().getSub_status_code().equals(SubStatusCode.AuthnSuccess)) authenticated = true;
-            if (res.getStatus().getSub_status_code() == null && res.getStatus().getStatus_code().equals("success")) authenticated = true;
+                if (res.getStatus().getSub_status_code() != null){
+                    System.out.println("Successful Response with id: " + res.getId() +
+                            "\n and status " + res.getStatus().getSub_status_code() +
+                            "\n and issuer:" + res.getIssuer());}
+                else {
+                    System.out.println("Successful Response with id " + res.getId() +
+                            " \n with status " + res.getStatus().getStatus_code() +
+                            " \n and with attributes " + res.getAttribute_list());
+                }
 
-            //Only produce jwt if the Authentication process was succesfull
-            if (authenticated) {
-                Log.d(getClass().getSimpleName(), "Successfully executed login()");
+                //Check if the user was authenticated
+                boolean authenticated = false;
+                if (res.getStatus().getSub_status_code() != null && res.getStatus().getSub_status_code().equals(SubStatusCode.AuthnSuccess)) authenticated = true;
+                if (res.getStatus().getSub_status_code() == null && res.getStatus().getStatus_code().equals("success")) authenticated = true;
 
-                //Create our custom jwt
-                JWT jwt = new JWT(SignatureAlgorithm.HS256, "ddd"+res.getId().toString(), "mitsos", 5000000L);
-                jwt.encode();
-                System.out.println("jwt = " + jwt.getEncoded());
-                accessToken = jwt.getEncoded();
-
-                Claims claims = jwt.decode(jwt.getEncoded());
-
-                System.out.println("Jwt With id " + claims.getId() +
-                        " and issued at " + claims.getIssuedAt() +
-                        " and expiration at " + claims.getExpiration());
-            }
-            else Log.d(getClass().getSimpleName(), "Authentication failed, login() unsuccessful");
-        }
+                //Only display the extraJwt if the Authentication process was successful
+                if (authenticated) {
+                    System.out.println("The assertion is: "+ assertion);
+                }
+            }}
         catch (Exception e){
             e.printStackTrace();
         }
