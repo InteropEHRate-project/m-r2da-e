@@ -1,18 +1,7 @@
 package eu.interopehrate.mr2de.fhir.dao;
 
-import org.reflections.Reflections;
-import org.reflections.scanners.TypeAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.util.Set;
-
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import eu.interopehrate.mr2de.api.HealthRecordType;
-import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.r2d.dao.HealthRecordDAO;
+import eu.interopehrate.mr2de.api.HealthDataType;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -41,12 +30,14 @@ public class FHIRDaoFactory {
      * @param type
      * @return
      */
-    public static GenericFHIRDAO create(IGenericClient fhirClient, HealthRecordType type) {
+    public static GenericFHIRDAO create(IGenericClient fhirClient, HealthDataType type) {
 
-        if (type == HealthRecordType.PATIENT_SUMMARY)
+        if (type == HealthDataType.PATIENT_SUMMARY)
             return new PatientSummaryDAO(fhirClient);
-        else if (type == HealthRecordType.LABORATORY_REPORT)
-            return new LaboratoryReportsDAO(fhirClient);
+        else if (type == HealthDataType.LABORATORY_RESULT)
+            return new LaboratoryResultsDAO(fhirClient);
+        else if (type == HealthDataType.MEDICAL_IMAGE)
+            return new MedicalImagesDAO(fhirClient);
         else
             throw new IllegalArgumentException("DAO non trovato per type: " + type);
         /*

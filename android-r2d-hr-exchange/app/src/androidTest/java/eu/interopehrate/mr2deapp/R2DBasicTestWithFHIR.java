@@ -17,8 +17,8 @@ import org.junit.Test;
 import java.util.Locale;
 
 import eu.interopehrate.mr2de.MR2DFactory;
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
+import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 
@@ -52,7 +52,7 @@ public class R2DBasicTestWithFHIR {
     public void getLastPatientSummaryOfMarioRossi() {
         Log.d(getClass().getSimpleName(), "Executing getLastPatientSummaryOfMarioRossi()");
         Bundle bundle = (Bundle) marioRossiR2D.getLastRecord(
-                HealthRecordType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
+                HealthDataType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
 
         Resource res = bundle.getEntryFirstRep().getResource();
         assertEquals("Composition", res.getResourceType().name());
@@ -72,30 +72,42 @@ public class R2DBasicTestWithFHIR {
     }
 
     @Test
+    public void getLastPatientSummaryForPatientMarioRossi() {
+        Log.d(getClass().getSimpleName(), "Executing getLastPatientSummaryOfMarioRossi()");
+        Bundle ps = (Bundle) marioRossiR2D.getLastRecord(
+                HealthDataType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
+
+        assertEquals("Bundle", ps.getResourceType().name());
+        assertEquals("DOCUMENT", ps.getType().toString());
+
+        assertTrue(ps.getEntry().size() == 33);
+    }
+
+    @Test
     public void getLastLaboratoryResultForPatientMarioRossi() {
         Log.d(getClass().getSimpleName(), "Executing getLastPatientSummaryOfMarioRossi()");
         Bundle bundle = (Bundle) marioRossiR2D.getLastRecord(
-                HealthRecordType.LABORATORY_RESULT, ResponseFormat.STRUCTURED_UNCONVERTED);
+                HealthDataType.LABORATORY_RESULT, ResponseFormat.STRUCTURED_UNCONVERTED);
 
         Resource res = bundle.getEntryFirstRep().getResource();
         assertEquals("DiagnosticReport", res.getResourceType().name());
 
         DiagnosticReport dr = (DiagnosticReport)res;
-        assertTrue(dr.getResult().size() == 41);
+        assertTrue(dr.getResult().size() == 40);
     }
 
     @Test
     public void getLaboratoryResultsForPatientMarioRossi() {
-        HealthRecordBundle b = marioRossiR2D.getRecords(null,
+        HealthDataBundle b = marioRossiR2D.getRecords(null,
                 ResponseFormat.ALL,
-                HealthRecordType.LABORATORY_RESULT);
+                HealthDataType.LABORATORY_RESULT);
 
         int counter = 0;
         int drCounter = 0;
         int obsCounter = 0;
         Resource r;
 
-        for (HealthRecordType t: b.getHealthRecordTypes()) {
+        for (HealthDataType t: b.getHealthRecordTypes()) {
             while (b.hasNext(t)) {
                 r = b.next(t);
                 if (r instanceof DiagnosticReport)
@@ -107,23 +119,23 @@ public class R2DBasicTestWithFHIR {
             }
         }
 
-        assertTrue(counter == 81);
+        assertTrue(counter == 79);
         assertTrue(drCounter == 2);
-        assertTrue(obsCounter == 79);
+        assertTrue(obsCounter == 77);
     }
 
     @Test
     public void getMedicalImagesForPatientMarioRossi() {
-        HealthRecordBundle b = marioRossiR2D.getRecords(null,
+        HealthDataBundle b = marioRossiR2D.getRecords(null,
                 ResponseFormat.ALL,
-                HealthRecordType.MEDICAL_IMAGE);
+                HealthDataType.MEDICAL_IMAGE);
 
         int counter = 0;
         int drCounter = 0;
         int mediaCounter = 0;
         Resource r;
 
-        for (HealthRecordType t: b.getHealthRecordTypes()) {
+        for (HealthDataType t: b.getHealthRecordTypes()) {
             while (b.hasNext(t)) {
                 r = b.next(t);
                 if (r instanceof DiagnosticReport)
@@ -135,9 +147,9 @@ public class R2DBasicTestWithFHIR {
             }
         }
 
-        assertTrue(counter == 1);
-        assertTrue(drCounter == 1);
-        // assertTrue(mediaCounter == 1);
+        assertTrue(counter == 3);
+        assertTrue(drCounter == 2);
+        assertTrue(mediaCounter == 1);
     }
 
     @Test

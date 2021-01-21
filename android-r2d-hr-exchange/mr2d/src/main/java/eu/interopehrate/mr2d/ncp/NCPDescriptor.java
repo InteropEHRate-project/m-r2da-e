@@ -6,6 +6,8 @@ package eu.interopehrate.mr2d.ncp;
  *
  *  Description: Class used to describe features of an NCP instance.
  */
+
+@Deprecated
 public final class NCPDescriptor {
     private String country; //ISO 3166 alpha 3
     private boolean supportsFHIR;

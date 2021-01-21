@@ -19,6 +19,8 @@ import java.util.Map;
  *
  *  Description: Maintains the list of the registered NCP instances.
  */
+
+@Deprecated
 public final class NCPRegistry {
 
     private final static Map<String, NCPDescriptor> registry = new HashMap<String, NCPDescriptor>();

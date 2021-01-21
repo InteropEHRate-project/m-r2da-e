@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.fhir.ExceptionDetector;
 import eu.interopehrate.mr2de.fhir.dao.FHIRDaoFactory;
-import eu.interopehrate.mr2de.r2d.executor.LazyHealthRecordBundle;
+import eu.interopehrate.mr2de.r2d.executor.LazyHealthDataBundle;
 import eu.interopehrate.mr2de.r2d.executor.ProgressiveExecutor;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.fhir.dao.GenericFHIRDAO;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 
@@ -31,19 +31,19 @@ import eu.interopehrate.mr2de.r2d.executor.Arguments;
 public class FHIRProgressiveExecutor implements ProgressiveExecutor {
 
     private final IGenericClient fhirClient;
-    private HealthRecordType[] hrTypes;
+    private HealthDataType[] hrTypes;
     private ResponseFormat format;
     private int currentHrTypesIdx;
     private Arguments args;
 
-    private Map<HealthRecordType, CacheEntry> cache = new HashMap<>();
+    private Map<HealthDataType, CacheEntry> cache = new HashMap<>();
 
     /**
      * Initialize all internal data
      * @param fhirClient
      * @param hrTypes
      */
-    public FHIRProgressiveExecutor(IGenericClient fhirClient, HealthRecordType[] hrTypes, ResponseFormat format) {
+    public FHIRProgressiveExecutor(IGenericClient fhirClient, HealthDataType[] hrTypes, ResponseFormat format) {
         this.fhirClient = fhirClient;
         this.hrTypes = hrTypes;
         this.format = format;
@@ -59,15 +59,15 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
      * 2) an instance of ResponseFormat identifed by ArgumentName.RESPONSE_FORMAT
      */
     @Override
-    public HealthRecordBundle start(final Arguments args) {
+    public HealthDataBundle start(final Arguments args) {
         this.args = args;
-        return new LazyHealthRecordBundle(this);
+        return new LazyHealthDataBundle(this);
     }
 
 
     @Override
     @WorkerThread
-    public Bundle next(HealthRecordType type) {
+    public Bundle next(HealthDataType type) {
         Log.d(getClass().getSimpleName(), "Started method next() for type: " + type);
 
         if (Arrays.binarySearch(hrTypes, type) < 0)
@@ -100,7 +100,7 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
                         }
                     }
                 }
-                currentBundle.setUserData(HealthRecordType.class.getName(), type);
+                currentBundle.setUserData(HealthDataType.class.getName(), type);
                 entry.setBundle(currentBundle);
 
                 return currentBundle;
@@ -124,7 +124,7 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
                         }
                     }
                 }
-                nextBundle.setUserData(HealthRecordType.class.getName(), type);
+                nextBundle.setUserData(HealthDataType.class.getName(), type);
                 entry.setBundle(nextBundle);
 
                 return nextBundle;
@@ -141,7 +141,7 @@ public class FHIRProgressiveExecutor implements ProgressiveExecutor {
 
 
     @Override
-    public HealthRecordType[] getHealthRecordTypes() {
+    public HealthDataType[] getHealthRecordTypes() {
         return this.hrTypes;
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
@@ -19,12 +18,12 @@ import ca.uhn.fhir.context.PerformanceOptionsEnum;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import eu.interopehrate.mr2d.MR2DContext;
 import eu.interopehrate.mr2d.R;
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
 import eu.interopehrate.mr2de.api.MR2D;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2d.exceptions.MR2DException;
-import eu.interopehrate.mr2de.r2d.executor.DefaultHealthRecordBundle;
+import eu.interopehrate.mr2de.r2d.executor.DefaultHealthDataBundle;
 
 class MR2DOverLocal implements MR2D {
 
@@ -40,30 +39,30 @@ class MR2DOverLocal implements MR2D {
 
 
     @Override
-    public HealthRecordBundle getRecords(@NonNull Date from,
-                                         @NonNull ResponseFormat responseFormat,
-                                         @NonNull HealthRecordType ...hrTypes) {
+    public HealthDataBundle getRecords(@NonNull Date from,
+                                       @NonNull ResponseFormat responseFormat,
+                                       @NonNull HealthDataType...hrTypes) {
         Log.d(getClass().getName(), "Execution of method getRecords() STARTED.");
-        Bundle ps = (Bundle)getLastRecord(HealthRecordType.PATIENT_SUMMARY, responseFormat);
+        Bundle ps = (Bundle)getLastRecord(HealthDataType.PATIENT_SUMMARY, responseFormat);
 
         Log.d(getClass().getName(), "Execution of method getRecords() COMPLETED.");
-        return new DefaultHealthRecordBundle(ps, HealthRecordType.PATIENT_SUMMARY);
+        return new DefaultHealthDataBundle(ps, HealthDataType.PATIENT_SUMMARY);
     }
 
     @Override
-    public HealthRecordBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
+    public HealthDataBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
         Log.d(getClass().getName(), "Execution of method getAllRecords() STARTED.");
-        HealthRecordBundle hrb = getRecords(from, responseFormat, HealthRecordType.values());
+        HealthDataBundle hrb = getRecords(from, responseFormat, HealthDataType.values());
         Log.d(getClass().getName(), "Execution of method getAllRecords() COMPLETED.");
         return hrb;
     }
 
     @Override
-    public Resource getLastRecord(@NonNull HealthRecordType rType, @NonNull ResponseFormat responseFormat) {
+    public Resource getLastRecord(@NonNull HealthDataType rType, @NonNull ResponseFormat responseFormat) {
         Log.d(getClass().getName(), "Execution of method getLastResource() STARTED.");
 
         Bundle bundle = new Bundle();
-        if (rType == HealthRecordType.PATIENT_SUMMARY) {
+        if (rType == HealthDataType.PATIENT_SUMMARY) {
             if (patientSummary == null) {
                 Context libContext = MR2DContext.getMR2DContext();
                 // load sample PS file
@@ -78,7 +77,7 @@ class MR2DOverLocal implements MR2D {
                 patientSummary = (Bundle)fhirContext.newJsonParser().parseResource(sb.toString());
             }
             bundle = patientSummary;
-            bundle.setUserData(HealthRecordType.class.getName(), HealthRecordType.PATIENT_SUMMARY);
+            bundle.setUserData(HealthDataType.class.getName(), HealthDataType.PATIENT_SUMMARY);
             bundle.setTotal(bundle.getEntry().size());
         }
 
@@ -89,7 +88,7 @@ class MR2DOverLocal implements MR2D {
     @Override
     public Resource getRecord(@NonNull String resId) throws MR2DException {
         Log.d(getClass().getName(), "Execution of method getRecord() STARTED.");
-        Resource r = getLastRecord(HealthRecordType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
+        Resource r = getLastRecord(HealthDataType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
         Log.d(getClass().getName(), "Execution of method getRecord() COMPLETED.");
         return r;
     }

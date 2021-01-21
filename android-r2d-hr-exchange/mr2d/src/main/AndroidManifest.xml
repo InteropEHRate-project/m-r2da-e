@@ -7,7 +7,11 @@
             android:exported="false"
             android:enabled="true"
             android:name="eu.interopehrate.mr2d.MR2DContext" />
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
+
+
 
     <!-- uses-library android:name="org.andengine.extension.augmentedreality" android:required="true"/ -->
 

@@ -8,8 +8,8 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
+import eu.interopehrate.mr2de.api.HealthDataType;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -22,9 +22,9 @@ import eu.interopehrate.mr2de.api.HealthRecordType;
  *  Lazy Loading is implemented by interaction with class ProgressiveExecutor.
  *
  */
-public class LazyHealthRecordBundle implements HealthRecordBundle {
+public class LazyHealthDataBundle implements HealthDataBundle {
 
-    private HealthRecordType current;
+    private HealthDataType current;
     private int total;
 
     private final ProgressiveExecutor executor;
@@ -32,23 +32,22 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
     private int currentBundleSize;
     private int currentBundleIndex = 0;
 
-    public LazyHealthRecordBundle(ProgressiveExecutor executor) {
+    public LazyHealthDataBundle(ProgressiveExecutor executor) {
         this.executor = executor;
     }
 
     @Override
-    public HealthRecordType[] getHealthRecordTypes() {
+    public HealthDataType[] getHealthRecordTypes() {
         return executor.getHealthRecordTypes();
     }
 
     @Override
-    public int getTotal(HealthRecordType type) {
-        // TODO: controllare che sia giusto, perche questo corrrisponde solo al corrente
-        return currentBundle.getEntry().size();
+    public int getTotal(HealthDataType type) {
+        return currentBundle != null ? currentBundle.getEntry().size() : 0;
     }
 
     @Override
-    public boolean hasNext(HealthRecordType type) {
+    public boolean hasNext(HealthDataType type) {
         if (currentBundleIndex == currentBundleSize) {
             // executes next step of query
             try {
@@ -70,15 +69,13 @@ public class LazyHealthRecordBundle implements HealthRecordBundle {
 
     @WorkerThread
     @Override
-    public Resource next(HealthRecordType type) {
+    public Resource next(HealthDataType type) {
         if (hasNext(type)) {
             Resource r = currentBundle.getEntry().get(currentBundleIndex++).getResource();
-            r.setUserData(HealthRecordType.class.getName(), currentBundle.getUserData(HealthRecordType.class.getName()));
+            r.setUserData(HealthDataType.class.getName(), currentBundle.getUserData(HealthDataType.class.getName()));
             return r;
         } else
             throw new IllegalStateException("No more objects to retrieve from LazyHealthRecordBundle.");
     }
-
-
 
 }

@@ -14,7 +14,8 @@ import eu.interopehrate.mr2de.r2d.executor.Arguments;
  *               from an NCP. Concrete implementations of this class must be able to retrieve
  *               only a specific kind of health data from an NCP using only one of the supported protocols.
  */
-public interface HealthRecordDAO {
+
+public interface HealthDataDAO {
 
     /**
      * Executes a search of a specific kind of health data.
@@ -33,7 +34,9 @@ public interface HealthRecordDAO {
      *
      * @return performs a search of a specific kind oh health data
      *         returning only the most recent one.
+     *         //TODO: TO BE REMOVED
      */
+    @Deprecated
     Resource getLast(ResponseFormat format);
 
     /**

@@ -10,7 +10,7 @@ import org.hl7.fhir.r4.model.Resource;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 import eu.interopehrate.mr2de.utils.codes.LoincCodes;
@@ -29,7 +29,7 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
 
     @Override
     protected Bundle searchFirstPageOfStructuredData(Arguments args) {
-        Log.d(getClass().getSimpleName(), "Retrieving first page of Structured - " + HealthRecordType.PATIENT_SUMMARY);
+        Log.d(getClass().getSimpleName(), "Retrieving first page of Structured - " + HealthDataType.PATIENT_SUMMARY);
 
         Coding psCode = LoincCodes.PATIENT_SUMMARY.getCoding();
         // Creates query to retrieve the instance of Composition
@@ -50,7 +50,7 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
         if (compositions != null && compositions.getEntry().size() > 0) {
             Bundle.BundleEntryComponent comp = compositions.getEntry().get(0);
             // Invokes operation $document to create PS Bundle
-            Parameters patientSummary =
+            Parameters operationOutcome =
                     fhirClient.operation()
                             .onInstance(comp.getResource().getIdElement())
                             .named("$document")
@@ -58,10 +58,17 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
                             .useHttpGet()
                             .execute();
 
-            Bundle ps = (Bundle)patientSummary.getParameterFirstRep().getResource();
-            // IMPORTANT: Sets total equals to size of contained entries
-            // ps.setTotal(ps.getEntry().size());
-            return ps;
+            // TODO: 05/11 è molto probabile che la search debba tornare un Bundle di tipo 'searchset' contenente un
+            //  Bundle di tipo 'document', mentre la getLast() debba ritornare direttamente il Bundle di tipo 'document'
+            Bundle patientSummary = (Bundle)operationOutcome.getParameterFirstRep().getResource();
+            Bundle searchSetBundle = new Bundle();
+            searchSetBundle.setType(Bundle.BundleType.SEARCHSET);
+
+            Bundle.BundleEntryComponent entry = searchSetBundle.addEntry()
+                    .setResource(patientSummary)
+                    .setFullUrl(patientSummary.getId());
+
+            return searchSetBundle;
         }
 
         return new Bundle();
@@ -69,7 +76,7 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
 
     @Override
     protected Bundle searchFirstPageOfUnstructuredData(Arguments args) {
-        Log.d(getClass().getSimpleName(), "Retrieving first page of Unstructured - " + HealthRecordType.PATIENT_SUMMARY);
+        Log.d(getClass().getSimpleName(), "Retrieving first page of Unstructured - " + HealthDataType.PATIENT_SUMMARY);
 
         return new Bundle();
     }
@@ -85,7 +92,10 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
 
         // Starts the execution of the search
         if (format == ResponseFormat.STRUCTURED_UNCONVERTED) {
-            return searchFirstPageOfStructuredData(new Arguments());
+            Bundle searchBundle = searchFirstPageOfStructuredData(new Arguments());
+            // return first element of Bundle, that is another Bundle
+            // containing the patient summary
+            return searchBundle.getEntry().get(0).getResource();
         } else
             return null;
     }

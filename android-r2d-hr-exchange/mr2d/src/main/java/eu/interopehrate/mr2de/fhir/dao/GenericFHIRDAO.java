@@ -9,7 +9,7 @@ import org.hl7.fhir.r4.model.Resource;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.r2d.dao.HealthRecordDAO;
+import eu.interopehrate.mr2de.r2d.dao.HealthDataDAO;
 import eu.interopehrate.mr2de.r2d.executor.Arguments;
 
 /**
@@ -32,7 +32,7 @@ import eu.interopehrate.mr2de.r2d.executor.Arguments;
  *               2) searchFirstPageOfUnstructuredData()
  *
  */
-public abstract class GenericFHIRDAO implements HealthRecordDAO {
+public abstract class GenericFHIRDAO implements HealthDataDAO {
 
     protected final static String ACCEPT_JSON = "application/fhir+json";
     protected IGenericClient fhirClient;
@@ -121,6 +121,7 @@ public abstract class GenericFHIRDAO implements HealthRecordDAO {
      * @return
      */
     @Override
+    @Deprecated
     public Resource getLast(ResponseFormat format) {
         Log.d(getClass().getSimpleName(), "Starting execution of method getLast()");
 

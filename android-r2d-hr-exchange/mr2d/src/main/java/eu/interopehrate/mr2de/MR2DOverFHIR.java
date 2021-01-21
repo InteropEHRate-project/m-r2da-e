@@ -1,7 +1,6 @@
 package eu.interopehrate.mr2de;
 
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
@@ -17,14 +16,13 @@ import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.BearerTokenAuthInterceptor;
 // import eu.interopehrate.mr2d.BuildConfig;
 import eu.interopehrate.mr2d.exceptions.MR2DSecurityException;
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
+import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2d.ncp.NCPDescriptor;
 import eu.interopehrate.mr2de.fhir.ExceptionDetector;
-import eu.interopehrate.mr2de.fhir.R2DHttpRestfulClientFactory;
 import eu.interopehrate.mr2de.fhir.dao.FHIRDaoFactory;
 import eu.interopehrate.mr2de.fhir.dao.GenericFHIRDAO;
 import eu.interopehrate.mr2de.fhir.dao.ResourceDAO;
@@ -73,9 +71,9 @@ class MR2DOverFHIR implements MR2D {
 
     @Override
     @WorkerThread
-    public HealthRecordBundle getRecords(@NonNull Date from,
-                                         @NonNull ResponseFormat responseFormat,
-                                         @NonNull HealthRecordType ...hrTypes) {
+    public HealthDataBundle getRecords(@NonNull Date from,
+                                       @NonNull ResponseFormat responseFormat,
+                                       @NonNull HealthDataType...hrTypes) {
         Log.d(getClass().getSimpleName(), "Execution of method getRecords() STARTED.");
 
         // Preconditions checks
@@ -84,7 +82,7 @@ class MR2DOverFHIR implements MR2D {
                     "Execute login() method to grant access to business methods of MR2D." ));
 
         if (hrTypes == null || hrTypes.length == 0)
-            hrTypes = HealthRecordType.values();
+            hrTypes = HealthDataType.values();
 
         if (responseFormat == null)
             responseFormat = ResponseFormat.STRUCTURED_UNCONVERTED;
@@ -109,13 +107,13 @@ class MR2DOverFHIR implements MR2D {
     }
 
     @Override
-    public HealthRecordBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
-        return getRecords(from, responseFormat, HealthRecordType.values());
+    public HealthDataBundle getAllRecords(Date from, ResponseFormat responseFormat) throws MR2DException {
+        return getRecords(from, responseFormat, HealthDataType.values());
     }
 
     @Override
     @WorkerThread
-    public Resource getLastRecord(@NonNull HealthRecordType hrType, @NonNull ResponseFormat responseFormat) {
+    public Resource getLastRecord(@NonNull HealthDataType hrType, @NonNull ResponseFormat responseFormat) {
         Log.d(getClass().getSimpleName(), "Execution of method getLastResource() STARTED.");
 
         // Preconditions checks

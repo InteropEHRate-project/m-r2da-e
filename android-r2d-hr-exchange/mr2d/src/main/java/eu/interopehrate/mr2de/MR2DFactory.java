@@ -28,6 +28,7 @@ public final class MR2DFactory {
      * @param ncp: ncp
      * @return
      */
+    @Deprecated
     public static MR2D create(NCPDescriptor ncp) {
         // preconditions checks
         if (ncp == null)
@@ -43,6 +44,7 @@ public final class MR2DFactory {
      * @param patient: patient
      * @return
      */
+    @Deprecated
     public static MR2D create(Patient patient) {
         // preconditions checks
         if (patient == null)
@@ -58,6 +60,7 @@ public final class MR2DFactory {
      * @param locale: locale indicating the country of the patient
      * @return
      */
+    @Deprecated
     public static MR2D create(Locale locale) {
         // preconditions checks
         if (locale == null)
@@ -73,6 +76,7 @@ public final class MR2DFactory {
      * @param country: ISO 3166 alpha 3 code identifying country
      * @return
      */
+    @Deprecated
     private static MR2D create(String country) {
         // preconditions checks
         if (country == null || country.isEmpty())

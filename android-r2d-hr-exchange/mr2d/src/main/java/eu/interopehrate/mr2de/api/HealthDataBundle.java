@@ -13,33 +13,34 @@ import org.hl7.fhir.r4.model.Resource;
  *              2) the current HealthRecordType
  *              3) the total number of records of the current HealthRecordType
  */
-public interface HealthRecordBundle {
+
+public interface HealthDataBundle {
 
     /**
      *
      * @return the array of HealthRecordType contained in the Bundle
      */
-    HealthRecordType[] getHealthRecordTypes();
+    HealthDataType[] getHealthRecordTypes();
 
     /**
      *
      * @return a boolean indicating if there are more items to be fetched for the provided HealthRecordType
      */
-    boolean hasNext(HealthRecordType type);
+    boolean hasNext(HealthDataType type);
 
 
     /**
      *
      * @return the next record of the bundle for the provided HealthRecordType
      */
-    Resource next(HealthRecordType type);
+    Resource next(HealthDataType type);
 
 
     /**
      *
      * @return Returns the total number of records retrieved for the provided HealthRecordType
      */
-    int getTotal(HealthRecordType type);
+    int getTotal(HealthDataType type);
 
 
     

@@ -6,8 +6,8 @@ import org.hl7.fhir.r4.model.Resource;
 import java.util.Hashtable;
 import java.util.Map;
 
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
+import eu.interopehrate.mr2de.api.HealthDataType;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -18,34 +18,34 @@ import eu.interopehrate.mr2de.api.HealthRecordType;
  *  downloaded and the provided to DefaultHealthRecordBundle.
  *
  */
-public class DefaultHealthRecordBundle implements HealthRecordBundle {
+public class DefaultHealthDataBundle implements HealthDataBundle {
 
     private static final String INDEX = "index";
     // Bundle of Bundles
-    private Map<HealthRecordType, Bundle> bundlesMap = new Hashtable<>();
-    private HealthRecordType[] types;
+    private Map<HealthDataType, Bundle> bundlesMap = new Hashtable<>();
+    private HealthDataType[] types;
 
-    public DefaultHealthRecordBundle(Bundle[] bundles, HealthRecordType[] types) {
+    public DefaultHealthDataBundle(Bundle[] bundles, HealthDataType[] types) {
         for (Bundle bundle: bundles) {
-            if (bundle.getUserData(HealthRecordType.class.getName()) != null) {
+            if (bundle.getUserData(HealthDataType.class.getName()) != null) {
                 bundle.setUserData(INDEX, 0);
-                bundlesMap.put((HealthRecordType)bundle.getUserData(HealthRecordType.class.getName()), bundle);
+                bundlesMap.put((HealthDataType)bundle.getUserData(HealthDataType.class.getName()), bundle);
             }
         }
         this.types = types;
     }
 
-    public DefaultHealthRecordBundle(Bundle bundle, HealthRecordType type) {
-        this(new Bundle[] {bundle}, new HealthRecordType[] {type});
+    public DefaultHealthDataBundle(Bundle bundle, HealthDataType type) {
+        this(new Bundle[] {bundle}, new HealthDataType[] {type});
     }
 
     @Override
-    public HealthRecordType[] getHealthRecordTypes() {
+    public HealthDataType[] getHealthRecordTypes() {
         return types;
     }
 
     @Override
-    public boolean hasNext(HealthRecordType type) {
+    public boolean hasNext(HealthDataType type) {
         Bundle bundle = bundlesMap.get(type);
         if (bundle == null)
             return false;
@@ -56,7 +56,7 @@ public class DefaultHealthRecordBundle implements HealthRecordBundle {
     }
 
     @Override
-    public Resource next(HealthRecordType type) {
+    public Resource next(HealthDataType type) {
         Bundle bundle = bundlesMap.get(type);
         if (bundle == null)
             return null;
@@ -69,7 +69,7 @@ public class DefaultHealthRecordBundle implements HealthRecordBundle {
     }
 
     @Override
-    public int getTotal(HealthRecordType type) {
+    public int getTotal(HealthDataType type) {
         Bundle bundle = bundlesMap.get(type);
         if (bundle == null)
             return 0;

@@ -4,17 +4,16 @@ package eu.interopehrate.mr2de.api;
  *      Author: Engineering Ingegneria Informatica
  *     Project: InteropEHRate - www.interopehrate.eu
  *
- * Description: Enumeration representing the medical data type tha can be requested with
+ * Description: Enumeration representing the medical data type that can be requested with
  *              MR2D protocol.
  */
-
-public enum HealthRecordType {
+public enum HealthDataType {
 
     PATIENT_SUMMARY
-    ,LABORATORY_REPORT
+    , LABORATORY_RESULT
+    , MEDICAL_IMAGE
     /*,OBSERVATION
     ,PRESCRIPTION
-    ,MEDICAL_IMAGE
     ,DISCHARGE_REPORT*/
     ;
 

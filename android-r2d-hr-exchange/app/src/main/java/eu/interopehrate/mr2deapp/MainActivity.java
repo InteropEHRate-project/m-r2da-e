@@ -25,8 +25,8 @@ import java.util.List;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.MR2DFactory;
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
+import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 
@@ -34,6 +34,27 @@ public class MainActivity extends AppCompatActivity {
 
     private MR2D mr2d;
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("d/M/yyyy");
+
+    /*
+    private Patient r2dEndpoint = new Patient();
+    private String username, password;
+    private DiagnosticReport getLastLaboratoryResults() {
+        MR2D mr2d = MR2DFactory.create(r2dEndpoint);
+
+        try {
+            mr2d.login(username, password);
+
+            DiagnosticReport labRes = (DiagnosticReport)mr2d.getLastRecord(
+                    HealthRecordType.LABORATORY_RESULT,
+                    ResponseFormat.STRUCTURED_UNCONVERTED);
+
+            return labRes;
+        } catch (MR2DException e) {
+            Log.e("Democlass", "Exception with MR2D", e);
+            return null;
+        }
+    }
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,19 +126,19 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // Handles selected HealthRecordType types
-                List<HealthRecordType> types = new ArrayList<>();
+                List<HealthDataType> types = new ArrayList<>();
                 if (switchPS.isChecked())
-                    types.add(HealthRecordType.PATIENT_SUMMARY);
+                    types.add(HealthDataType.PATIENT_SUMMARY);
                 if (switchLabRes.isChecked())
-                    types.add(HealthRecordType.LABORATORY_RESULT);
+                    types.add(HealthDataType.LABORATORY_RESULT);
                 if (switchMedImg.isChecked())
-                    types.add(HealthRecordType.MEDICAL_IMAGE);
+                    types.add(HealthDataType.MEDICAL_IMAGE);
 
                 // Handles selected format
                 Spinner formats = (Spinner)findViewById(R.id.formats);
                 ResponseFormat format = ResponseFormat.valueOf(formats.getSelectedItem().toString());
 
-                (new GetRecords()).execute(date, format, types.toArray(new HealthRecordType[types.size()]));
+                (new GetRecords()).execute(date, format, types.toArray(new HealthDataType[types.size()]));
             }
         });
     }
@@ -174,10 +195,10 @@ public class MainActivity extends AppCompatActivity {
     /*
      * ASYNC TASK #5: method MR2D.getRecords() for all type and all formats
      */
-    private class GetRecords extends AsyncTask<Object, HealthRecordBundle, HealthRecordBundle> {
+    private class GetRecords extends AsyncTask<Object, HealthDataBundle, HealthDataBundle> {
         private int numRecords = 0;
         private int totalRecords = 0;
-        private HealthRecordType currentType;
+        private HealthDataType currentType;
         private ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         private TextView progressLabel = (TextView) findViewById(R.id.progressLabel);
 
@@ -192,18 +213,18 @@ public class MainActivity extends AppCompatActivity {
          * args[1] = instance of ResponseFormat
          * args[2] = optional Date
          */
-        protected HealthRecordBundle doInBackground(Object... args) {
-            HealthRecordBundle bundle = null;
-            HealthRecordType cu = null;
+        protected HealthDataBundle doInBackground(Object... args) {
+            HealthDataBundle bundle = null;
+            HealthDataType cu = null;
             try {
                 // executes method getAllRecords providing the starting date
                 // bundle = MainActivity.this.mr2d.getAllRecords((Date)args[0], ResponseFormat.ALL);
                 bundle = MainActivity.this.mr2d.getRecords((Date)args[0],
                         (ResponseFormat) args[1],
-                        (HealthRecordType[]) args[2]);
+                        (HealthDataType[]) args[2]);
                 totalRecords = 0;
 
-                for (HealthRecordType t : bundle.getHealthRecordTypes()) {
+                for (HealthDataType t : bundle.getHealthRecordTypes()) {
                     numRecords = 0;
                     currentType = t;
 //                    Log.d(getClass().getSimpleName(),"Tipo corrente: " + currentType);
@@ -233,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
          * Used to write the total number of records downloaded
          * at the end of the "doInBackground" method
          */
-        protected void onPostExecute(HealthRecordBundle bundle) {
+        protected void onPostExecute(HealthDataBundle bundle) {
             progressLabel.setText("Downloaded " +  totalRecords + " records.");
         }
 
@@ -248,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
          * is running and the number of records downloaded compared to the
          * total.
          */
-        protected void onProgressUpdate(HealthRecordBundle... bundles) {
+        protected void onProgressUpdate(HealthDataBundle... bundles) {
             if (bundles[0] == null)
                 return;
 

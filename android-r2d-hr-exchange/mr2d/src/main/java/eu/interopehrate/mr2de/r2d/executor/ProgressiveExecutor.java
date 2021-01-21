@@ -2,8 +2,8 @@ package eu.interopehrate.mr2de.r2d.executor;
 
 import org.hl7.fhir.r4.model.Bundle;
 
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
+import eu.interopehrate.mr2de.api.HealthDataType;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -22,7 +22,7 @@ public interface ProgressiveExecutor {
      *
      * @return An instance of LazyIterator
      */
-    HealthRecordBundle start(Arguments args);
+    HealthDataBundle start(Arguments args);
 
 
     /**
@@ -30,13 +30,13 @@ public interface ProgressiveExecutor {
      *
      * @return a FHIR Bundle
      */
-    Bundle next(HealthRecordType type);
+    Bundle next(HealthDataType type);
 
 
     /**
      *
      * @return Returns all the HealthRecordType provided to the Executor
      */
-    HealthRecordType[] getHealthRecordTypes();
+    HealthDataType[] getHealthRecordTypes();
 
 }

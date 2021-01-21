@@ -26,9 +26,9 @@ public interface MR2D extends MR2DSM {
      * @param responseFormat : the format of returned data (structured or unstructured)
      * @return
      */
-    public HealthRecordBundle getRecords(Date from,
-                                         ResponseFormat responseFormat,
-                                         HealthRecordType ...hrTypes) throws MR2DException;
+    public HealthDataBundle getRecords(Date from,
+                                       ResponseFormat responseFormat,
+                                       HealthDataType...hrTypes) throws MR2DException;
 
     /**
      *
@@ -36,8 +36,8 @@ public interface MR2D extends MR2DSM {
      * @param responseFormat : the format of returned data (structured or unstructured)
      * @return
      */
-    public HealthRecordBundle getAllRecords(Date from,
-                                            ResponseFormat responseFormat) throws MR2DException;
+    public HealthDataBundle getAllRecords(Date from,
+                                          ResponseFormat responseFormat) throws MR2DException;
 
 
     /**
@@ -50,7 +50,8 @@ public interface MR2D extends MR2DSM {
      */
     @NonNull
     @WorkerThread
-    public Resource getLastRecord(@NonNull HealthRecordType hrType,
+    @Deprecated
+    public Resource getLastRecord(@NonNull HealthDataType hrType,
                                   @NonNull ResponseFormat responseFormat) throws MR2DException;
 
 

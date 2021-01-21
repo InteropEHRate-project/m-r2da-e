@@ -9,8 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import eu.interopehrate.mr2de.MR2DFactory;
-import eu.interopehrate.mr2de.api.HealthRecordBundle;
-import eu.interopehrate.mr2de.api.HealthRecordType;
+import eu.interopehrate.mr2de.api.HealthDataBundle;
+import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 
@@ -36,7 +36,7 @@ public class R2DBasicMockTest {
     @Test
     public void getLastRecordForPatientSummaryOfMarioRossi() {
         Bundle bundle = (Bundle)marioRossiR2D.getLastRecord(
-                HealthRecordType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
+                HealthDataType.PATIENT_SUMMARY, ResponseFormat.STRUCTURED_UNCONVERTED);
 
         Resource res = bundle.getEntryFirstRep().getResource();
         assertEquals("Composition", res.getResourceType().name());
@@ -57,10 +57,10 @@ public class R2DBasicMockTest {
 
     @Test
     public void getAllRecordsForForPatientSummaryOfMarioRossi() {
-        HealthRecordBundle b = marioRossiR2D.getAllRecords(null, ResponseFormat.ALL);
+        HealthDataBundle b = marioRossiR2D.getAllRecords(null, ResponseFormat.ALL);
 
         int counter = 0;
-        for (HealthRecordType t: b.getHealthRecordTypes()) {
+        for (HealthDataType t: b.getHealthRecordTypes()) {
             while (b.hasNext(t)) {
                 b.next(t);
                 counter++;
