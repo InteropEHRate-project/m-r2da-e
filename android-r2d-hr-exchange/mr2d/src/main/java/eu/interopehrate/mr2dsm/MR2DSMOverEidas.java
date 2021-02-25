@@ -38,8 +38,7 @@ class MR2DSMOverEidas implements MR2DSM {
     private static final String CLIENT_SECRET = "864452c3-3bc1-4f09-ad06-b3c4dde0ee7b";
 
     private String eIDASURL;
-    private String accessToken;
-    private String refreshToken;
+    private String assertion;
 
     MR2DSMOverEidas(String eIDASURL) {
         // Stores eIDAS server endpoint
@@ -84,7 +83,7 @@ class MR2DSMOverEidas implements MR2DSM {
             else {
                 JWT jwt = new JWT();
                 Claims jwtClaims = jwt.decode(results);
-                String assertion = jwtClaims.get("assertion").toString();
+                String  assertion= jwtClaims.get("assertion").toString();
                 String encryptedData = jwtClaims.get("attributes").toString();
                 String data = jwt.decode(encryptedData).get("data3").toString();
                 data = data. replaceAll("\n","");
@@ -117,6 +116,7 @@ class MR2DSMOverEidas implements MR2DSM {
                 //Only display the extraJwt if the Authentication process was successful
                 if (authenticated) {
                     System.out.println("The assertion is: "+ assertion);
+                    this.assertion = assertion;
                 }
             }}
         catch (Exception e){
@@ -130,17 +130,12 @@ class MR2DSMOverEidas implements MR2DSM {
     public void logout() throws MR2DSecurityException {
         Log.d(getClass().getSimpleName(), "Executing logout()");
 
-        accessToken = null;
-        refreshToken = null;
+        assertion = null;
         Log.d(getClass().getSimpleName(), "Succesfully executed logout()");
     }
 
     public String getToken() {
-        return accessToken;
-    }
-
-    public String getRefreshTokenToken() {
-        return refreshToken;
+        return assertion;
     }
 
 }
