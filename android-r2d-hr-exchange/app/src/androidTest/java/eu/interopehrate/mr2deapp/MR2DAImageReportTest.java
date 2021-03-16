@@ -50,7 +50,7 @@ public class MR2DAImageReportTest {
     public void testImageReportWithDate() {
         GregorianCalendar gc = new GregorianCalendar(2015, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.IMAGE_REPORT,
-                "", "", gc.getTime(), false);
+                gc.getTime(), false);
 
         int counter = 0;
         while (it.hasNext()) {
