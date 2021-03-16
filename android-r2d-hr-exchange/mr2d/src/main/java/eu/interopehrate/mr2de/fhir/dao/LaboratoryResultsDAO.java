@@ -11,8 +11,8 @@ import java.util.Date;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2de.api.HealthDataType;
-import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
-import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2da.r2d.ArgumentName;
+import eu.interopehrate.mr2da.r2d.Arguments;
 
 public class LaboratoryResultsDAO extends GenericFHIRDAO {
     private static final String LAB_CODE = "LAB";
@@ -38,7 +38,7 @@ public class LaboratoryResultsDAO extends GenericFHIRDAO {
                 .and(DiagnosticReport.STATUS.exactly().code(DiagnosticReport.DiagnosticReportStatus.FINAL.toCode()))
                 .sort().descending(DiagnosticReport.DATE)
                 .include(DiagnosticReport.INCLUDE_RESULT)
-                .accept(GenericFHIRDAO.ACCEPT_JSON)
+                .accept(ACCEPT_JSON)
                 .returnBundle(Bundle.class);
 
         // Checks if has been provided a FROM argument
@@ -67,7 +67,7 @@ public class LaboratoryResultsDAO extends GenericFHIRDAO {
                 .forResource(DocumentReference.class)
                 .where(DocumentReference.CATEGORY.exactly().code(LAB_CODE))
                 .sort().descending(DocumentReference.DATE)
-                .accept(GenericFHIRDAO.ACCEPT_JSON)
+                .accept(ACCEPT_JSON)
                 .returnBundle(Bundle.class);
 
         // Checks if has been provided a FROM argument

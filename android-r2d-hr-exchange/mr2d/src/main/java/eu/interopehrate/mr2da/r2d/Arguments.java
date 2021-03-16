@@ -1,10 +1,10 @@
-package eu.interopehrate.mr2de.r2d.executor;
+package eu.interopehrate.mr2da.r2d;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -14,10 +14,15 @@ import java.util.Map;
  *  Description: represents a collection of instances of Argument
  */
 public class Arguments {
-     private Map<ArgumentName, Argument> args = new Hashtable<>();
+    private Map<ArgumentName, Argument> args = new Hashtable<>();
 
     public Arguments add(@NonNull ArgumentName name, @NonNull Object value) {
         args.put(name, new Argument(name, value));
+        return this;
+    }
+
+    public Arguments add(@NonNull Argument arg) {
+        args.put(arg.getName(), arg);
         return this;
     }
 
@@ -36,6 +41,10 @@ public class Arguments {
             return args.get(name).getValue();
 
         return null;
+    }
+
+    public Iterator<Argument> getArguments() {
+        return args.values().iterator();
     }
 
     @Override

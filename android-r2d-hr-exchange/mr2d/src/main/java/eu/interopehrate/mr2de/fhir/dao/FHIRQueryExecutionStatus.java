@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2da.r2d.Arguments;
 
 final class FHIRQueryExecutionStatus {
     private ResponseFormat responseFormat;

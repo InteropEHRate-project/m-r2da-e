@@ -13,13 +13,13 @@ import java.util.Map;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import eu.interopehrate.mr2de.api.HealthDataBundle;
 import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.fhir.ExceptionDetector;
+import eu.interopehrate.mr2da.fhir.ExceptionDetector;
 import eu.interopehrate.mr2de.fhir.dao.FHIRDaoFactory;
 import eu.interopehrate.mr2de.r2d.executor.LazyHealthDataBundle;
 import eu.interopehrate.mr2de.r2d.executor.ProgressiveExecutor;
 import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.fhir.dao.GenericFHIRDAO;
-import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2da.r2d.Arguments;
 
 /**
  *  Author: Engineering Ingegneria Informatica
@@ -28,6 +28,7 @@ import eu.interopehrate.mr2de.r2d.executor.Arguments;
  *  Description: Implementation of a ProgressiveExecutor using FHIR as underlying protocol
  */
 @SuppressWarnings("ALL")
+@Deprecated
 public class FHIRProgressiveExecutor implements ProgressiveExecutor {
 
     private final IGenericClient fhirClient;

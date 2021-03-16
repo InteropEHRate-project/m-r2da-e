@@ -1,4 +1,4 @@
-package eu.interopehrate.mr2de.r2d.executor;
+package eu.interopehrate.mr2da.r2d;
 
 /**
  *      Author: Engineering Ingegneria Informatica
@@ -6,14 +6,17 @@ package eu.interopehrate.mr2de.r2d.executor;
  *
  *  Description: couple of name / value used to represent a generic argument
  */
+
+// TODO: handle the argument of type array.
 public class Argument {
 
     private ArgumentName name;
     private Object value;
 
-    public Argument() {}
-
     public Argument(ArgumentName name, Object value) {
+        if (value == null)
+            throw new IllegalArgumentException("the value of an Argument cannot be null.");
+
         this.name = name;
         this.value = value;
     }
@@ -31,9 +34,24 @@ public class Argument {
         return value;
     }
 
+    public String getValueAsString() {
+        return (String)value;
+    }
+
+    public String[] getValueAsStringArray() {
+        if (isArray())
+            return (String[])value;
+        else
+            return new String[]{value.toString()};
+    }
+
     public Argument setValue(Object value) {
         this.value = value;
         return this;
+    }
+
+    public boolean isArray() {
+        return value.getClass().isArray();
     }
 
     @Override

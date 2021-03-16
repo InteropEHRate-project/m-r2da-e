@@ -14,6 +14,7 @@ import org.hl7.fhir.r4.model.Resource;
  *              3) the total number of records of the current HealthRecordType
  */
 
+@Deprecated
 public interface HealthDataBundle {
 
     /**

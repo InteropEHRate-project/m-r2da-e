@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     password = "creus";
                 mr2d.login(objects[0].toString(), password);
             } catch (Exception e) {
-                Log.e(getClass().getName(), "Error during login()", e);
+                Log.e(getClass().getName(), e.getMessage(), e.getCause());
             }
             return null;
         }

@@ -12,7 +12,7 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.mr2de.utils.codes.LoincCodes;
 
 /**
@@ -39,7 +39,7 @@ public class PatientSummaryDAO extends GenericFHIRDAO {
                 .where(Composition.TYPE.exactly().systemAndCode(psCode.getSystem(), psCode.getCode()))
                 .count(1)
                 .sort().descending(Composition.DATE)
-                .accept(GenericFHIRDAO.ACCEPT_JSON)
+                .accept(ACCEPT_JSON)
                 .returnBundle(Bundle.class);
 
         // Executes query

@@ -7,6 +7,7 @@ import java.util.Date;
 
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 
+@Deprecated
 public interface MHD {
 
     /**

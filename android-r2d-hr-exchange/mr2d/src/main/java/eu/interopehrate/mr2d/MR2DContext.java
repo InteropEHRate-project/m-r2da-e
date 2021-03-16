@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.util.Log;
 
 import eu.interopehrate.mr2d.ncp.NCPRegistry;
-import eu.interopehrate.mr2d.R;
+import eu.interopehrate.mr2da.document.DocumentQueryGeneratorFactory;
+import eu.interopehrate.mr2da.fhir.ConnectionFactory;
+import eu.interopehrate.mr2da.r2d.QueryGeneratorFactory;
 
 /**
  *       Author: Engineering Ingegneria Informatica
@@ -39,10 +41,18 @@ public final class MR2DContext extends ContentProvider {
         // Initialization procedures must be performed here
         try {
             Log.d(getClass().getName(), "Initializing MR2D library...");
+            // FHIR Connection Factory init
+            ConnectionFactory.initialize();
+            // R2D Query Generator init
+            QueryGeneratorFactory.initialize();
+            // Document Query Generator init
+            DocumentQueryGeneratorFactory.initialize();
+            // Initializing NCP Node list
+            // TODO: should be removed it is deprecated
             XmlResourceParser parser = getContext().getResources().getXml(R.xml.ncps);
             NCPRegistry.loadConfiguration(parser);
         } catch (Exception e) {
-            Log.e(getClass().getName(), "Fatal error while loading NCP descriptors", e);
+            Log.e(getClass().getName(), "Fatal error while loading MR2DContext", e);
             e.printStackTrace();
         }
 

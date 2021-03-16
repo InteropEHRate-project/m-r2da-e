@@ -25,6 +25,7 @@ import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2de.r2d.executor.DefaultHealthDataBundle;
 
+@Deprecated
 class MR2DOverLocal implements MR2D {
 
     private Bundle patientSummary;

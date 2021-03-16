@@ -10,9 +10,8 @@ import java.util.Date;
 import ca.uhn.fhir.rest.api.SearchTotalModeEnum;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2de.api.ResponseFormat;
-import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
-import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2da.r2d.ArgumentName;
+import eu.interopehrate.mr2da.r2d.Arguments;
 
 public class ObservationDAO extends GenericFHIRDAO {
 
@@ -29,7 +28,7 @@ public class ObservationDAO extends GenericFHIRDAO {
                 .forResource(Observation.class)
                 .sort().descending(Observation.DATE)
                 .totalMode(SearchTotalModeEnum.ACCURATE)
-                .accept(GenericFHIRDAO.ACCEPT_JSON)
+                .accept(ACCEPT_JSON)
                 .returnBundle(Bundle.class);
 
         // Adds condition on optional date parameter

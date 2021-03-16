@@ -22,13 +22,13 @@ import eu.interopehrate.mr2de.api.MR2D;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2d.exceptions.MR2DException;
 import eu.interopehrate.mr2d.ncp.NCPDescriptor;
-import eu.interopehrate.mr2de.fhir.ExceptionDetector;
+import eu.interopehrate.mr2da.fhir.ExceptionDetector;
 import eu.interopehrate.mr2de.fhir.dao.FHIRDaoFactory;
 import eu.interopehrate.mr2de.fhir.dao.GenericFHIRDAO;
 import eu.interopehrate.mr2de.fhir.dao.ResourceDAO;
 import eu.interopehrate.mr2de.fhir.executor.FHIRProgressiveExecutor;
-import eu.interopehrate.mr2de.r2d.executor.ArgumentName;
-import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2da.r2d.ArgumentName;
+import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.mr2dsm.MR2DSMFactory;
 import eu.interopehrate.mr2dsm.api.MR2DSM;
 
@@ -38,6 +38,7 @@ import eu.interopehrate.mr2dsm.api.MR2DSM;
  *
  *  Description: Concrete implementation of MR2D working with FHIR protocol
  */
+@Deprecated
 class MR2DOverFHIR implements MR2D {
     private static final String MARIO_ROSSI_SESSION = "f70e7d7e-ad8a-478d-9e02-2499e37fb7a8";
 

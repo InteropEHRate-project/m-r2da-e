@@ -18,6 +18,7 @@ import eu.interopehrate.mr2de.api.MR2D;
  *
  * Description: factory class for instances of MR2D
  */
+@Deprecated
 public final class MR2DFactory {
 
     private MR2DFactory() {}

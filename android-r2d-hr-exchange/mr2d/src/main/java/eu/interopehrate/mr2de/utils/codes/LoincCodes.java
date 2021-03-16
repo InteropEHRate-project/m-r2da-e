@@ -34,4 +34,16 @@ public enum LoincCodes {
 
         return concept;
     }
+
+    public static String getSystem() {
+        return SYSTEM;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDescritption() {
+        return descritption;
+    }
 }

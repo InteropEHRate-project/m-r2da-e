@@ -10,7 +10,7 @@ import org.hl7.fhir.r4.model.Resource;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2de.r2d.dao.HealthDataDAO;
-import eu.interopehrate.mr2de.r2d.executor.Arguments;
+import eu.interopehrate.mr2da.r2d.Arguments;
 
 /**
  *       Author: Engineering Ingegneria Informatica

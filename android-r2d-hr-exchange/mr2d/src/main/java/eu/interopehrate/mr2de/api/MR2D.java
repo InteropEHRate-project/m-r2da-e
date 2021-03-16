@@ -17,6 +17,7 @@ import eu.interopehrate.mr2dsm.api.MR2DSM;
  * Description: interface of local proxy compliant to MR2D specifications. It allows
  *              a mobile fhirClient to submit requests compliant to MR2D specifications.
  */
+@Deprecated
 public interface MR2D extends MR2DSM {
 
     /**

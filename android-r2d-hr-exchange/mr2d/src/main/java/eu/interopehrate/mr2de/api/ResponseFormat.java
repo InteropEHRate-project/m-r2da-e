@@ -6,6 +6,7 @@ package eu.interopehrate.mr2de.api;
  *
  * Description: Enumeration representing the format of medical data requested with MR2D.
  */
+@Deprecated
 public enum ResponseFormat {
 
     /*
