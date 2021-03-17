@@ -13,7 +13,7 @@ import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2da.r2d.Arguments;
-import eu.interopehrate.mr2de.utils.codes.LoincCodes;
+import eu.interopehrate.mr2da.utils.codes.LoincCodes;
 
 /**
  *       Author: Engineering Ingegneria Informatica

@@ -1,11 +1,12 @@
-package eu.interopehrate.mr2de.utils.codes;
+package eu.interopehrate.mr2da.utils.codes;
 
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 
 public enum LoincCodes {
 
-    PATIENT_SUMMARY("60591-5", "Patient Summary");
+    PATIENT_SUMMARY("60591-5", "Patient Summary"),
+    DISCHARGE_REPORT("18842-5", "Discharge Report");
 
     public static final String SYSTEM = "http://loinc.org";
     private String code;
@@ -41,6 +42,10 @@ public enum LoincCodes {
 
     public String getCode() {
         return code;
+    }
+
+    public String getSystemAndCode() {
+        return SYSTEM + "|" + code;
     }
 
     public String getDescritption() {

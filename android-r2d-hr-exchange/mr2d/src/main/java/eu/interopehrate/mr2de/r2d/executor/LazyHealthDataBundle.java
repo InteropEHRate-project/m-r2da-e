@@ -22,6 +22,8 @@ import eu.interopehrate.mr2de.api.HealthDataType;
  *  Lazy Loading is implemented by interaction with class ProgressiveExecutor.
  *
  */
+
+@Deprecated
 public class LazyHealthDataBundle implements HealthDataBundle {
 
     private HealthDataType current;

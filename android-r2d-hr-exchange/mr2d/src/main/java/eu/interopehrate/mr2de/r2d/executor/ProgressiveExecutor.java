@@ -16,6 +16,8 @@ import eu.interopehrate.mr2de.api.HealthDataType;
  *               single set of data.
  *
  */
+
+@Deprecated
 public interface ProgressiveExecutor {
 
     /**

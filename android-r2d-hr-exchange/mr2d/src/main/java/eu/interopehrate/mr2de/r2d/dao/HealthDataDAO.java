@@ -15,6 +15,7 @@ import eu.interopehrate.mr2da.r2d.Arguments;
  *               only a specific kind of health data from an NCP using only one of the supported protocols.
  */
 
+@Deprecated
 public interface HealthDataDAO {
 
     /**

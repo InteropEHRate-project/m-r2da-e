@@ -7,11 +7,10 @@ import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2da.r2d.AbstractQueryGenerator;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
-import eu.interopehrate.mr2da.r2d.Option;
 import eu.interopehrate.mr2da.r2d.OptionName;
 import eu.interopehrate.mr2da.r2d.Options;
 import eu.interopehrate.mr2da.r2d.QueryGeneratorFactory;
-import eu.interopehrate.mr2de.utils.codes.LoincCodes;
+import eu.interopehrate.mr2da.utils.codes.LoincCodes;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 /**

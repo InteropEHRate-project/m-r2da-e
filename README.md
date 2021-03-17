@@ -40,3 +40,7 @@ Example usage:
         GregorianCalendar gc = new GregorianCalendar(2015, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.LABORATORY_REPORT,
                 gc.getTime(), false);
+
+        // retrieving Discharge Reports
+        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DOCUMENT_REFERENCE,
+                null, LoincCodes.DISCHARGE_REPORT.getSystemAndCode(), null, false);

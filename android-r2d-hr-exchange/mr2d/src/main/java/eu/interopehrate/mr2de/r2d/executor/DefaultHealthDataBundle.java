@@ -18,6 +18,8 @@ import eu.interopehrate.mr2de.api.HealthDataType;
  *  downloaded and the provided to DefaultHealthRecordBundle.
  *
  */
+
+@Deprecated
 public class DefaultHealthDataBundle implements HealthDataBundle {
 
     private static final String INDEX = "index";
