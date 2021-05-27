@@ -1,7 +1,7 @@
 package eu.interopehrate.mr2de.api;
 
 /*
- *      Author: Engineering Ingegneria Informatica
+ *      Author: Engineering S.p.A. (www.eng.it)
  *     Project: InteropEHRate - www.interopehrate.eu
  *
  * Description: Enumeration representing the medical data type that can be requested with

@@ -1,6 +1,24 @@
+/**
+ Copyright 2021 Engineering S.p.A. (www.eng.it) - InteropEHRate (www.interopehrate.eu)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 package eu.interopehrate.mr2da;
 
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
@@ -8,35 +26,45 @@ import org.hl7.fhir.r4.model.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EmptyStackException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2da.document.DocumentQueryGeneratorFactory;
-import eu.interopehrate.mr2da.r2d.AbstractQueryGenerator;
+import eu.interopehrate.mr2da.r2d.document.DocumentQueryGeneratorFactory;
+import eu.interopehrate.mr2da.r2d.resources.AbstractQueryGenerator;
 import eu.interopehrate.mr2da.r2d.Options;
-import eu.interopehrate.mr2da.r2d.QueryGeneratorFactory;
+import eu.interopehrate.mr2da.r2d.resources.QueryGeneratorFactory;
 import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.protocols.common.DocumentCategory;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 import eu.interopehrate.protocols.common.ResourceCategory;
 
 /**
- *  Author: Engineering Ingegneria Informatica
+ *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
- *  Description:
+ *  Description: This class is able to execute a set of R2D queries to retrieve the requested
+ *               data from an R2D Server. Every query may requested to interact several times
+ *               with the R2D Server to download each page composing the overall result (results
+ *               are paged).
+ *
+ *               Lazy download of data is hidden to the client, results are provided to the client
+ *               inside an instance of Iterator&lt;Resource&gt; that handles the lazy loading
+ *               mechanism. The client only need to iterate over the Iterator.
+ *
  */
 class ProgressiveQueryExecutor {
 
     private final IGenericClient fhirClient;
     private ResourceCategory[] categories;
     private int queriesSize;
-    private Stack<IQuery> queries = new Stack<>();
+
+    private Queue<IQuery> queries = new LinkedList<IQuery>();
     private IQuery<Bundle> currentQuery;
     private Bundle currentBundle;
 
@@ -58,15 +86,13 @@ class ProgressiveQueryExecutor {
 
         // Fills the stack of AbstractQueryGenerator
         for (AbstractQueryGenerator generator: qGenList)
-            // TODO: come fare per capire quale metodo va invocato?
-            queries.push(generator.generateQueryForSearch(args, opts));
+            queries.add(generator.generateQueryForSearch(args, opts));
 
         queriesSize = queries.size();
         // Executes the first query in the stack
-        Log.d(ProgressiveQueryExecutor.class.getSimpleName(), "Starting execution of query 1 of " + queriesSize);
-        currentBundle = (Bundle) queries.pop().execute();
-        Log.d(getClass().getSimpleName(), currentBundle.getLink(Bundle.LINK_SELF).getUrl());
-        Log.d(ProgressiveQueryExecutor.class.getSimpleName(), "Retrieved " +
+        Log.d("MR2DA", "Starting execution of query 1 of " + queriesSize);
+        currentBundle = (Bundle) queries.poll().execute();
+        Log.d("MR2DA", "Retrieved " +
                 (currentBundle == null ? " 0 items " : currentBundle.getEntry().size() + " items."));
 
         return new LazyIterator<Resource>(this, currentBundle);
@@ -77,24 +103,27 @@ class ProgressiveQueryExecutor {
      * @return
      */
     protected Bundle next() {
+        //Log.d("MR2D", String.format("invoked method next(). Queries %d currentBundle.next = %s ",
+        //        queries.size(), currentBundle.getLink(Bundle.LINK_NEXT)));
         if (currentBundle.getLink(Bundle.LINK_NEXT) != null) {
-            Log.d(ProgressiveQueryExecutor.class.getSimpleName(), "Loading next page of current query...");
-            Log.d(ProgressiveQueryExecutor.class.getSimpleName(), currentBundle.getLink(Bundle.LINK_NEXT).getUrl());
+            Log.d("MR2DA", "Loading next page of current query...");
             currentBundle = fhirClient.loadPage().next(currentBundle).execute();
-            Log.d(ProgressiveQueryExecutor.class.getSimpleName(), "Retrieved " +
-                    (currentBundle == null ? " 0 items " : currentBundle.getEntry().size() + " items."));
+            Log.d("MR2DA", "Retrieved " +
+                    (currentBundle == null ? " null Bundle " : currentBundle.getEntry().size() + " items."));
         } else {
-            if (queries.empty()) {
-                Log.d(getClass().getSimpleName(), "Execution terminated");
+            if (queries.isEmpty()) {
+                Log.d("MR2DA", "Execution terminated");
                 return null;
             } else {
-                IQuery<Bundle> nextQuery = queries.pop();
-                Log.d(ProgressiveQueryExecutor.class.getSimpleName(), "Starting execution of query " +
+                IQuery<Bundle> nextQuery = queries.poll();
+                Log.d("MR2DA", "Starting execution of query " +
                         (queriesSize - queries.size()) + " of " + queriesSize);
                 currentBundle = nextQuery.execute();
-                Log.d(getClass().getSimpleName(), currentBundle.getLink(Bundle.LINK_SELF).getUrl());
-                Log.d(ProgressiveQueryExecutor.class.getSimpleName(), "Retrieved " +
-                        (currentBundle == null ? " 0 items " : currentBundle.getEntry().size() + " items."));
+                Log.d("MR2DA", "Retrieved " +
+                        (currentBundle == null ? " null Bundle " : currentBundle.getEntry().size() + " items."));
+
+                if (currentBundle.getEntry().size() == 0)
+                    return this.next();
             }
         }
 
@@ -178,7 +207,7 @@ class ProgressiveQueryExecutor {
                     ids.add(id);
                     return (T) r;
                 } else
-                    Log.d(getClass().getSimpleName(), "Trovato duplicato: " + id);
+                    Log.d("MR2DA", "Remove duplicated element: " + id);
             }
 
             return null;

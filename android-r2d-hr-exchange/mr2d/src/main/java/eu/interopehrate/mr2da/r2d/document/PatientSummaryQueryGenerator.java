@@ -1,25 +1,25 @@
-package eu.interopehrate.mr2da.document;
+package eu.interopehrate.mr2da.r2d.document;
 
 import org.hl7.fhir.r4.model.Bundle;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2da.r2d.AbstractQueryGenerator;
+import eu.interopehrate.mr2da.r2d.resources.AbstractQueryGenerator;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.mr2da.r2d.OptionName;
 import eu.interopehrate.mr2da.r2d.Options;
-import eu.interopehrate.mr2da.r2d.QueryGeneratorFactory;
+import eu.interopehrate.mr2da.r2d.resources.QueryGeneratorFactory;
 import eu.interopehrate.mr2da.utils.codes.LoincCodes;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 /**
- *  Author: Engineering Ingegneria Informatica
+ *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description:
  */
-public class PatientSummaryQueryGenerator extends AbstractQueryGenerator {
+class PatientSummaryQueryGenerator extends AbstractQueryGenerator {
 
     private AbstractQueryGenerator documentReferenceQGen;
 

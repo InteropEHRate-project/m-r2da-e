@@ -20,12 +20,12 @@ import eu.interopehrate.protocols.common.FHIRResourceCategory;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class MR2DALaboratoryReportTest {
+public class LaboratoryReportTest {
 
     protected MR2DSM mr2dsm;
     protected MR2DA mr2da;
 
-    public MR2DALaboratoryReportTest() {
+    public LaboratoryReportTest() {
         mr2dsm = MR2DSMFactory.create(Locale.ITALY);
         mr2dsm.login("mario.rossi","interopehrate");
         mr2da = MR2DAFactory.create("http://213.249.46.205:8080/R2D/fhir/", mr2dsm);

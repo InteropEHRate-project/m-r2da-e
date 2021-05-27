@@ -1,51 +1,54 @@
-package eu.interopehrate.mr2da.document;
+package eu.interopehrate.mr2da.r2d.document;
 
 import org.hl7.fhir.r4.model.Bundle;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2da.r2d.AbstractQueryGenerator;
+import eu.interopehrate.mr2da.r2d.resources.AbstractQueryGenerator;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.mr2da.r2d.Option;
 import eu.interopehrate.mr2da.r2d.OptionName;
 import eu.interopehrate.mr2da.r2d.Options;
-import eu.interopehrate.mr2da.r2d.QueryGeneratorFactory;
+import eu.interopehrate.mr2da.r2d.resources.QueryGeneratorFactory;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 /**
- *  Author: Engineering Ingegneria Informatica
+ *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description:
  */
-public class StructuredImageReportQueryGenerator extends AbstractQueryGenerator {
-    private static final String[] DR_IMAGE_CATEGORY = {"RX", "RAD", "EC", "CUS", "NMR",
-            "NMS", "OUS", "RUS", "XRC", "CT", "CTH", "VUS"};
-    private AbstractQueryGenerator structuredImageRepGenerator;
+class UnstructuredImageReportQueryGenerator extends AbstractQueryGenerator {
+    private static final String[] IMAGE_REP_TYPES = {
+            "http://loinc.org|18748-4", "http://loinc.org|18726-0",
+            "http://loinc.org|26441-6", "http://loinc.org|26442-4",
+            "http://loinc.org|27895-2"
+    };
 
-    public StructuredImageReportQueryGenerator(IGenericClient fhirClient) {
+    private AbstractQueryGenerator documentReferenceQGen;
+
+    public UnstructuredImageReportQueryGenerator(IGenericClient fhirClient) {
         super(fhirClient);
-        structuredImageRepGenerator = QueryGeneratorFactory.getQueryGenerator(
-                FHIRResourceCategory.DIAGNOSTIC_REPORT, this.fhirClient);
+        documentReferenceQGen = QueryGeneratorFactory.getQueryGenerator(
+                FHIRResourceCategory.DOCUMENT_REFERENCE, this.fhirClient);
     }
 
     @Override
     public IQuery<Bundle> generateQueryForSearch(Arguments args, Options opts) {
         // Creates new Arguments instance
         Arguments newArgs = new Arguments();
-        newArgs.add(ArgumentName.CATEGORY, DR_IMAGE_CATEGORY);
-
+        newArgs.add(ArgumentName.CATEGORY, IMAGE_REP_TYPES);
         if (args.hasArgument(ArgumentName.FROM))
             newArgs.add(ArgumentName.FROM, args.getValueByName(ArgumentName.FROM));
 
         // Creates new Opions instance
         Options newOpts = new Options();
-        newOpts.add(OptionName.INCLUDE, Option.Include.INCLUDE_MEDIA);
+        newOpts.add(OptionName.INCLUDE, Option.Include.INCLUDE_RESULTS);
         if (opts.hasOption(OptionName.SORT))
             newOpts.add(opts.getByName(OptionName.SORT));
 
-        return structuredImageRepGenerator.generateQueryForSearch(newArgs, newOpts);
+        return documentReferenceQGen.generateQueryForSearch(newArgs, newOpts);
     }
 
 }

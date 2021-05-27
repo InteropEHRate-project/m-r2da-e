@@ -1,4 +1,4 @@
-package eu.interopehrate.mr2da.document;
+package eu.interopehrate.mr2da.r2d.document;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import eu.interopehrate.mr2da.r2d.AbstractQueryGenerator;
+import eu.interopehrate.mr2da.r2d.resources.AbstractQueryGenerator;
 import eu.interopehrate.protocols.common.DocumentCategory;
 
 /**
- *  Author: Engineering Ingegneria Informatica
+ *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description:

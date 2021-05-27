@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Maintains the list of the registered NCP instances.

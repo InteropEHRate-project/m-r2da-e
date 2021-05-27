@@ -14,6 +14,7 @@ import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
 
+@Deprecated
 public class LaboratoryResultsDAO extends GenericFHIRDAO {
     private static final String LAB_CODE = "LAB";
 

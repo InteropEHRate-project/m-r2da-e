@@ -7,6 +7,7 @@ import java.util.Map;
 import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2da.r2d.Arguments;
 
+@Deprecated
 final class FHIRQueryExecutionStatus {
     private ResponseFormat responseFormat;
     private Arguments arguments;

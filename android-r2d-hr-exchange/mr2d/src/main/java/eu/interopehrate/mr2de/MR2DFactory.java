@@ -13,7 +13,7 @@ import eu.interopehrate.mr2d.ncp.NCPRegistry;
 import eu.interopehrate.mr2de.api.MR2D;
 
 /**
- *      Author: Engineering Ingegneria Informatica
+ *      Author: Engineering S.p.A. (www.eng.it)
  *     Project: InteropEHRate - www.interopehrate.eu
  *
  * Description: factory class for instances of MR2D

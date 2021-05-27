@@ -1,3 +1,18 @@
+/**
+ Copyright 2021 Engineering S.p.A. (www.eng.it) - InteropEHRate (www.interopehrate.eu)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 package eu.interopehrate.mr2da;
 
 import android.util.Log;
@@ -6,6 +21,8 @@ import androidx.annotation.NonNull;
 
 import org.hl7.fhir.r4.model.Attachment;
 import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.CapabilityStatement;
+import org.hl7.fhir.r4.model.Condition;
 import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Parameters;
@@ -17,6 +34,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IFetchConformanceTyped;
+import ca.uhn.fhir.rest.gclient.IFetchConformanceUntyped;
 import eu.interopehrate.mr2d.exceptions.MR2DSecurityException;
 import eu.interopehrate.mr2da.api.MR2DA;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
@@ -32,10 +51,10 @@ import eu.interopehrate.protocols.common.FHIRResourceCategory;
 import eu.interopehrate.protocols.common.ResourceCategory;
 
 /**
- *  Author: Engineering Ingegneria Informatica
+ *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
- *  Description:
+ *  Description: Default implementation of MR2DA interface
  */
 class MR2DAImpl implements MR2DA {
 
@@ -47,24 +66,30 @@ class MR2DAImpl implements MR2DA {
 
         // creates the instance of IGenericClient to submit requests to the R2D Server
         fhirClient = ConnectionFactory.getFHIRClient(r2dEndPoint, mr2dsmInstance.getToken());
+
+        // start check of Capability Statement
+        IFetchConformanceUntyped conformanceUntyped = fhirClient.capabilities();
+
+        //TODO: check the Capability Statement
+        /*
+        fhirClient.capabilities()
+                .ofType(CapabilityStatement.class)
+                .execute();
+         */
     }
 
     @Override
     public Iterator<Resource> getResources(Date date, boolean isSummary) {
         return getResourcesByCategories(date,
                 isSummary,
-                FHIRResourceCategory.DIAGNOSTIC_REPORT
-                , FHIRResourceCategory.OBSERVATION
-                , FHIRResourceCategory.DOCUMENT_REFERENCE
-                /* , FHIRResourceCategory.DOCUMENT_MANIFEST
-                , FHIRResourceCategory.PRESCRIPTION */);
+                FHIRResourceCategory.values());
     }
 
     @Override
     public Iterator<Resource> getResourcesByCategories(Date from,
                                                        boolean isSummary,
                                                        ResourceCategory... resourceCategories) {
-        Log.d(getClass().getSimpleName(), "Execution of method getResourcesByCategories() STARTED.");
+        Log.d("MR2DA", "Execution of method getResourcesByCategories() STARTED.");
 
         // Preconditions checks
         if (resourceCategories == null || resourceCategories.length == 0)
@@ -94,10 +119,8 @@ class MR2DAImpl implements MR2DA {
             // Starts Execution
             return executor.start(args, opts);
         } catch (Exception e) {
-            Log.e(getClass().getName(), "Exception in method getRecords()", e);
+            Log.e("MR2DA", "Exception in method getRecords()", e);
             throw ExceptionDetector.detectException(e);
-        } finally {
-            Log.d(getClass().getSimpleName(), "Execution of method getRecords() HAS_STARTED (completion has been delegated to progressive executor)");
         }
     }
 
@@ -113,7 +136,7 @@ class MR2DAImpl implements MR2DA {
     public Iterator<Resource> getResourcesByCategory(@NonNull ResourceCategory resourceCategory,
                                                      String subCategory, String type,
                                                      Date from, boolean isSummary) {
-        Log.d(getClass().getSimpleName(), "Execution of method getResourcesByCategory() STARTED.");
+        Log.d("MR2DA", "Execution of method getResourcesByCategory() STARTED.");
 
         // Preconditions checks
         if (resourceCategory == null)
@@ -145,10 +168,8 @@ class MR2DAImpl implements MR2DA {
             // Starts Execution
             return executor.start(args, opts);
         } catch (Exception e) {
-            Log.e(getClass().getName(), "Exception in method getRecords()", e);
+            Log.e("MR2DA", "Exception in method getRecords()", e);
             throw ExceptionDetector.detectException(e);
-        } finally {
-            Log.d(getClass().getSimpleName(), "Execution of method getRecords() HAS_STARTED (completion has been delegated to progressive executor)");
         }
     }
 
@@ -170,7 +191,7 @@ class MR2DAImpl implements MR2DA {
 
     @Override
     public Iterator<Resource> getResourcesById(@NonNull String... ids) {
-        Log.d(getClass().getSimpleName(), "Starting execution of method getResourcesById()");
+        Log.d("MR2DA", "Starting execution of method getResourcesById()");
 
         List<Resource> resources = new ArrayList<>();
         for (String id : ids)
@@ -179,9 +200,10 @@ class MR2DAImpl implements MR2DA {
         return resources.iterator();
     }
 
+
     @Override
     public Resource getResourceById(String id) {
-        Log.d(getClass().getSimpleName(), "Starting execution of method getResourceById()");
+        Log.d("MR2DA", "Starting execution of method getResourceById()");
 
         String[] tokens = id.split("/");
         if (tokens.length > 1)
@@ -190,22 +212,10 @@ class MR2DAImpl implements MR2DA {
             throw new IllegalArgumentException("Provided id is not a valid FHIR id: " + id);
     }
 
-    private Bundle getBundleFromComposition(String psURL) {
-        // Invokes operation $document to create PS Bundle
-        Parameters operationOutcome =
-                fhirClient.operation()
-                        .onInstance(new IdType(psURL))
-                        .named("$document")
-                        .withNoParameters(Parameters.class)
-                        .useHttpGet()
-                        .execute();
-
-        return (Bundle) operationOutcome.getParameterFirstRep().getResource();
-    }
 
     @Override
     public Resource getPatientSummary() {
-        Log.d(getClass().getSimpleName(), "Execution of method getPatientSummary() STARTED.");
+        Log.d("MR2DA", "Execution of method getPatientSummary() STARTED.");
 
         if (! mr2dsm.isAuthenticated())
             throw new MR2DSecurityException(new IllegalStateException("Authentication to EIDAS has " +
@@ -226,28 +236,52 @@ class MR2DAImpl implements MR2DA {
             // Starts Execution and retrieves only the first element
             Iterator<Resource> psIt = executor.start(args, opts);
             if (psIt.hasNext()) {
+                // retrieve the first element of the Iterator where there is the DocRef of the PS
                 DocumentReference psDocRef = (DocumentReference)psIt.next();
-                // TODO: verify if PS is embedded in the Attachment
+                // The PS may referenced by the attachment.url of the attachment or
+                // embedded as an array of byte in the attachment.content
                 Attachment attachment = psDocRef.getContentFirstRep().getAttachment();
                 if (!attachment.getUrl().isEmpty()) {
                     String psURL = attachment.getUrl();
 
                     if (psURL.startsWith("Composition"))
-                        return getBundleFromComposition(psURL);
+                        // using the $document operation, creates the Bundle form the Composition
+                        return createBundleFromComposition(psURL);
                     else if (psURL.startsWith("Bundle"))
+                        // exists the Bundle and directly retrieves it
                         return getResourceById(psURL);
                     else
                         throw new IllegalArgumentException("URL " + psURL + " is not a valid URL to retrieve the PS.");
-                } else
+                } else {
                     return psDocRef;
+                }
             }
         } catch (Exception e) {
-            Log.e(getClass().getName(), "Exception in method getRecords()", e);
+            Log.e("MR2DA", "Exception in method getRecords()", e);
             throw ExceptionDetector.detectException(e);
         } finally {
-            Log.d(getClass().getSimpleName(), "Execution of method getPatientSummary() HAS_FINISHED.");
+            Log.d("MR2DA", "Execution of method getPatientSummary() HAS_FINISHED.");
         }
 
+        return null;
+    }
+
+    private Bundle createBundleFromComposition(String psURL) {
+        // Invokes operation $document to create PS Bundle
+        Parameters operationOutcome =
+                fhirClient.operation()
+                        .onInstance(new IdType(psURL))
+                        .named("$document")
+                        .withNoParameters(Parameters.class)
+                        .useHttpGet()
+                        .execute();
+
+        return (Bundle) operationOutcome.getParameterFirstRep().getResource();
+    }
+
+
+    @Override
+    public Iterator<Resource> synchronizeWithServer(Date lastSyncDate) {
         return null;
     }
 

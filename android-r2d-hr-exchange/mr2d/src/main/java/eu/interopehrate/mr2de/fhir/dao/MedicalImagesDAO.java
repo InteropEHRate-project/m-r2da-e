@@ -14,6 +14,7 @@ import eu.interopehrate.mr2de.api.HealthDataType;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
 
+@Deprecated
 public class MedicalImagesDAO extends GenericFHIRDAO {
     private static final String[] DR_IMAGE_CATEGORY = {"RX", "RAD", "EC", "CUS", "NMR",
             "NMS", "OUS", "RUS", "XRC", "CT", "CTH", "VUS"};

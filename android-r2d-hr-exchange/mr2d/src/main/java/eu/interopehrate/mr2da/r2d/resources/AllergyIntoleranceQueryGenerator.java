@@ -1,5 +1,20 @@
-package eu.interopehrate.mr2da.r2d;
+package eu.interopehrate.mr2da.r2d.resources;
 
+/**
+ Copyright 2021 Engineering S.p.A. (www.eng.it) - InteropEHRate (www.interopehrate.eu)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 import android.util.Log;
 
 import org.hl7.fhir.r4.model.Bundle;
@@ -11,24 +26,30 @@ import java.util.Date;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IQuery;
+import eu.interopehrate.mr2da.r2d.Argument;
+import eu.interopehrate.mr2da.r2d.ArgumentName;
+import eu.interopehrate.mr2da.r2d.Arguments;
+import eu.interopehrate.mr2da.r2d.Option;
+import eu.interopehrate.mr2da.r2d.OptionName;
+import eu.interopehrate.mr2da.r2d.Options;
 
 /**
- *  Author: Engineering Ingegneria Informatica
+ *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description:
  */
 
 //TODO: completare implementazione e fare test
-class DocumentManifestQueryGenerator extends AbstractQueryGenerator {
+class AllergyIntoleranceQueryGenerator extends AbstractQueryGenerator {
 
-    public DocumentManifestQueryGenerator(IGenericClient fhirClient)  {
+    public AllergyIntoleranceQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);
     }
 
     @Override
     public IQuery<Bundle> generateQueryForSearch(Arguments args, Options opts) {
-        Log.d(getClass().getSimpleName(), "Searching for DocumentReference...");
+        Log.d("MR2DA", "Searching for DocumentReference...");
 
         IQuery<Bundle> q = fhirClient
                 .search()

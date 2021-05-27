@@ -22,7 +22,7 @@ import eu.interopehrate.mr2de.fhir.dao.GenericFHIRDAO;
 import eu.interopehrate.mr2da.r2d.Arguments;
 
 /**
- *  Author: Engineering Ingegneria Informatica
+ *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Implementation of a ProgressiveExecutor using FHIR as underlying protocol

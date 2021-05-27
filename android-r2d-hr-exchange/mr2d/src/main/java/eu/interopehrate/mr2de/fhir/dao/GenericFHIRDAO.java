@@ -13,7 +13,7 @@ import eu.interopehrate.mr2de.r2d.dao.HealthDataDAO;
 import eu.interopehrate.mr2da.r2d.Arguments;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Root class of all DAO for FHIR implementing HealthRecordDAO
@@ -32,6 +32,7 @@ import eu.interopehrate.mr2da.r2d.Arguments;
  *               2) searchFirstPageOfUnstructuredData()
  *
  */
+@Deprecated
 public abstract class GenericFHIRDAO implements HealthDataDAO {
 
     protected final static String ACCEPT_JSON = "application/fhir+json";

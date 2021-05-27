@@ -4,11 +4,13 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import eu.interopehrate.mr2de.api.HealthDataType;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Factory class for instantiating DAO related to a specific HealthRecordType.
  */
+
+@Deprecated
 public class FHIRDaoFactory {
 
     /*

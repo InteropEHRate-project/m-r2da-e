@@ -16,11 +16,12 @@ import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.mr2da.utils.codes.LoincCodes;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: DAO for performing operations on resource of type Composition.
  */
+@Deprecated
 public class PatientSummaryDAO extends GenericFHIRDAO {
 
     public PatientSummaryDAO(IGenericClient fhirClient) {

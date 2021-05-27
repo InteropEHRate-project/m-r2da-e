@@ -7,7 +7,7 @@ import eu.interopehrate.mr2de.api.HealthDataBundle;
 import eu.interopehrate.mr2de.api.HealthDataType;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Interface of a progressive executor. This class is used by MR2D to execute

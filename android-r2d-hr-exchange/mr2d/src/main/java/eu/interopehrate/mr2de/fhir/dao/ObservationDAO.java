@@ -13,6 +13,7 @@ import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
 
+@Deprecated
 public class ObservationDAO extends GenericFHIRDAO {
 
     public ObservationDAO(IGenericClient client) {

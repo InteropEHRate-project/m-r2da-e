@@ -7,12 +7,13 @@ import org.hl7.fhir.r4.model.Resource;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: DAO for performing only the read operation on resource whose type
  *               is not known (only the URL is known).
  */
+@Deprecated
 public class ResourceDAO {
 
     protected final IGenericClient fhirClient;

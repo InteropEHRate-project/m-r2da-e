@@ -1,7 +1,7 @@
 package eu.interopehrate.mr2d.ncp;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Class used to describe features of an NCP instance.

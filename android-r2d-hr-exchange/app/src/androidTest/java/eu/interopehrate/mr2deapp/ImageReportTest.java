@@ -14,27 +14,27 @@ import eu.interopehrate.mr2da.MR2DAFactory;
 import eu.interopehrate.mr2da.api.MR2DA;
 import eu.interopehrate.mr2dsm.MR2DSMFactory;
 import eu.interopehrate.mr2dsm.api.MR2DSM;
+import eu.interopehrate.protocols.common.DocumentCategory;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class DocumentReferenceTest {
+public class ImageReportTest {
 
     protected MR2DSM mr2dsm;
     protected MR2DA mr2da;
 
-    public DocumentReferenceTest() {
+    public ImageReportTest() {
         mr2dsm = MR2DSMFactory.create(Locale.ITALY);
         mr2dsm.login("mario.rossi","interopehrate");
         mr2da = MR2DAFactory.create("http://213.249.46.205:8080/R2D/fhir/", mr2dsm);
     }
 
     @Test
-    public void testDocumentReferenceWithDateAndType() {
-        GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
-        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DOCUMENT_REFERENCE,
-                "", "http://loinc.org|742-7", gc.getTime(), false);
+    public void testImageReportWithoutParameters() {
+        Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.IMAGE_REPORT,
+                null, false);
 
         int counter = 0;
         while (it.hasNext()) {
@@ -42,6 +42,22 @@ public class DocumentReferenceTest {
             counter++;
         }
 
-        assertEquals(0, counter);
+        // 2 DiagnosticReports with iamges containing 1 ImagingStudy
+        assertEquals(3, counter);
     }
+
+    @Test
+    public void testImageReportWithDate() {
+        GregorianCalendar gc = new GregorianCalendar(2015, Calendar.JANUARY, 01);
+        Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.IMAGE_REPORT,
+                gc.getTime(), false);
+
+        int counter = 0;
+        while (it.hasNext()) {
+            it.next();
+            counter++;
+        }
+        assertEquals(3, counter);
+    }
+
 }

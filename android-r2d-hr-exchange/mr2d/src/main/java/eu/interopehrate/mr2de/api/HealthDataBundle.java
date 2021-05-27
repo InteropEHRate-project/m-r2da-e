@@ -3,7 +3,7 @@ package eu.interopehrate.mr2de.api;
 import org.hl7.fhir.r4.model.Resource;
 
 /**
- *      Author: Engineering Ingegneria Informatica
+ *      Author: Engineering S.p.A. (www.eng.it)
  *     Project: InteropEHRate - www.interopehrate.eu
  *
  * Description: Represents an heterogeneous set of Resources (grouped by HealthRecordType)

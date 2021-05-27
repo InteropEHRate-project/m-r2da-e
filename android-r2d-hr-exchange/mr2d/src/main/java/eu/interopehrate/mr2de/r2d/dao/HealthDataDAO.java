@@ -7,7 +7,7 @@ import eu.interopehrate.mr2de.api.ResponseFormat;
 import eu.interopehrate.mr2da.r2d.Arguments;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Interface used by MR2D for accessing a specific type of Health Data

@@ -33,7 +33,7 @@ import eu.interopehrate.mr2dsm.MR2DSMFactory;
 import eu.interopehrate.mr2dsm.api.MR2DSM;
 
 /**
- *       Author: Engineering Ingegneria Informatica
+ *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
  *  Description: Concrete implementation of MR2D working with FHIR protocol
