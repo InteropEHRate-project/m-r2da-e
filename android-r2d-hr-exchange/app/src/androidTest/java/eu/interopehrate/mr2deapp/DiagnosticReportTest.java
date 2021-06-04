@@ -10,31 +10,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.Locale;
 
-import eu.interopehrate.mr2da.MR2DAFactory;
-import eu.interopehrate.mr2da.api.MR2DA;
-import eu.interopehrate.mr2de.MR2DFactory;
-import eu.interopehrate.mr2dsm.MR2DSMFactory;
-import eu.interopehrate.mr2dsm.api.MR2DSM;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class DiagnosticReportTest {
-
-    protected MR2DSM mr2dsm;
-    protected MR2DA mr2da;
-
-    public DiagnosticReportTest() {
-        mr2dsm = MR2DSMFactory.create(Locale.ITALY);
-        mr2dsm.login("mario.rossi","interopehrate");
-        mr2da = MR2DAFactory.create("http://213.249.46.205:8080/R2D/fhir/", mr2dsm);
-    }
+public class DiagnosticReportTest extends BasicMR2DATest {
 
     @Test
     public void testDiagnosticReportWithoutParameters() {

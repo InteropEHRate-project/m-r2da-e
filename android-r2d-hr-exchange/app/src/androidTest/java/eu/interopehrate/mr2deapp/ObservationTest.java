@@ -15,23 +15,12 @@ import java.util.Locale;
 
 import eu.interopehrate.mr2da.MR2DAFactory;
 import eu.interopehrate.mr2da.api.MR2DA;
-import eu.interopehrate.mr2dsm.MR2DSMFactory;
-import eu.interopehrate.mr2dsm.api.MR2DSM;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class ObservationTest {
-
-    protected MR2DSM mr2dsm;
-    protected MR2DA mr2da;
-
-    public ObservationTest() {
-        mr2dsm = MR2DSMFactory.create(Locale.ITALY);
-        mr2dsm.login("mario.rossi","interopehrate");
-        mr2da = MR2DAFactory.create("http://213.249.46.205:8080/R2D/fhir/", mr2dsm);
-    }
+public class ObservationTest extends BasicMR2DATest {
 
     @Test
     public void testObservationWithoutParameters() {

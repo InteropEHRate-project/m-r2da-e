@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="eu.interopehrate.mr2da" >
+
+    <application>
+        <provider
+            android:authorities="MR2D.MR2DEContext"
+            android:exported="false"
+            android:enabled="true"
+            android:name="eu.interopehrate.mr2da.MR2DContext" />
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+    </application>
+
+</manifest>

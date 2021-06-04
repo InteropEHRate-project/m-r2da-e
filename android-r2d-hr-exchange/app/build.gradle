@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     // import library module mr2de and its dependencies (only those marked 'api')
-    implementation project(':mr2d')
+    implementation project(':mr2da')
 
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'

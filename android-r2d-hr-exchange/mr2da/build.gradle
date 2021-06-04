@@ -1,0 +1,102 @@
+apply plugin: 'com.android.library'
+apply plugin: "maven-publish"
+
+group = "eu.interoperhate"
+version="0.3.1"
+
+configurations {
+    all*.exclude group: 'org.codehaus.woodstox'
+    all*.exclude group: 'org.apache.httpcomponents'
+    all*.exclude group: 'xpp3'
+    all*.exclude group: 'commons-logging'
+}
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 29
+        versionCode 1
+        versionName version
+        setProperty("archivesBaseName", "$archivesBaseName-$version")
+    }
+
+    // added for retro-compatibility with JVM not supporting JAVA 1.8
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def FHIR_VERSION = "4.1.0"
+    api "ca.uhn.hapi.fhir:hapi-fhir-android:$FHIR_VERSION"
+    api "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$FHIR_VERSION"
+
+    def R2D_D2D_COMMONS_VERSION = "0.0.4";
+    api "eu.interoperhate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION"
+    api "eu.interoperhate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION:javadoc"
+
+    implementation "androidx.annotation:annotation:1.1.0"
+    implementation 'org.reflections:reflections:0.9.12'
+
+}
+
+/*
+ * Configuration of a task, for publishing mrd2e.aar into a Nexus Repository
+ */
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = "mr2da"
+            artifact("build/outputs/aar/$archivesBaseName"+"-release.aar") {
+                extension "aar"
+
+                // adds dependencies to the generated POM
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    //Iterate over the dependencies, adding a <dependency> node for each
+                    configurations.releaseCompileClasspath.allDependencies.each {
+                        if (it.group != null && it.name != null) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+
+                            //If there are any exclusions in dependency
+                            if (it.excludeRules.size() > 0) {
+                                def exclusionsNode = dependencyNode.appendNode('exclusions')
+                                it.excludeRules.each { rule ->
+                                    def exclusionNode = exclusionsNode.appendNode('exclusion')
+                                    exclusionNode.appendNode('groupId', rule.group)
+                                    exclusionNode.appendNode('artifactId', rule.module)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // descriptive information to add to the generated POM file
+            pom {
+                name = 'MR2DA Library'
+                description = 'Android library (developed by InteropEHRate consortium) for interacting with an Health Repository adopting R2D Access protocol.'
+                url = 'http://www.interopehrate.eu'
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name "IEHR-Nexus"
+            url "http://213.249.46.206:8081/repository/maven-releases/"
+            credentials {
+                username project.repoUser
+                password project.repoPassword
+            }
+        }
+    }
+}
