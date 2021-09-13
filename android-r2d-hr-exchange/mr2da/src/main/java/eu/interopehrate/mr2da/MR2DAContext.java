@@ -19,9 +19,12 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
+
+import java.io.InputStream;
 
 import eu.interopehrate.mr2da.r2d.document.DocumentQueryGeneratorFactory;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
@@ -31,7 +34,7 @@ import eu.interopehrate.mr2da.r2d.resources.QueryGeneratorFactory;
  *       Author: Engineering S.p.A. (www.eng.it)
  *      Project: InteropEHRate - www.interopehrate.eu
  *
- *  Description: MR2DE Content Provider used to retrieve context information
+ *  Description: MR2DA Content Provider used to retrieve context information
  *               from hosting app. Context information are used to access
  *               "res" folder.
  */
@@ -56,14 +59,19 @@ public final class MR2DContext extends ContentProvider {
             Log.d(getClass().getName(), "Initializing MR2D library...");
             // FHIR Connection Factory init
             ConnectionFactory.initialize();
+
+            Context ctx = getMR2DContext();
+
             // R2D Query Generator init
-            QueryGeneratorFactory.initialize();
+            // XmlResourceParser resourceConfig = getContext().getResources().getXml(R.xml.resourcegenerators);
+            InputStream resourceConfigFile = ctx.getResources().openRawResource(R.raw.resourcegenerators);
+            QueryGeneratorFactory.initialize(resourceConfigFile);
+
             // Document Query Generator init
+            XmlResourceParser documentConfig = getContext().getResources().getXml(R.xml.documentgenerators);
             DocumentQueryGeneratorFactory.initialize();
-            // Initializing NCP Node list
         } catch (Exception e) {
             Log.e(getClass().getName(), "Fatal error while loading MR2DContext", e);
-            e.printStackTrace();
         }
 
         return true;
