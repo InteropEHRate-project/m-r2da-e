@@ -35,6 +35,7 @@ import java.util.List;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IFetchConformanceUntyped;
 import eu.interopehrate.mr2da.api.MR2DA;
+import eu.interopehrate.mr2da.fhir.BundleFetcher;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
 import eu.interopehrate.mr2da.fhir.ExceptionDetector;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
@@ -59,8 +60,10 @@ class MR2DAImpl implements MR2DA {
     private final IGenericClient fhirClient;
 
     MR2DAImpl(URL r2dServerURL, String eidasToken) {
-        if (eidasToken == null || eidasToken.trim().isEmpty())
-            throw new IllegalArgumentException("Provided auth token is empty.");
+        if (r2dServerURL == null || r2dServerURL.getHost() == null || r2dServerURL.getHost().trim().isEmpty())
+            throw new IllegalArgumentException("Provided server URL is not valid.");
+
+
 
         if (eidasToken == null || eidasToken.trim().isEmpty())
             throw new IllegalArgumentException("Provided auth token is empty.");
@@ -99,13 +102,6 @@ class MR2DAImpl implements MR2DA {
         // Preconditions checks
         if (resourceCategories == null || resourceCategories.length == 0)
             throw new IllegalArgumentException("Precondition failed: Argument 'resourceCategories' cannot be null or empty.");
-
-        /*
-        if (!mr2dsm.isAuthenticated())
-            throw new MR2DSecurityException(new IllegalStateException("Authentication to EIDAS has " +
-                    "not been executed. " +
-                    "Execute login() method to grant access to business methods of MR2DA." ));
-        */
 
         // Business Logic
         try {
@@ -149,13 +145,6 @@ class MR2DAImpl implements MR2DA {
         if (resourceCategory == null)
             throw new IllegalArgumentException("Precondition failed: Argument 'resourceCategory' cannot be null.");
 
-        /*
-        if (! mr2dsm.isAuthenticated())
-            throw new MR2DSecurityException(new IllegalStateException("Authentication to EIDAS has " +
-                    "not been executed. " +
-                    "Execute login() method to grant access to business methods of MR2DA." ));
-        */
-
         // Business Logic
         try {
             //  DOC_CAT = PATIENT_SUMMARY, IMAGE_REPORT, LABORATORY_REPORT
@@ -195,6 +184,7 @@ class MR2DAImpl implements MR2DA {
     public Iterator<Resource> getMostRecentResources(@NonNull ResourceCategory resourceCategory,
                                                      String subCategory, String type,
                                                      int mostRecentSize, boolean isSummary) {
+        //TODO: implement this method
         return null;
     }
 
@@ -202,14 +192,17 @@ class MR2DAImpl implements MR2DA {
     public Iterator<Resource> getResourcesById(@NonNull String... ids) {
         Log.d("MR2DA", "Starting execution of method getResourcesById()");
 
+        throw new UnsupportedOperationException("The R2DAccess protocol does not allow to retrieve a resource by its ID.");
+        /*
         List<Resource> resources = new ArrayList<>();
         for (String id : ids)
             resources.add (getResourceById(id));
 
         return resources.iterator();
+         */
     }
 
-
+    /*
     @Override
     public Resource getResourceById(String id) {
         Log.d("MR2DA", "Starting execution of method getResourceById()");
@@ -220,18 +213,11 @@ class MR2DAImpl implements MR2DA {
         else
             throw new IllegalArgumentException("Provided id is not a valid FHIR id: " + id);
     }
-
+    */
 
     @Override
     public Resource getPatientSummary() {
         Log.d("MR2DA", "Execution of method getPatientSummary() STARTED.");
-
-        /*
-        if (! mr2dsm.isAuthenticated())
-            throw new MR2DSecurityException(new IllegalStateException("Authentication to EIDAS has " +
-                    "not been executed. " +
-                    "Execute login() method to grant access to business methods of MR2DA." ));
-        */
 
         // Business Logic
         try {
@@ -252,16 +238,17 @@ class MR2DAImpl implements MR2DA {
                 // The PS may referenced by the attachment.url of the attachment or
                 // embedded as an array of byte in the attachment.content
                 Attachment attachment = psDocRef.getContentFirstRep().getAttachment();
-                if (!attachment.getUrl().isEmpty()) {
-                    String psURL = attachment.getUrl();
+                final String psURL = attachment.getUrl();
+                if (!psURL.isEmpty()) {
+                    // if the URL is external, the Patient Summary cannot be retrievd
+                    if (!psURL.startsWith(r2dServerURL.toString())) {
+                        throw new IllegalStateException("The retrieved DocumentReference refers an external Patient Summary.");
+                    }
 
-                    // TODO: check if URL is a FHIR URL or if it refers to a
-                    if (psURL.startsWith("Composition"))
+                    // Once obtained the internal URL of the PS invokes the operation to retrieve it
+                    if (psURL.indexOf("/Composition/") >= 0)
                         // using the $document operation, creates the Bundle form the Composition
                         return createBundleFromComposition(psURL);
-                    else if (psURL.startsWith("Bundle"))
-                        // exists the Bundle and directly retrieves it
-                        return getResourceById(psURL);
                     else
                         throw new IllegalArgumentException("URL " + psURL + " is not a valid URL to retrieve the PS.");
                 } else {
@@ -269,12 +256,44 @@ class MR2DAImpl implements MR2DA {
                 }
             }
         } catch (Exception e) {
-            Log.e("MR2DA", "Exception in method getRecords()", e);
+            Log.e("MR2DA", "Exception in method getPatientSummary()", e);
             throw ExceptionDetector.detectException(e);
         } finally {
             Log.d("MR2DA", "Execution of method getPatientSummary() HAS_FINISHED.");
         }
 
+        return null;
+    }
+
+    @Override
+    public Bundle getPatientEverything() throws Exception {
+        return null;
+    }
+
+    @Override
+    public Bundle getEncounterEverything(String encounterId) throws Exception {
+        // Invokes operation $document to create PS Bundle
+        Parameters operationOutcome =
+                fhirClient.operation()
+                        .onInstance(new IdType(encounterId))
+                        .named("$everything")
+                        .withNoParameters(Parameters.class)
+                        .useHttpGet()
+                        .execute();
+
+        Bundle firstBundle = (Bundle) operationOutcome.getParameterFirstRep().getResource();
+        BundleFetcher.fetchRestOfBundle(fhirClient, firstBundle);
+
+        return firstBundle;
+    }
+
+    @Override
+    public Bundle getDiagnosticReportEverything(String encounterId) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Bundle getCompositionEverything(String encounterId) throws Exception {
         return null;
     }
 

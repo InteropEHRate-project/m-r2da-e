@@ -1,5 +1,8 @@
 package eu.interopehrate.mr2deapp;
 
+import android.util.Log;
+
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,74 +20,12 @@ import static org.junit.Assert.assertEquals;
 public class OperationTest extends BasicMR2DATest {
 
     @Test
-    public void testObservationWithoutParameters() throws Exception {
-        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
-                null, false);
+    public void testEncounterEverything() throws Exception {
+        // Bundle bundle = mr2da.getEncounterEverything("http://213.249.46.205:8080/R2D/fhir/Encounter/36");
+        Bundle bundle = mr2da.getEncounterEverything("Encounter/36");
+        Log.d("MR2DA", "getId() " + bundle.getEntryFirstRep().getResource().getId());
 
-        int counter = 0;
-        while (it.hasNext()) {
-            it.next();
-            counter++;
-        }
-
-        assertEquals(91, counter);
-    }
-
-    @Test
-    public void testObservationWithDate() throws Exception {
-        GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
-        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
-                gc.getTime(), false);
-
-        int counter = 0;
-        while (it.hasNext()) {
-            it.next();
-            counter++;
-        }
-        assertEquals(77, counter);
-    }
-
-    @Test
-    public void testObservationWithSubCategory() throws Exception {
-        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
-                "vital-signs", null, null, false);
-
-        int counter = 0;
-        while (it.hasNext()) {
-            it.next();
-            counter++;
-        }
-
-        assertEquals(4, counter);
-    }
-
-    @Test
-    public void testObservationWithType() throws Exception {
-        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
-                "", "http://loinc.org|742-7", null, false);
-
-        int counter = 0;
-        while (it.hasNext()) {
-            it.next();
-            counter++;
-        }
-
-        assertEquals(2, counter);
-    }
-
-    @Test
-    public void testObservationWithTypeAndDate() throws Exception {
-        GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
-        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
-                "", "http://loinc.org|742-7", gc.getTime(), false);
-
-        int counter = 0;
-        while (it.hasNext()) {
-            it.next();
-            counter++;
-        }
-
-        assertEquals(2, counter);
+        assertEquals(42, bundle.getTotal());
     }
 
 }

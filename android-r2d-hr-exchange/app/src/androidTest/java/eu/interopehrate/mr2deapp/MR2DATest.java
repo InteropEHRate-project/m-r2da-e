@@ -30,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 public class MR2DATest extends BasicMR2DATest {
 
     @Test
-    public void testGetResourcesWithoutParameters() {
+    public void testGetResourcesWithoutParameters() throws Exception {
         Iterator<Resource> it = mr2da.getResources(null, false);
 
         int counter = 0;
@@ -43,7 +43,7 @@ public class MR2DATest extends BasicMR2DATest {
     }
 
     @Test
-    public void testGetResourcesByCategories() {
+    public void testGetResourcesByCategories() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategories(null, false,
                 FHIRResourceCategory.MEDICATION_REQUEST,
                 FHIRResourceCategory.DIAGNOSTIC_REPORT);
@@ -56,7 +56,7 @@ public class MR2DATest extends BasicMR2DATest {
     }
 
         @Test
-    public void testGetResourcesWithDate() {
+    public void testGetResourcesWithDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResources(gc.getTime(), false);
 
@@ -70,7 +70,7 @@ public class MR2DATest extends BasicMR2DATest {
     }
 
     @Test
-    public void testGetPatientSummary() {
+    public void testGetPatientSummary() throws Exception {
         Resource res = mr2da.getPatientSummary();
 
         assertTrue(res instanceof Bundle);
@@ -91,15 +91,4 @@ public class MR2DATest extends BasicMR2DATest {
         assertEquals("Patient Summary di: Mario Rossi", ps.getTitle());
     }
 
-    @Test
-    public void getRecordForPatientMarioRossi() {
-        Resource res = mr2da.getResourceById("Patient/31");
-
-        assertEquals("Patient", res.getResourceType().name());
-
-        Patient p = (Patient)res;
-        assertEquals("RSSMRA60A01D663E", p.getIdentifierFirstRep().getValue());
-        assertEquals("Mario", p.getNameFirstRep().getGivenAsSingleString());
-        assertEquals("Rossi", p.getNameFirstRep().getFamily());
-    }
 }

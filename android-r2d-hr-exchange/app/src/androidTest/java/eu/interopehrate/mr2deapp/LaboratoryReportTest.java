@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 public class LaboratoryReportTest extends BasicMR2DATest {
 
     @Test
-    public void testLaboratoryReportWithoutParameters() {
+    public void testLaboratoryReportWithoutParameters() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.LABORATORY_REPORT,
                 null, false);
 

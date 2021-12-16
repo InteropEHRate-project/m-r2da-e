@@ -55,19 +55,8 @@ class ConditionQueryGenerator extends AbstractQueryGenerator {
                 .forResource(Condition.class)
                 .accept(ACCEPT_JSON)
                 .returnBundle(Bundle.class)
-                .where(DocumentReference.STATUS.exactly().code(DocumentReferenceStatus.CURRENT.toCode()));
-
-        // Checks if has been provided a CATEGORY
-        if (args.hasArgument(ArgumentName.CATEGORY)) {
-            Argument cat = args.getByName(ArgumentName.CATEGORY);
-            q = q.and(Condition.CATEGORY.exactly().codes(cat.getValueAsStringArray()));
-        }
-
-        // Checks if has been provided a TYPE
-        if (args.hasArgument(ArgumentName.TYPE)) {
-            Argument type = args.getByName(ArgumentName.TYPE);
-            q = addSystemAndCodeArgument(q, type.getValueAsString(), Condition.CODE);
-        }
+                .where(Condition.VERIFICATION_STATUS.exactly()
+                        .systemAndCode("http://terminology.hl7.org/CodeSystem/condition-ver-status", "confirmed"));
 
         // Checks if has been provided a FROM argument
         if (args.hasArgument(ArgumentName.FROM)) {

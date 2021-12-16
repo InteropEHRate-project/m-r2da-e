@@ -1,5 +1,6 @@
 package eu.interopehrate.mr2da.api;
 
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 
 import java.util.Date;
@@ -43,7 +44,7 @@ public interface MR2DA extends ResourceReader {
      *
      * @return
      */
-    public Resource getPatientSummary();
+    public Resource getPatientSummary() throws Exception;
 
 
     /**
@@ -51,7 +52,51 @@ public interface MR2DA extends ResourceReader {
      *
      * @param id
      * @return
+    public Resource getResourceById(String id) throws Exception;
      */
-    public Resource getResourceById(String id);
+
+    /**
+     * Returns a Bundle containing all the resources related to a patient.
+     *
+     * @return
+     * @throws Exception
+     */
+    Bundle getPatientEverything() throws Exception;
+
+
+    /**
+     * Returns all the resources related to the Encounter passed as argument.
+     *
+     * @param encounterId: it is the id of the Encounter. It is not the complete URL of the Encounter
+     *                   it is only the id part: [base]/Encounter/4567987, in this case the id
+     *                   is  the substring 4567987.
+     * @return
+     * @throws Exception
+     */
+    Bundle getEncounterEverything(String encounterId) throws Exception;
+
+
+    /**
+     * Returns all the resources related to the Encounter passed as argument.
+     *
+     * @param encounterId: it is the id of the Encounter. It is not the complete URL of the Encounter
+     *                   it is only the id part: [base]/Encounter/4567987, in this case the id
+     *                   is  the substring 4567987.
+     * @return
+     * @throws Exception
+     */
+    Bundle getDiagnosticReportEverything(String encounterId) throws Exception;
+
+
+    /**
+     * Returns all the resources related to the Encounter passed as argument.
+     *
+     * @param encounterId: it is the id of the Encounter. It is not the complete URL of the Encounter
+     *                   it is only the id part: [base]/Encounter/4567987, in this case the id
+     *                   is  the substring Encounter/4567987.
+     * @return
+     * @throws Exception
+     */
+    Bundle getCompositionEverything(String encounterId) throws Exception;
 
 }

@@ -1,5 +1,8 @@
 package eu.interopehrate.mr2deapp;
 
+import android.util.Log;
+
+import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,32 +12,34 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
+import eu.interopehrate.mr2da.fhir.CategoryMapper;
 import eu.interopehrate.protocols.common.DocumentCategory;
+import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
-public class ImageReportTest extends BasicMR2DATest {
+public class EncounterTest extends BasicMR2DATest {
 
     @Test
-    public void testImageReportWithoutParameters() throws Exception {
-        Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.IMAGE_REPORT,
+    public void testEncounterWithoutParameters() throws Exception {
+        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.ENCOUNTER,
                 null, false);
 
         int counter = 0;
+        Bundle everything;
         while (it.hasNext()) {
-            it.next();
             counter++;
         }
 
-        // 2 DiagnosticReports with iamges containing 1 ImagingStudy
+        // Expecting 3 Encounter
         assertEquals(3, counter);
     }
 
     @Test
-    public void testImageReportWithDate() throws Exception {
+    public void testEncounterWithDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2015, Calendar.JANUARY, 01);
-        Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.IMAGE_REPORT,
+        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.ENCOUNTER,
                 gc.getTime(), false);
 
         int counter = 0;

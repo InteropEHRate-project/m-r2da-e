@@ -14,7 +14,6 @@ import org.hl7.fhir.r4.model.Procedure;
 import org.hl7.fhir.r4.model.Resource;
 
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
-import eu.interopehrate.protocols.common.ResourceCategory;
 
 /**
  *  Author: Engineering S.p.A. (www.eng.it)
@@ -22,16 +21,19 @@ import eu.interopehrate.protocols.common.ResourceCategory;
  *
  *  Description: Mapper between a FHIR resource type and a value of the R2D ResourceCategory Enum
  */
-public class CategoryDetector {
+public final class CategoryMapper {
 
+    private CategoryMapper(){}
     /**
      * This method given an instance of FHIR Resource returns (if exists)
      * the corresponding value of ResourceCategory.
-     * 
+     *
      * @param resource
      * @return
      */
-    public ResourceCategory getCategory(Resource resource) {
+    public static FHIRResourceCategory getCategory(Resource resource) {
+        if (resource == null)
+            throw new IllegalArgumentException("Provided resource is null and cannot be processed!");
 
         if (resource instanceof Observation)
             return FHIRResourceCategory.OBSERVATION;

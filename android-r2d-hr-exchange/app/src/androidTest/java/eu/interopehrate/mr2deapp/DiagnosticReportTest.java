@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class DiagnosticReportTest extends BasicMR2DATest {
 
     @Test
-    public void testDiagnosticReportWithoutParameters() {
+    public void testDiagnosticReportWithoutParameters() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DIAGNOSTIC_REPORT,
                 null, false);
 
@@ -36,7 +36,7 @@ public class DiagnosticReportTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testDiagnosticReportWithDate() {
+    public void testDiagnosticReportWithDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DIAGNOSTIC_REPORT,
                 gc.getTime(), false);
@@ -52,7 +52,7 @@ public class DiagnosticReportTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testDiagnosticReportWithCategory() {
+    public void testDiagnosticReportWithCategory() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DIAGNOSTIC_REPORT,
                 "LAB", null , null, false);
 
@@ -67,7 +67,7 @@ public class DiagnosticReportTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testDiagnosticReportWithType() {
+    public void testDiagnosticReportWithType() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DIAGNOSTIC_REPORT,
                 null, "http://loinc.org|30954-2" , null, false);
 
@@ -82,7 +82,7 @@ public class DiagnosticReportTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testDiagnosticReportWithTypeAndDate() {
+    public void testDiagnosticReportWithTypeAndDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DIAGNOSTIC_REPORT,
                 null, "http://loinc.org|30954-2" , gc.getTime(), false);
@@ -98,7 +98,7 @@ public class DiagnosticReportTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testDiagnosticReportWithCategoryAndTypeAndDate() {
+    public void testDiagnosticReportWithCategoryAndTypeAndDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DIAGNOSTIC_REPORT,
                 "LAB", "http://loinc.org|30954-2" , gc.getTime(), false);

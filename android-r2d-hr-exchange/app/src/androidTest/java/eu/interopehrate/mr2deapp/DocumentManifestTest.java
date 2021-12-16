@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class DocumentManifestTest extends BasicMR2DATest {
 
     @Test
-    public void testDocumentReferenceWithDateAndType() {
+    public void testDocumentReferenceWithDateAndType() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DOCUMENT_MANIFEST,
                 "", "http://loinc.org|742-7", gc.getTime(), false);

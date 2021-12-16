@@ -15,17 +15,18 @@
  */
 package eu.interopehrate.mr2da.r2d.resources;
 
+import android.content.res.XmlResourceParser;
+import android.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import eu.interopehrate.mr2da.r2d.resources.AbstractQueryGenerator;
-import eu.interopehrate.mr2da.r2d.resources.DiagnosticReportQueryGenerator;
-import eu.interopehrate.mr2da.r2d.resources.DocumentManifestQueryGenerator;
-import eu.interopehrate.mr2da.r2d.resources.DocumentReferenceQueryGenerator;
-import eu.interopehrate.mr2da.r2d.resources.MedicationRequestQueryGenerator;
-import eu.interopehrate.mr2da.r2d.resources.ObservationQueryGenerator;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 
 /**
@@ -35,31 +36,63 @@ import eu.interopehrate.protocols.common.FHIRResourceCategory;
  *  Description:
  */
 public final class QueryGeneratorFactory {
-    private static Map<FHIRResourceCategory, Class<? extends AbstractQueryGenerator>> generatorsMap;
+    // Map used to bind a FHIR resource type to the corresponding Query Generator
+    private static Map<FHIRResourceCategory, Class<?>> generatorsMap;
 
-    public static void initialize() throws ClassNotFoundException {
-        generatorsMap = new HashMap<FHIRResourceCategory, Class<? extends AbstractQueryGenerator>>();
 
-        generatorsMap.put(FHIRResourceCategory.DIAGNOSTIC_REPORT, DiagnosticReportQueryGenerator.class);
-        generatorsMap.put(FHIRResourceCategory.OBSERVATION, ObservationQueryGenerator.class);
-        generatorsMap.put(FHIRResourceCategory.DOCUMENT_REFERENCE, DocumentReferenceQueryGenerator.class);
-        generatorsMap.put(FHIRResourceCategory.DOCUMENT_MANIFEST, DocumentManifestQueryGenerator.class);
-        generatorsMap.put(FHIRResourceCategory.MEDICATION_REQUEST, MedicationRequestQueryGenerator.class);
+    public static void initialize(InputStream resourceConfigFile) throws ClassNotFoundException, IOException {
+        Properties config = new Properties();
+        config.load(resourceConfigFile);
+
+        generatorsMap = new HashMap<FHIRResourceCategory, Class<?>>();
+
+        Iterator<String> propertyNames = config.stringPropertyNames().iterator();
+        String resourceCategoryName;
+        String generatorClassName;
+        Class generatorClass;
+        FHIRResourceCategory resourceCategory;
+        while (propertyNames.hasNext()) {
+            resourceCategoryName = propertyNames.next();
+            resourceCategory = FHIRResourceCategory.valueOf(resourceCategoryName);
+            if (resourceCategory == null) {
+                Log.w("MR2DA", "Unknown resource type configured in properties file. " +
+                        "Property '" + resourceCategoryName + "'is ignored.");
+                continue;
+            }
+
+            generatorClassName = config.getProperty(resourceCategoryName);
+            generatorClass = Class.forName(generatorClassName);
+            if (!AbstractQueryGenerator.class.isAssignableFrom(generatorClass)) {
+                Log.w("MR2DA", "Invalid generator for resource type " + resourceCategory +
+                        ", " + generatorClassName + " does not extends AbstractQueryGenerator.");
+                continue;
+            }
+
+            Log.d("MR2DA: ", "Adding generator for type: " + resourceCategory);
+            generatorsMap.put(resourceCategory, generatorClass);
+        }
+
+        // generatorsMap.put(FHIRResourceCategory.DIAGNOSTIC_REPORT, DiagnosticReportQueryGenerator.class);
+        // generatorsMap.put(FHIRResourceCategory.OBSERVATION, ObservationQueryGenerator.class);
+        // generatorsMap.put(FHIRResourceCategory.DOCUMENT_REFERENCE, DocumentReferenceQueryGenerator.class);
+        // generatorsMap.put(FHIRResourceCategory.DOCUMENT_MANIFEST, DocumentManifestQueryGenerator.class);
+        // generatorsMap.put(FHIRResourceCategory.MEDICATION_REQUEST, MedicationRequestQueryGenerator.class);
 
         // IMMUNIZATION, ALLERGY, CONDITION, ENCOUNTER
     }
 
     public static AbstractQueryGenerator getQueryGenerator(FHIRResourceCategory category, IGenericClient fhirClient) {
-        Class<? extends AbstractQueryGenerator> qg = generatorsMap.get(category);
+        Class<?> qg = generatorsMap.get(category);
         if (qg == null)
             throw new IllegalArgumentException("QueryGeneratorFactory non configured for category: " + category);
 
-        final Constructor<? extends AbstractQueryGenerator> constructor;
+        final Constructor<?> constructor;
         try {
             constructor = qg.getConstructor(IGenericClient.class);
-            return constructor.newInstance(fhirClient);
+            return (AbstractQueryGenerator)constructor.newInstance(fhirClient);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
+
 }

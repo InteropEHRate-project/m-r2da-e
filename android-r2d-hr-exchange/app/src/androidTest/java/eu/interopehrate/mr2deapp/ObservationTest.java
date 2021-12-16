@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 public class ObservationTest extends BasicMR2DATest {
 
     @Test
-    public void testObservationWithoutParameters() {
+    public void testObservationWithoutParameters() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
                 null, false);
 
@@ -37,7 +37,7 @@ public class ObservationTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testObservationWithDate() {
+    public void testObservationWithDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
                 gc.getTime(), false);
@@ -51,7 +51,7 @@ public class ObservationTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testObservationWithSubCategory() {
+    public void testObservationWithSubCategory() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
                 "vital-signs", null, null, false);
 
@@ -65,7 +65,7 @@ public class ObservationTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testObservationWithType() {
+    public void testObservationWithType() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
                 "", "http://loinc.org|742-7", null, false);
 
@@ -79,7 +79,7 @@ public class ObservationTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testObservationWithTypeAndDate() {
+    public void testObservationWithTypeAndDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
                 "", "http://loinc.org|742-7", gc.getTime(), false);

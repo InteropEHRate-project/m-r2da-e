@@ -38,9 +38,9 @@ import eu.interopehrate.mr2da.r2d.resources.QueryGeneratorFactory;
  *               from hosting app. Context information are used to access
  *               "res" folder.
  */
-public final class MR2DContext extends ContentProvider {
+public final class MR2DAContext extends ContentProvider {
 
-    private static MR2DContext INSTANCE;
+    private static MR2DAContext INSTANCE;
 
     public static Context getMR2DContext() {
         return INSTANCE.getContext();
@@ -68,8 +68,8 @@ public final class MR2DContext extends ContentProvider {
             QueryGeneratorFactory.initialize(resourceConfigFile);
 
             // Document Query Generator init
-            XmlResourceParser documentConfig = getContext().getResources().getXml(R.xml.documentgenerators);
-            DocumentQueryGeneratorFactory.initialize();
+            InputStream documentConfigFile = getContext().getResources().openRawResource(R.raw.documentgenerators);
+            DocumentQueryGeneratorFactory.initialize(documentConfigFile);
         } catch (Exception e) {
             Log.e(getClass().getName(), "Fatal error while loading MR2DContext", e);
         }

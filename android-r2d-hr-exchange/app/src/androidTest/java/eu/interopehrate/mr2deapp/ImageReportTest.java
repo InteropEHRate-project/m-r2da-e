@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class ImageReportTest extends BasicMR2DATest {
 
     @Test
-    public void testImageReportWithoutParameters() {
+    public void testImageReportWithoutParameters() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.IMAGE_REPORT,
                 null, false);
 
@@ -32,7 +32,7 @@ public class ImageReportTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testImageReportWithDate() {
+    public void testImageReportWithDate() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2015, Calendar.JANUARY, 01);
         Iterator<Resource> it = mr2da.getResourcesByCategory(DocumentCategory.IMAGE_REPORT,
                 gc.getTime(), false);

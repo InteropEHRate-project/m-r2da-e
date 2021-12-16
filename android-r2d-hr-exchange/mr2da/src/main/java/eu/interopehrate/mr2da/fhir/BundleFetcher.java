@@ -29,9 +29,9 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
  *
  *  Description: Class that fetches all the pages of a query and return a single bundle.
  */
-class BundleFetcher {
+public class BundleFetcher {
 
-    static void fetchRestOfBundle(IGenericClient theClient, Bundle theBundle) {
+    public static void fetchRestOfBundle(IGenericClient theClient, Bundle theBundle) {
         Set<String> resourcesAlreadyAdded = new HashSet<>();
         addInitialUrlsToSet(theBundle, resourcesAlreadyAdded);
         Bundle partialBundle = theBundle;

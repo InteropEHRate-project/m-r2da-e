@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: "maven-publish"
 
-group = "eu.interoperhate"
-version="0.3.1"
+group = "eu.interopehrate"
+version="0.3.4"
 
 configurations {
     all*.exclude group: 'org.codehaus.woodstox'
@@ -35,12 +35,11 @@ dependencies {
     api "ca.uhn.hapi.fhir:hapi-fhir-android:$FHIR_VERSION"
     api "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$FHIR_VERSION"
 
-    def R2D_D2D_COMMONS_VERSION = "0.0.4";
-    api "eu.interoperhate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION"
-    api "eu.interoperhate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION:javadoc"
+    def R2D_D2D_COMMONS_VERSION = "0.0.6";
+    api "eu.interopehrate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION"
+    api "eu.interopehrate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION:javadoc"
 
     implementation "androidx.annotation:annotation:1.1.0"
-    implementation 'org.reflections:reflections:0.9.12'
 
 }
 
