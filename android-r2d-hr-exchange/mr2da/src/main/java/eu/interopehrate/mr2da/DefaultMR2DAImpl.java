@@ -19,6 +19,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.hl7.fhir.r4.model.Attachment;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DocumentReference;
@@ -27,22 +28,25 @@ import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.IFetchConformanceUntyped;
+import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import eu.interopehrate.mr2da.api.MR2DA;
-import eu.interopehrate.mr2da.fhir.BundleFetcher;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
 import eu.interopehrate.mr2da.fhir.ExceptionDetector;
+import eu.interopehrate.mr2da.fhir.FHIRExecutor;
+import eu.interopehrate.mr2da.fhir.ProgressiveQueryExecutor;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.mr2da.r2d.Option;
 import eu.interopehrate.mr2da.r2d.OptionName;
 import eu.interopehrate.mr2da.r2d.Options;
+import eu.interopehrate.mr2da.r2d.resources.CompositionQueryGenerator;
+import eu.interopehrate.mr2da.r2d.resources.DiagnosticReportQueryGenerator;
+import eu.interopehrate.mr2da.r2d.resources.EncounterQueryGenerator;
+import eu.interopehrate.mr2da.r2d.resources.PatientQueryGenerator;
 import eu.interopehrate.protocols.common.DocumentCategory;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 import eu.interopehrate.protocols.common.ResourceCategory;
@@ -53,17 +57,15 @@ import eu.interopehrate.protocols.common.ResourceCategory;
  *
  *  Description: Default implementation of MR2DA interface
  */
-class MR2DAImpl implements MR2DA {
+class DefaultMR2DAImpl implements MR2DA {
 
-    private final String eidasToken;
-    private final URL r2dServerURL;
-    private final IGenericClient fhirClient;
+    protected final String eidasToken;
+    protected final URL r2dServerURL;
+    protected final IGenericClient fhirClient;
 
-    MR2DAImpl(URL r2dServerURL, String eidasToken) {
+    DefaultMR2DAImpl(URL r2dServerURL, String eidasToken) {
         if (r2dServerURL == null || r2dServerURL.getHost() == null || r2dServerURL.getHost().trim().isEmpty())
             throw new IllegalArgumentException("Provided server URL is not valid.");
-
-
 
         if (eidasToken == null || eidasToken.trim().isEmpty())
             throw new IllegalArgumentException("Provided auth token is empty.");
@@ -72,17 +74,7 @@ class MR2DAImpl implements MR2DA {
         this.r2dServerURL = r2dServerURL;
 
         // creates the instance of IGenericClient to submit requests to the R2D Server
-        fhirClient = ConnectionFactory.getFHIRClient(r2dServerURL, eidasToken);
-
-        // start check of Capability Statement
-        IFetchConformanceUntyped conformanceUntyped = fhirClient.capabilities();
-
-        //TODO: check the Capability Statement
-        /*
-        fhirClient.capabilities()
-                .ofType(CapabilityStatement.class)
-                .execute();
-         */
+        this.fhirClient = ConnectionFactory.getFHIRClient(r2dServerURL, eidasToken);
     }
 
     @Override
@@ -108,8 +100,7 @@ class MR2DAImpl implements MR2DA {
             //  DOC_CAT = PATIENT_SUMMARY, IMAGE_REPORT, LABORATORY_REPORT
             // FHIR_CAT = DIAGNOSTIC_REPORT, OBSERVATION, PRESCRIPTIONS, DOCUMENT_REFERENCE, DOCUMENT_MANIFEST, ENCOUNTER
             // Creates executor
-            ProgressiveQueryExecutor executor =
-                    new ProgressiveQueryExecutor(fhirClient, resourceCategories);
+            FHIRExecutor executor = createFHIRExecutorInstance();
 
             // Creates Arguments
             Arguments args = new Arguments();
@@ -120,7 +111,7 @@ class MR2DAImpl implements MR2DA {
             opts.add(OptionName.SORT, Option.Sort.SORT_DESCENDING_DATE);
 
             // Starts Execution
-            return executor.start(args, opts);
+            return executor.executeQueries(args, opts, resourceCategories);
         } catch (Exception e) {
             Log.e("MR2DA", "Exception in method getRecords()", e);
             throw ExceptionDetector.detectException(e);
@@ -150,8 +141,7 @@ class MR2DAImpl implements MR2DA {
             //  DOC_CAT = PATIENT_SUMMARY, IMAGE_REPORT, LABORATORY_REPORT
             // FHIR_CAT = DIAGNOSTIC_REPORT, OBSERVATION, PRESCRIPTIONS, DOCUMENT_REFERENCE, DOCUMENT_MANIFEST, ENCOUNTER
             // Creates executor
-            ProgressiveQueryExecutor executor =
-                    new ProgressiveQueryExecutor(fhirClient, resourceCategory);
+            FHIRExecutor executor = createFHIRExecutorInstance();
 
             // Creates Arguments
             Arguments args = new Arguments();
@@ -164,7 +154,7 @@ class MR2DAImpl implements MR2DA {
             opts.add(OptionName.SORT, Option.Sort.SORT_DESCENDING_DATE);
 
             // Starts Execution
-            return executor.start(args, opts);
+            return executor.executeQueries(args, opts, resourceCategory);
         } catch (Exception e) {
             Log.e("MR2DA", "Exception in method getRecords()", e);
             throw ExceptionDetector.detectException(e);
@@ -185,45 +175,24 @@ class MR2DAImpl implements MR2DA {
                                                      String subCategory, String type,
                                                      int mostRecentSize, boolean isSummary) {
         //TODO: implement this method
-        return null;
+        throw new NotImplementedException("method getMostRecentResources() is not implemented yet, sorry");
     }
 
     @Override
     public Iterator<Resource> getResourcesById(@NonNull String... ids) {
         Log.d("MR2DA", "Starting execution of method getResourcesById()");
 
-        throw new UnsupportedOperationException("The R2DAccess protocol does not allow to retrieve a resource by its ID.");
-        /*
-        List<Resource> resources = new ArrayList<>();
-        for (String id : ids)
-            resources.add (getResourceById(id));
-
-        return resources.iterator();
-         */
+        throw new UnsupportedOperationException("The R2DAccess protocol does not allow to retrieve a resource by ID.");
     }
 
-    /*
     @Override
-    public Resource getResourceById(String id) {
-        Log.d("MR2DA", "Starting execution of method getResourceById()");
-
-        String[] tokens = id.split("/");
-        if (tokens.length > 1)
-            return (Resource) fhirClient.read().resource(tokens[0]).withUrl(id).execute();
-        else
-            throw new IllegalArgumentException("Provided id is not a valid FHIR id: " + id);
-    }
-    */
-
-    @Override
-    public Resource getPatientSummary() {
+    public Bundle getPatientSummary() {
         Log.d("MR2DA", "Execution of method getPatientSummary() STARTED.");
 
         // Business Logic
         try {
              // Creates the executor even if it is a simple query
-            ProgressiveQueryExecutor executor =
-                    new ProgressiveQueryExecutor(fhirClient, DocumentCategory.PATIENT_SUMMARY);
+            FHIRExecutor executor = createFHIRExecutorInstance();
 
             // Creates Arguments
             Arguments args = new Arguments();
@@ -231,7 +200,8 @@ class MR2DAImpl implements MR2DA {
             Options opts = new Options();
             opts.add(OptionName.SORT, Option.Sort.SORT_DESCENDING_DATE);
             // Starts Execution and retrieves only the first element
-            Iterator<Resource> psIt = executor.start(args, opts);
+            Iterator<Resource> psIt = executor.executeQueries(args, opts, DocumentCategory.PATIENT_SUMMARY);
+
             if (psIt.hasNext()) {
                 // retrieve the first element of the Iterator where there is the DocRef of the PS
                 DocumentReference psDocRef = (DocumentReference)psIt.next();
@@ -246,13 +216,14 @@ class MR2DAImpl implements MR2DA {
                     }
 
                     // Once obtained the internal URL of the PS invokes the operation to retrieve it
-                    if (psURL.indexOf("/Composition/") >= 0)
+                    int idx = psURL.indexOf("/Composition/");
+                    if (idx >= 0)
                         // using the $document operation, creates the Bundle form the Composition
-                        return createBundleFromComposition(psURL);
+                        return getCompositionEverything(psURL.substring(idx + 1));
                     else
                         throw new IllegalArgumentException("URL " + psURL + " is not a valid URL to retrieve the PS.");
                 } else {
-                    return psDocRef;
+                    throw new IllegalStateException("DocumentReference does not contain a valid URL to the PatientSummary.");
                 }
             }
         } catch (Exception e) {
@@ -267,34 +238,61 @@ class MR2DAImpl implements MR2DA {
 
     @Override
     public Bundle getPatientEverything() throws Exception {
-        return null;
+        PatientQueryGenerator e = new PatientQueryGenerator(this.fhirClient);
+        IOperationUntypedWithInput<Bundle> op = e.generatePatientEverythingOperation();
+
+        FHIRExecutor executor = createFHIRExecutorInstance();
+        return executor.executeOperation(op);
     }
 
     @Override
     public Bundle getEncounterEverything(String encounterId) throws Exception {
-        // Invokes operation $document to create PS Bundle
-        Parameters operationOutcome =
-                fhirClient.operation()
-                        .onInstance(new IdType(encounterId))
-                        .named("$everything")
-                        .withNoParameters(Parameters.class)
-                        .useHttpGet()
-                        .execute();
+        if (encounterId == null || encounterId.trim().isEmpty())
+            throw new IllegalArgumentException("Precondition failed: encounterId cannot be null or empty.");
 
-        Bundle firstBundle = (Bundle) operationOutcome.getParameterFirstRep().getResource();
-        BundleFetcher.fetchRestOfBundle(fhirClient, firstBundle);
+        if (!encounterId.startsWith("Encounter/"))
+            encounterId = "Encounter/" + encounterId;
 
-        return firstBundle;
+        EncounterQueryGenerator e = new EncounterQueryGenerator(this.fhirClient);
+        IOperationUntypedWithInput<Bundle> op = e.generateEncounterEverythingOperation(encounterId);
+
+        FHIRExecutor executor = createFHIRExecutorInstance();
+        return executor.executeOperation(op);
+     }
+
+    @Override
+    public Bundle getDiagnosticReportEverything(String diagnosticReportId) throws Exception {
+        if (diagnosticReportId == null || diagnosticReportId.trim().isEmpty())
+            throw new IllegalArgumentException("Precondition failed: diagnosticReportId cannot be null or empty.");
+
+        if (!diagnosticReportId.startsWith("DiagnosticReport/"))
+            diagnosticReportId = "DiagnosticReport/" + diagnosticReportId;
+
+        DiagnosticReportQueryGenerator e = new DiagnosticReportQueryGenerator(this.fhirClient);
+        IOperationUntypedWithInput<Bundle> op = e.generateDiagnosticReportEverythingOperation(diagnosticReportId);
+
+        FHIRExecutor executor = createFHIRExecutorInstance();
+        return executor.executeOperation(op);
     }
 
     @Override
-    public Bundle getDiagnosticReportEverything(String encounterId) throws Exception {
-        return null;
+    public Bundle getCompositionEverything(String compositionId) throws Exception {
+        if (compositionId == null || compositionId.trim().isEmpty())
+            throw new IllegalArgumentException("Precondition failed: compositionId cannot be null or empty.");
+
+        if (!compositionId.startsWith("Composition/"))
+            compositionId = "Composition/" + compositionId;
+
+        CompositionQueryGenerator e = new CompositionQueryGenerator(this.fhirClient);
+        IOperationUntypedWithInput<Bundle> op = e.generateCompositionDocumentOperation(compositionId);
+
+        FHIRExecutor executor = createFHIRExecutorInstance();
+        return executor.executeOperation(op);
     }
 
-    @Override
-    public Bundle getCompositionEverything(String encounterId) throws Exception {
-        return null;
+    protected FHIRExecutor createFHIRExecutorInstance() {
+        FHIRExecutor executor = new ProgressiveQueryExecutor(this.fhirClient);
+        return executor;
     }
 
     private Bundle createBundleFromComposition(String psURL) {

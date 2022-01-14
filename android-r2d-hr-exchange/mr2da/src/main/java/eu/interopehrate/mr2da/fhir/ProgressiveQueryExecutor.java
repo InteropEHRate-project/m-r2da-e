@@ -13,14 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-package eu.interopehrate.mr2da;
+package eu.interopehrate.mr2da.fhir;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 
 import java.util.ArrayList;
@@ -31,9 +30,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Stack;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2da.r2d.document.DocumentQueryGeneratorFactory;
 import eu.interopehrate.mr2da.r2d.resources.AbstractQueryGenerator;
@@ -58,9 +57,9 @@ import eu.interopehrate.protocols.common.ResourceCategory;
  *               mechanism. The client only need to iterate over the Iterator.
  *
  */
-class ProgressiveQueryExecutor {
+public class ProgressiveQueryExecutor implements FHIRExecutor{
 
-    private final IGenericClient fhirClient;
+    private IGenericClient fhirClient;
     private ResourceCategory[] categories;
     private int queriesSize;
 
@@ -68,9 +67,42 @@ class ProgressiveQueryExecutor {
     private IQuery<Bundle> currentQuery;
     private Bundle currentBundle;
 
-    public ProgressiveQueryExecutor(IGenericClient fhirClient, ResourceCategory... categories) {
+    public ProgressiveQueryExecutor(IGenericClient fhirClient) {
         this.fhirClient = fhirClient;
-        this.categories = categories;
+    }
+
+    @Override
+    public void setFhirClient(IGenericClient fhirClient) {
+        this.fhirClient = fhirClient;
+    }
+
+    @Override
+    public Iterator<Resource> executeQueries(Arguments args, Options opts, ResourceCategory... categories) {
+        // Build the list of quey generators depending on the categories provided by caller
+        List<AbstractQueryGenerator> qGenList = buildQueryGeneratorsList(fhirClient, categories);
+        if (qGenList.size() == 0)
+            throw new IllegalStateException("No QueryGenerators for " + Arrays.toString(categories));
+
+        // Fills the stack of AbstractQueryGenerator
+        for (AbstractQueryGenerator generator: qGenList)
+            queries.add(generator.generateQueryForSearch(args, opts));
+
+        queriesSize = queries.size();
+        // Executes the first query in the stack
+        Log.d("MR2DA", "Starting execution of query 1 of " + queriesSize);
+        currentBundle = (Bundle) queries.poll().execute();
+        Log.d("MR2DA", "Retrieved " +
+                (currentBundle == null ? " 0 items " : currentBundle.getEntry().size() + " items."));
+
+        return new LazyIterator<Resource>(this, currentBundle);
+    }
+
+    @Override
+    public Bundle executeOperation(IOperationUntypedWithInput<Bundle> operation) {
+        Bundle operationOutcome = operation.execute();
+        BundleFetcher.fetchRestOfBundle(fhirClient, operationOutcome);
+
+        return operationOutcome;
     }
 
     /**
@@ -78,6 +110,7 @@ class ProgressiveQueryExecutor {
      * @param args
      * @return
      */
+    @Deprecated
     public Iterator<Resource> start(Arguments args, Options opts) {
         // Build the list of quey generators depending on the categories provided by caller
         List<AbstractQueryGenerator> qGenList = buildQueryGeneratorsList(fhirClient, categories);
@@ -103,8 +136,8 @@ class ProgressiveQueryExecutor {
      * @return
      */
     protected Bundle next() {
-        //Log.d("MR2D", String.format("invoked method next(). Queries %d currentBundle.next = %s ",
-        //        queries.size(), currentBundle.getLink(Bundle.LINK_NEXT)));
+//        Log.d("MR2D", String.format("invoked method next(). Queries %d currentBundle.next = %s ",
+//                queries.size(), currentBundle.getLink(Bundle.LINK_NEXT)));
         if (currentBundle.getLink(Bundle.LINK_NEXT) != null) {
             Log.d("MR2DA", "Loading next page of current query...");
             currentBundle = fhirClient.loadPage().next(currentBundle).execute();

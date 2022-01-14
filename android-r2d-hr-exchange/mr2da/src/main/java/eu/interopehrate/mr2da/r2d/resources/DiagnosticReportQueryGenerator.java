@@ -19,10 +19,13 @@ import android.util.Log;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DiagnosticReport;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Parameters;
 
 import java.util.Date;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2da.r2d.Argument;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
@@ -37,7 +40,7 @@ import eu.interopehrate.mr2da.r2d.Options;
  *
  *  Description:
  */
-class DiagnosticReportQueryGenerator extends AbstractQueryGenerator {
+public class DiagnosticReportQueryGenerator extends AbstractQueryGenerator {
 
     public DiagnosticReportQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);
@@ -93,6 +96,20 @@ class DiagnosticReportQueryGenerator extends AbstractQueryGenerator {
         }
 
         return q;
+    }
+
+    /**
+     * Generate the operation to invoke DiagnosticReport/id/$everything
+     * @param diagnosticReportId
+     * @return
+     */
+    public IOperationUntypedWithInput<Bundle> generateDiagnosticReportEverythingOperation(String diagnosticReportId) {
+        return fhirClient.operation()
+                .onInstance(new IdType(diagnosticReportId))
+                .named("$everything")
+                .withNoParameters(Parameters.class)
+                .useHttpGet()
+                .returnResourceType(Bundle.class);
     }
 
 }

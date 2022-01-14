@@ -52,7 +52,7 @@ public final class CategoryMapper {
         else if (resource instanceof Immunization)
             return FHIRResourceCategory.IMMUNIZATION;
         else if (resource instanceof AllergyIntolerance)
-            return FHIRResourceCategory.ALLERGIES_INTOLERANCE;
+            return FHIRResourceCategory.ALLERGY_INTOLERANCE;
         else if (resource instanceof Encounter)
             return FHIRResourceCategory.ENCOUNTER;
         else if (resource instanceof Procedure)

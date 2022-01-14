@@ -37,7 +37,7 @@ import eu.interopehrate.mr2da.r2d.Options;
  *  Description:
  */
 //TODO: Fare test
-class ImmunizationQueryGenerator extends AbstractQueryGenerator {
+public class ImmunizationQueryGenerator extends AbstractQueryGenerator {
 
     public ImmunizationQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);
@@ -45,7 +45,7 @@ class ImmunizationQueryGenerator extends AbstractQueryGenerator {
 
     @Override
     public IQuery<Bundle> generateQueryForSearch(Arguments args, Options opts) {
-        Log.d("MR2DA", "Searching for Immunization...");
+        Log.d("MR2DA", "Generating query for Immunization...");
 
         IQuery<Bundle> q = fhirClient
                 .search()

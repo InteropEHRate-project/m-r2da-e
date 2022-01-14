@@ -23,7 +23,7 @@ import eu.interopehrate.mr2da.r2d.Options;
  *
  *  Description:
  */
-class DocumentReferenceQueryGenerator extends AbstractQueryGenerator {
+public class DocumentReferenceQueryGenerator extends AbstractQueryGenerator {
 
     public DocumentReferenceQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);

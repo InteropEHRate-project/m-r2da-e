@@ -27,8 +27,8 @@ public class EncounterTest extends BasicMR2DATest {
                 null, false);
 
         int counter = 0;
-        Bundle everything;
         while (it.hasNext()) {
+            it.next();
             counter++;
         }
 

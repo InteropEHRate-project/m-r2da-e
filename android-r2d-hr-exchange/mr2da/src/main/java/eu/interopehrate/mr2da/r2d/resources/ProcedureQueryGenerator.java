@@ -18,9 +18,8 @@ package eu.interopehrate.mr2da.r2d.resources;
 import android.util.Log;
 
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Condition;
-import org.hl7.fhir.r4.model.DocumentReference;
-import org.hl7.fhir.r4.model.codesystems.DocumentReferenceStatus;
+import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.Procedure;
 
 import java.util.Date;
 
@@ -39,38 +38,49 @@ import eu.interopehrate.mr2da.r2d.Options;
  *
  *  Description:
  */
-//TODO: Fare test
-public class ConditionQueryGenerator extends AbstractQueryGenerator {
+public class ProcedureQueryGenerator extends AbstractQueryGenerator {
 
-    public ConditionQueryGenerator(IGenericClient fhirClient)  {
+    public ProcedureQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);
     }
 
     @Override
     public IQuery<Bundle> generateQueryForSearch(Arguments args, Options opts) {
-        Log.d("MR2DA", "Generating query for Condition...");
+        Log.d("MR2DA", "Generating query for Procedure...");
 
+        // Builds the basic query
         IQuery<Bundle> q = fhirClient
                 .search()
-                .forResource(Condition.class)
+                .forResource(Procedure.class)
                 .accept(ACCEPT_JSON)
                 .returnBundle(Bundle.class)
-                .where(Condition.VERIFICATION_STATUS.exactly()
-                        .systemAndCode("http://terminology.hl7.org/CodeSystem/condition-ver-status", "confirmed"));
-
-        // Checks if has been provided a FROM argument
-        if (args.hasArgument(ArgumentName.FROM)) {
-            Date from = (Date)args.getValueByName(ArgumentName.FROM);
-            q = q.and(Condition.ONSET_DATE.afterOrEquals().day(from));
-        }
+                .where(Procedure.STATUS.exactly().code(Procedure.ProcedureStatus.COMPLETED.toCode()));
 
         // Checks how to sort results
         if (opts.hasOption(OptionName.SORT)) {
             Object sort = opts.getValueByName(OptionName.SORT);
             if (sort == Option.Sort.SORT_ASCENDING_DATE)
-                q = q.sort().ascending(Condition.ONSET_DATE);
+                q = q.sort().ascending(Procedure.DATE);
             else
-                q = q.sort().descending(Condition.ONSET_DATE);
+                q = q.sort().descending(Procedure.DATE);
+        }
+
+        // Checks if has been provided a CATEGORY
+        if (args.hasArgument(ArgumentName.CATEGORY)) {
+            Argument subCat = args.getByName(ArgumentName.CATEGORY);
+            q = q.and(Procedure.CATEGORY.exactly().codes(subCat.getValueAsStringArray()));
+        }
+
+        // Checks if has been provided a TYPE
+        if (args.hasArgument(ArgumentName.TYPE)) {
+            Argument type = args.getByName(ArgumentName.TYPE);
+            q = addSystemAndCodeArgument(q, type.getValueAsString(), Procedure.CODE);
+        }
+
+        // Checks if has been provided a FROM argument
+        if (args.hasArgument(ArgumentName.FROM)) {
+            Date from = (Date)args.getValueByName(ArgumentName.FROM);
+            q = q.and(Procedure.DATE.afterOrEquals().day(from));
         }
 
         return q;

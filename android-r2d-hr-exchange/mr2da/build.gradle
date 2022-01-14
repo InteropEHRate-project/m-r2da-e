@@ -35,7 +35,7 @@ dependencies {
     api "ca.uhn.hapi.fhir:hapi-fhir-android:$FHIR_VERSION"
     api "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$FHIR_VERSION"
 
-    def R2D_D2D_COMMONS_VERSION = "0.0.6";
+    def R2D_D2D_COMMONS_VERSION = "0.0.7";
     api "eu.interopehrate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION"
     api "eu.interopehrate:r2d-d2d-commons:$R2D_D2D_COMMONS_VERSION:javadoc"
 

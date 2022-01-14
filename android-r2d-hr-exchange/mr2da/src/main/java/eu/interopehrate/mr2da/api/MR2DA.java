@@ -44,7 +44,7 @@ public interface MR2DA extends ResourceReader {
      *
      * @return
      */
-    public Resource getPatientSummary() throws Exception;
+    public Bundle getPatientSummary() throws Exception;
 
 
     /**
@@ -67,9 +67,8 @@ public interface MR2DA extends ResourceReader {
     /**
      * Returns all the resources related to the Encounter passed as argument.
      *
-     * @param encounterId: it is the id of the Encounter. It is not the complete URL of the Encounter
-     *                   it is only the id part: [base]/Encounter/4567987, in this case the id
-     *                   is  the substring 4567987.
+     * @param encounterId: it is the id of the Encounter. It MUST have the following structure:
+     *                   Encounter/<id>. Example: Encounter/3424354656
      * @return
      * @throws Exception
      */
@@ -79,24 +78,22 @@ public interface MR2DA extends ResourceReader {
     /**
      * Returns all the resources related to the Encounter passed as argument.
      *
-     * @param encounterId: it is the id of the Encounter. It is not the complete URL of the Encounter
-     *                   it is only the id part: [base]/Encounter/4567987, in this case the id
-     *                   is  the substring 4567987.
+     * @param diagnosticReportId: it is the id of the DiagnosticReport. It MUST have the following structure:
+     *                            DiagnosticReport/<id>. Example: DiagnosticReport/3424354656
      * @return
      * @throws Exception
      */
-    Bundle getDiagnosticReportEverything(String encounterId) throws Exception;
+    Bundle getDiagnosticReportEverything(String diagnosticReportId) throws Exception;
 
 
     /**
      * Returns all the resources related to the Encounter passed as argument.
      *
-     * @param encounterId: it is the id of the Encounter. It is not the complete URL of the Encounter
-     *                   it is only the id part: [base]/Encounter/4567987, in this case the id
-     *                   is  the substring Encounter/4567987.
+     * @param compositionId: it is the id of the Composition. It MUST have the following structure:
+     *                       Composition/<id>. Example: Composition/3424354656
      * @return
      * @throws Exception
      */
-    Bundle getCompositionEverything(String encounterId) throws Exception;
+    Bundle getCompositionEverything(String compositionId) throws Exception;
 
 }

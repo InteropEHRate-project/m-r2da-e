@@ -1,5 +1,3 @@
-package eu.interopehrate.mr2da.r2d.resources;
-
 /**
  Copyright 2021 Engineering S.p.A. (www.eng.it) - InteropEHRate (www.interopehrate.eu)
 
@@ -15,16 +13,19 @@ package eu.interopehrate.mr2da.r2d.resources;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+package eu.interopehrate.mr2da.r2d.resources;
+
 import android.util.Log;
 
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.DiagnosticReport;
-import org.hl7.fhir.r4.model.DocumentReference;
-import org.hl7.fhir.r4.model.codesystems.DocumentReferenceStatus;
+import org.hl7.fhir.r4.model.Composition;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Parameters;
 
 import java.util.Date;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import eu.interopehrate.mr2da.r2d.Argument;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
@@ -39,54 +40,66 @@ import eu.interopehrate.mr2da.r2d.Options;
  *
  *  Description:
  */
+public class CompositionQueryGenerator extends AbstractQueryGenerator {
 
-//TODO: completare implementazione e fare test
-public class AllergyIntoleranceQueryGenerator extends AbstractQueryGenerator {
-
-    public AllergyIntoleranceQueryGenerator(IGenericClient fhirClient)  {
+    public CompositionQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);
     }
 
     @Override
     public IQuery<Bundle> generateQueryForSearch(Arguments args, Options opts) {
-        Log.d("MR2DA", "Generating query for AllergyIntolerance...");
+        Log.d("MR2DA", "Generating query for Composition...");
 
+        // Builds the basic query
         IQuery<Bundle> q = fhirClient
                 .search()
-                .forResource(DocumentReference.class)
-                .sort().descending(DocumentReference.DATE)
+                .forResource(Composition.class)
                 .accept(ACCEPT_JSON)
                 .returnBundle(Bundle.class)
-                .where(DocumentReference.STATUS.exactly().code(DocumentReferenceStatus.CURRENT.toCode()));
+                .where(Composition.STATUS.exactly().code(Composition.CompositionStatus.FINAL.toCode()));
 
         // Checks how to sort results
         if (opts.hasOption(OptionName.SORT)) {
             Object sort = opts.getValueByName(OptionName.SORT);
             if (sort == Option.Sort.SORT_ASCENDING_DATE)
-                q = q.sort().ascending(DocumentReference.DATE);
+                q = q.sort().ascending(Composition.DATE);
             else
-                q = q.sort().descending(DocumentReference.DATE);
+                q = q.sort().descending(Composition.DATE);
         }
 
         // Checks if has been provided a CATEGORY
         if (args.hasArgument(ArgumentName.CATEGORY)) {
-            Argument cat = args.getByName(ArgumentName.CATEGORY);
-            q = q.and(DocumentReference.CATEGORY.exactly().codes(cat.getValueAsStringArray()));
+            Argument subCat = args.getByName(ArgumentName.CATEGORY);
+            q = q.and(Composition.CATEGORY.exactly().codes(subCat.getValueAsStringArray()));
         }
 
         // Checks if has been provided a TYPE
         if (args.hasArgument(ArgumentName.TYPE)) {
             Argument type = args.getByName(ArgumentName.TYPE);
-            q = addSystemAndCodeArgument(q, type.getValueAsString(), DocumentReference.TYPE);
+            q = addSystemAndCodeArgument(q, type.getValueAsString(), Composition.TYPE);
         }
 
         // Checks if has been provided a FROM argument
         if (args.hasArgument(ArgumentName.FROM)) {
             Date from = (Date)args.getValueByName(ArgumentName.FROM);
-            q = q.and(DiagnosticReport.DATE.afterOrEquals().day(from));
+            q = q.and(Composition.DATE.afterOrEquals().day(from));
         }
 
         return q;
+    }
+
+    /**
+     * Generate the operation to invoke DiagnosticReport/id/$everything
+     * @param compositionId
+     * @return
+     */
+    public IOperationUntypedWithInput<Bundle> generateCompositionDocumentOperation(String compositionId) {
+        return fhirClient.operation()
+                .onInstance(new IdType(compositionId))
+                .named("$document")
+                .withNoParameters(Parameters.class)
+                .useHttpGet()
+                .returnResourceType(Bundle.class);
     }
 
 }

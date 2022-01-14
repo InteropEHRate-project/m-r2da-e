@@ -71,14 +71,6 @@ public final class QueryGeneratorFactory {
             Log.d("MR2DA: ", "Adding generator for type: " + resourceCategory);
             generatorsMap.put(resourceCategory, generatorClass);
         }
-
-        // generatorsMap.put(FHIRResourceCategory.DIAGNOSTIC_REPORT, DiagnosticReportQueryGenerator.class);
-        // generatorsMap.put(FHIRResourceCategory.OBSERVATION, ObservationQueryGenerator.class);
-        // generatorsMap.put(FHIRResourceCategory.DOCUMENT_REFERENCE, DocumentReferenceQueryGenerator.class);
-        // generatorsMap.put(FHIRResourceCategory.DOCUMENT_MANIFEST, DocumentManifestQueryGenerator.class);
-        // generatorsMap.put(FHIRResourceCategory.MEDICATION_REQUEST, MedicationRequestQueryGenerator.class);
-
-        // IMMUNIZATION, ALLERGY, CONDITION, ENCOUNTER
     }
 
     public static AbstractQueryGenerator getQueryGenerator(FHIRResourceCategory category, IGenericClient fhirClient) {

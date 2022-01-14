@@ -19,13 +19,14 @@ import android.util.Log;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Encounter;
-import org.hl7.fhir.r4.model.Observation;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Parameters;
 
 import java.util.Date;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import ca.uhn.fhir.rest.gclient.IQuery;
-import eu.interopehrate.mr2da.r2d.Argument;
 import eu.interopehrate.mr2da.r2d.ArgumentName;
 import eu.interopehrate.mr2da.r2d.Arguments;
 import eu.interopehrate.mr2da.r2d.Option;
@@ -46,7 +47,7 @@ public class EncounterQueryGenerator extends AbstractQueryGenerator {
 
     @Override
     public IQuery<Bundle> generateQueryForSearch(Arguments args, Options opts) {
-        Log.d("MR2DA", "Generating query for Observation...");
+        Log.d("MR2DA", "Generating query for Encounter...");
 
         // Builds the basic query
         IQuery<Bundle> q = fhirClient
@@ -72,6 +73,20 @@ public class EncounterQueryGenerator extends AbstractQueryGenerator {
         }
 
         return q;
+    }
+
+    /**
+     * Generate the operation to invoke Encounter/id/$everything
+     * @param encounterId
+     * @return
+     */
+    public IOperationUntypedWithInput<Bundle> generateEncounterEverythingOperation(String encounterId) {
+        return fhirClient.operation()
+                .onInstance(new IdType(encounterId))
+                .named("$everything")
+                .withNoParameters(Parameters.class)
+                .useHttpGet()
+                .returnResourceType(Bundle.class);
     }
 
 }

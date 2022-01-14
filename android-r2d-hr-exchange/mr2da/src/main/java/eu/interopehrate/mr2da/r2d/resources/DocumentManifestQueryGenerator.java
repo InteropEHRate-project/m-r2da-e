@@ -39,7 +39,7 @@ import eu.interopehrate.mr2da.r2d.Options;
  *  Description:
  */
 
-class DocumentManifestQueryGenerator extends AbstractQueryGenerator {
+public class DocumentManifestQueryGenerator extends AbstractQueryGenerator {
 
     public DocumentManifestQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);

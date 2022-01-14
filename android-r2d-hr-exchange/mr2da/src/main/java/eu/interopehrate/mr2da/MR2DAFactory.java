@@ -18,7 +18,9 @@ package eu.interopehrate.mr2da;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import eu.interopehrate.mr2da.api.AsynchronousMR2DA;
 import eu.interopehrate.mr2da.api.MR2DA;
+import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
 
 /**
  *  Author: Engineering S.p.A. (www.eng.it)
@@ -27,16 +29,6 @@ import eu.interopehrate.mr2da.api.MR2DA;
  *  Description:
  */
 public final class MR2DAFactory {
-
-    public static MR2DA create(URL r2dServerURL, String eidasToken) {
-        if (r2dServerURL == null)
-            throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
-
-        if (eidasToken == null || eidasToken.trim().isEmpty())
-            throw new IllegalArgumentException("Provided auth token is empty.");
-
-        return new MR2DAImpl(r2dServerURL, eidasToken);
-    }
 
     public static MR2DA create(String r2dEndpoint, String eidasToken) {
         if (r2dEndpoint == null || r2dEndpoint.trim().isEmpty())
@@ -51,4 +43,38 @@ public final class MR2DAFactory {
         }
     }
 
+    public static MR2DA create(URL r2dServerURL, String eidasToken) {
+        if (r2dServerURL == null)
+            throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
+
+        if (eidasToken == null || eidasToken.trim().isEmpty())
+            throw new IllegalArgumentException("Provided auth token is empty.");
+
+        return new DefaultMR2DAImpl(r2dServerURL, eidasToken);
+    }
+
+
+    public static AsynchronousMR2DA createAsync(URL r2dServerURL, String eidasToken, MR2DACallbackHandler listener) {
+        if (r2dServerURL == null)
+            throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
+
+        if (eidasToken == null || eidasToken.trim().isEmpty())
+            throw new IllegalArgumentException("Provided auth token is empty.");
+
+        return new AsyncMR2DA(r2dServerURL, eidasToken, listener);
+    }
+
+
+    public static AsynchronousMR2DA createAsync(String r2dEndpoint, String eidasToken, MR2DACallbackHandler listener) {
+        if (r2dEndpoint == null || r2dEndpoint.trim().isEmpty())
+            throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
+
+        URL r2dURL = null;
+        try {
+            r2dURL = new URL(r2dEndpoint);
+            return createAsync(r2dURL, eidasToken, listener);
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Provided endpoint '" + r2dEndpoint + "' is not valid. ");
+        }
+    }
 }

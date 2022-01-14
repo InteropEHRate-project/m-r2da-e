@@ -42,9 +42,7 @@ public abstract class AbstractQueryGenerator {
         this.fhirClient = fhirClient;
     }
 
-
     public abstract IQuery<Bundle> generateQueryForSearch(Arguments args, Options opts);
-
 
     protected IQuery<Bundle> addSystemAndCodeArgument(IQuery<Bundle> query,
                                         @NonNull String systemAndCode, TokenClientParam param) {

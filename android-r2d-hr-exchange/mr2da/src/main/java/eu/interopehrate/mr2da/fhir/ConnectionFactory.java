@@ -22,6 +22,7 @@ import java.net.URL;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.PerformanceOptionsEnum;
+import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.client.api.IClientInterceptor;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.api.IHttpRequest;
@@ -80,6 +81,7 @@ public class ConnectionFactory {
         IGenericClient fC = fhirContext.newRestfulGenericClient(r2DServerURL.toString());
         // Registering outgoing interceptor for adding Bearer Token to requests
         fC.registerInterceptor(new BearerTokenAuthInterceptor(authToken));
+
         // Registering a logging Interceptor
         fC.registerInterceptor(new IClientInterceptor() {
             @Override
@@ -97,6 +99,10 @@ public class ConnectionFactory {
         // fC.setPrettyPrint();
 
         return fC;
+    }
+
+    public static IParser getFHIRParser() {
+        return fhirContext.newJsonParser();
     }
 
 }

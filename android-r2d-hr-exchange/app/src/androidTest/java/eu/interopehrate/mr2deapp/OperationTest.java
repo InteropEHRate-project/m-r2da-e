@@ -21,11 +21,13 @@ public class OperationTest extends BasicMR2DATest {
 
     @Test
     public void testEncounterEverything() throws Exception {
-        // Bundle bundle = mr2da.getEncounterEverything("http://213.249.46.205:8080/R2D/fhir/Encounter/36");
-        Bundle bundle = mr2da.getEncounterEverything("Encounter/36");
-        Log.d("MR2DA", "getId() " + bundle.getEntryFirstRep().getResource().getId());
-
-        assertEquals(42, bundle.getTotal());
+        Bundle bundle = mr2da.getEncounterEverything("Encounter/35");
+        assertEquals(42, bundle.getEntry().size());
     }
 
+    @Test
+    public void testPatientSummary() throws Exception {
+        Bundle bundle = mr2da.getPatientSummary();
+        assertEquals(33, bundle.getEntry().size());
+    }
 }

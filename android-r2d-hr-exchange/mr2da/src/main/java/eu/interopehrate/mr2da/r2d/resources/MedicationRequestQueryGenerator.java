@@ -38,7 +38,7 @@ import eu.interopehrate.mr2da.r2d.Options;
  */
 
 //TODO: Fare test
-class MedicationRequestQueryGenerator extends AbstractQueryGenerator {
+public class MedicationRequestQueryGenerator extends AbstractQueryGenerator {
 
     public MedicationRequestQueryGenerator(IGenericClient fhirClient)  {
         super(fhirClient);
