@@ -5,7 +5,6 @@ import org.hl7.fhir.r4.model.Bundle;
 import java.net.URL;
 
 import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
-import eu.interopehrate.mr2da.api.AsynchronousMR2DA;
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
 import eu.interopehrate.mr2da.async.PollingHandlerThread;
 import eu.interopehrate.mr2da.async.ResultsRetrieverHandlerThread;
@@ -14,7 +13,7 @@ import eu.interopehrate.mr2da.async.AsyncHTTPClientInterceptor;
 import eu.interopehrate.mr2da.fhir.FHIRExecutor;
 import eu.interopehrate.mr2da.r2d.resources.PatientQueryGenerator;
 
-class AsyncMR2DA extends DefaultMR2DAImpl implements AsynchronousMR2DA {
+class AsyncMR2DA extends DefaultMR2DAImpl {
 
     private MR2DACallbackHandler callbackHandler;
     private PollingHandlerThread pollingThread;
@@ -45,7 +44,7 @@ class AsyncMR2DA extends DefaultMR2DAImpl implements AsynchronousMR2DA {
         AsyncHTTPClientInterceptor.getInstance().setHandlerThread(pollingThread);
     }
 
-    @Override
+
     public void setCallbackHandler(MR2DACallbackHandler callbackHandler) {
         this.callbackHandler = callbackHandler;
     }

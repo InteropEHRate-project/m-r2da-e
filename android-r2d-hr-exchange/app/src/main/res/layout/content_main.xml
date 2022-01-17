@@ -19,24 +19,24 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
         <RadioGroup
-            android:id="@+id/operationOptions"
+            android:id="@+id/opsRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/psOption"
+                android:id="@+id/psRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="PatientSummary" />
 
             <RadioButton
-                android:id="@+id/encListOption"
+                android:id="@+id/encSearchRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="List of Encounters" />
 
             <RadioButton
-                android:id="@+id/encEverythingOption"
+                android:id="@+id/encEverythingRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Encounter$everything" />

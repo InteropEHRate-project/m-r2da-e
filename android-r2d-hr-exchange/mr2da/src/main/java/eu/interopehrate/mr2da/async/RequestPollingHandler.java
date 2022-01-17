@@ -55,7 +55,6 @@ public class RequestPollingHandler extends Handler {
                 .build();
 
         try {
-            Log.d("MR2DA.PollingHandler", "Polling request status...");
             // Submit the request...
             Response response = client.newCall(request).execute();
             switch (response.code()) {

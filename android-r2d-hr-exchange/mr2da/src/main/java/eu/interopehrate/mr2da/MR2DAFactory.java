@@ -18,7 +18,6 @@ package eu.interopehrate.mr2da;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import eu.interopehrate.mr2da.api.AsynchronousMR2DA;
 import eu.interopehrate.mr2da.api.MR2DA;
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
 
@@ -54,7 +53,7 @@ public final class MR2DAFactory {
     }
 
 
-    public static AsynchronousMR2DA createAsync(URL r2dServerURL, String eidasToken, MR2DACallbackHandler listener) {
+    public static MR2DA createAsync(URL r2dServerURL, String eidasToken, MR2DACallbackHandler listener) {
         if (r2dServerURL == null)
             throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
 
@@ -65,7 +64,7 @@ public final class MR2DAFactory {
     }
 
 
-    public static AsynchronousMR2DA createAsync(String r2dEndpoint, String eidasToken, MR2DACallbackHandler listener) {
+    public static MR2DA createAsync(String r2dEndpoint, String eidasToken, MR2DACallbackHandler listener) {
         if (r2dEndpoint == null || r2dEndpoint.trim().isEmpty())
             throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
 

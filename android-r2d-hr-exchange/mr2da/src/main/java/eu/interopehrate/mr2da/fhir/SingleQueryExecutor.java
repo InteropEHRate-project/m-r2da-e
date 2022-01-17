@@ -47,8 +47,16 @@ public class SingleQueryExecutor implements FHIRExecutor {
         AbstractQueryGenerator queryGenerator = getQueryGenerator(fhirClient, categories[0]);
         // builds the query
         IQuery query = queryGenerator.generateQueryForSearch(args, opts);
-        // Executes the query
-        query.execute();
+        try {
+            // Executes the query
+            query.execute();
+        } catch (Exception e) {
+            Log.e("MR2DA.SingleExecutor", e.getMessage());
+            if (e.getCause() != null && e.getCause() instanceof DataFormatException)
+                Log.i("MR2DA.SingleExecutor", "Exception can be ignored due to asynchronous management.");
+            else
+                throw e;
+        }
 
         return null;
     }
@@ -64,7 +72,10 @@ public class SingleQueryExecutor implements FHIRExecutor {
             }
         } catch (Exception e) {
             Log.e("MR2DA.SingleExecutor", e.getMessage());
-            Log.e("MR2DA.SingleExecutor", e.getCause().getMessage());
+            if (e.getCause() != null && e.getCause() instanceof DataFormatException)
+                Log.i("MR2DA.SingleExecutor", "Exception can be ignored due to asynchronous management.");
+            else
+                throw e;
         }
 
         return null;
