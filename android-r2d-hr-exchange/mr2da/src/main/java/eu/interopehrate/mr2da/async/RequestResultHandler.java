@@ -59,7 +59,6 @@ public class RequestResultHandler extends Handler {
             switch (response.code()) {
                 case 200:
                     // Retrieving response body
-                    Log.d("MR2DA.ResultHandler", "Retrieving JSON results...");
                     String body = response.body().string();
                     // Parsing results to FHIR Bundle
                     Log.d("MR2DA.ResultHandler", "Parsing JSON to Java...");

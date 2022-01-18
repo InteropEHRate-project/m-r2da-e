@@ -54,6 +54,9 @@ class AsyncMR2DA extends DefaultMR2DAImpl {
         if (this.callbackHandler == null)
             throw new IllegalStateException("Cannot use AsynchronousMR2DA with listener set to null!");
 
+        if (this.callbackHandler == null)
+            throw new IllegalStateException("Cannot use AsynchronousMR2DA with listener set to null!");
+
         FHIRExecutor executor = new SingleQueryExecutor(this.fhirClient);
         return executor;
     }

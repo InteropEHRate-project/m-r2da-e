@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
                             "Please select one operation...", Snackbar.LENGTH_INDEFINITE);
                     snackbar.show();
                 } else {
-                    execButton.setEnabled(false);
+                    // execButton.setEnabled(false);
                     if (checkedRadioButtonId == patientSummaryRadio.getId())
                         asyncTask.execute("PATIENT_SUMMARY");
                     else if (checkedRadioButtonId == encEverythingRadio.getId())

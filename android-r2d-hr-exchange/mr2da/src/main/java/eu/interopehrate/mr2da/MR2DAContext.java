@@ -19,12 +19,12 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
 import java.io.InputStream;
+import java.util.Properties;
 
 import eu.interopehrate.mr2da.r2d.document.DocumentQueryGeneratorFactory;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
@@ -40,16 +40,17 @@ import eu.interopehrate.mr2da.r2d.resources.QueryGeneratorFactory;
  */
 public final class MR2DAContext extends ContentProvider {
 
-    private static MR2DAContext INSTANCE;
+    public static MR2DAContext INSTANCE;
 
-    public static Context getMR2DContext() {
+    public static Context getMR2DAContext() {
         return INSTANCE.getContext();
     }
 
-    public static Resources getMR2DResources() {
+    public static Resources getMR2DAResources() {
         return INSTANCE.getContext().getResources();
     }
 
+    private Properties pollingProperties;
     @Override
     public boolean onCreate() {
         INSTANCE = this;
@@ -60,21 +61,28 @@ public final class MR2DAContext extends ContentProvider {
             // FHIR Connection Factory init
             ConnectionFactory.initialize();
 
-            Context ctx = getMR2DContext();
+            Context ctx = getMR2DAContext();
 
             // R2D Query Generator init
-            // XmlResourceParser resourceConfig = getContext().getResources().getXml(R.xml.resourcegenerators);
             InputStream resourceConfigFile = ctx.getResources().openRawResource(R.raw.resourcegenerators);
             QueryGeneratorFactory.initialize(resourceConfigFile);
 
             // Document Query Generator init
             InputStream documentConfigFile = getContext().getResources().openRawResource(R.raw.documentgenerators);
             DocumentQueryGeneratorFactory.initialize(documentConfigFile);
+
+            // Load polling properties file
+            pollingProperties = new Properties();
+            pollingProperties.load(getContext().getResources().openRawResource(R.raw.polling));
         } catch (Exception e) {
             Log.e(getClass().getName(), "Fatal error while loading MR2DContext", e);
         }
 
         return true;
+    }
+
+    public Properties getPollingProperties() {
+        return this.pollingProperties;
     }
 
     @Override

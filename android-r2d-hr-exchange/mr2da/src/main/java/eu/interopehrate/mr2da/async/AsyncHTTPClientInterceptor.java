@@ -29,17 +29,23 @@ public class AsyncHTTPClientInterceptor implements IClientInterceptor {
 
     @Override
     public void interceptRequest(IHttpRequest theRequest) {
-        // Sets the Prefer header param for indicating asynchronous trx
-        theRequest.addHeader(Constants.HEADER_PREFER, "respond-async");
-        // sends a request to the R2DServer
-        // request = new AsyncRequest(theRequest.getUri());
+        RequestPollingHandler handler = (RequestPollingHandler) pollingThread.getHandler();
+        if (handler.getPendingRequestSize() < 3) {
+            // Sets the Prefer header param for indicating asynchronous trx
+            theRequest.addHeader(Constants.HEADER_PREFER, "respond-async");
+            // sends a request to the R2DServer
+            // request = new AsyncRequest(theRequest.getUri());
+        } else
+            throw new IllegalStateException("MR2DA.ClientInterceptor: cannot have more than 3 " +
+                    "requests pending! Request can't be submitted");
+
     }
 
     @Override
     public void interceptResponse(IHttpResponse theResponse) throws IOException {
         // if the return code is 200 the request has been served synchronously
         // and nothing has to be done
-        if (theResponse.getStatus() == RequestPollingHandler.REQUEST_RUNNING) {
+        if (theResponse.getStatus() == RequestPollingHandler.REQUEST_RUNNING_HTTP_STATUS) {
             Log.d("MR2DA.ClientInterceptor", "The previous request will be served asynchronously from the R2D Access Server...");
             List<String> contentLocations = theResponse.getHeaders("Content-Location");
             if (contentLocations == null || contentLocations.size() < 1)
@@ -49,6 +55,7 @@ public class AsyncHTTPClientInterceptor implements IClientInterceptor {
                 // request.setMonitoringURL(contentLocations.get(0));
                 Message msg = new Message();
                 msg.what = RequestPollingHandler.ASYNC_REQUEST_TO_BE_MONITORED;
+                msg.arg1 = RequestPollingHandler.NEW_REQUEST;
                 msg.obj = contentLocations.get(0);
                 pollingThread.getHandler().sendMessage(msg);
             }
