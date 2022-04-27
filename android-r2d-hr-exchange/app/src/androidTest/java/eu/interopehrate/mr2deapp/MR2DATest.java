@@ -69,26 +69,4 @@ public class MR2DATest extends BasicMR2DATest {
         assertEquals(80, counter);
     }
 
-    @Test
-    public void testGetPatientSummary() throws Exception {
-        Resource res = mr2da.getPatientSummary();
-
-        assertTrue(res instanceof Bundle);
-
-        Bundle psBundle = (Bundle) res;
-
-        Composition ps = (Composition)psBundle.getEntryFirstRep().getResource();
-
-        // Generic checks
-        Coding psType = ps.getType().getCodingFirstRep();
-        assertEquals("60591-5", psType.getCode());
-        assertEquals("http://loinc.org", psType.getSystem());
-        assertNotNull(ps.getAuthorFirstRep());
-        assertNotNull(ps.getAttesterFirstRep());
-        assertNotNull(ps.getCustodian());
-
-        // Specific checks
-        assertEquals("Patient Summary di: Mario Rossi", ps.getTitle());
-    }
-
 }

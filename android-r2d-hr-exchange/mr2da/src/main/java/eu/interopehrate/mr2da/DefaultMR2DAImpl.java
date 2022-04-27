@@ -27,11 +27,16 @@ import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Resource;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
+import ca.uhn.fhir.rest.client.api.IClientInterceptor;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.client.api.IHttpRequest;
+import ca.uhn.fhir.rest.client.api.IHttpResponse;
 import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import eu.interopehrate.mr2da.api.MR2DA;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
@@ -62,6 +67,8 @@ class DefaultMR2DAImpl implements MR2DA {
     protected final String eidasToken;
     protected final URL r2dServerURL;
     protected final IGenericClient fhirClient;
+    protected Locale language;
+    protected boolean strictChecking = true;
 
     DefaultMR2DAImpl(URL r2dServerURL, String eidasToken) {
         if (r2dServerURL == null || r2dServerURL.getHost() == null || r2dServerURL.getHost().trim().isEmpty())
@@ -187,53 +194,11 @@ class DefaultMR2DAImpl implements MR2DA {
 
     @Override
     public Bundle getPatientSummary() {
-        Log.d("MR2DA", "Execution of method getPatientSummary() STARTED.");
+        PatientQueryGenerator e = new PatientQueryGenerator(this.fhirClient);
+        IOperationUntypedWithInput<Bundle> op = e.generatePatientSummaryOperation();
 
-        // Business Logic
-        try {
-             // Creates the executor even if it is a simple query
-            FHIRExecutor executor = createFHIRExecutorInstance();
-
-            // Creates Arguments
-            Arguments args = new Arguments();
-            // Creates Options
-            Options opts = new Options();
-            opts.add(OptionName.SORT, Option.Sort.SORT_DESCENDING_DATE);
-            // Starts Execution and retrieves only the first element
-            Iterator<Resource> psIt = executor.executeQueries(args, opts, DocumentCategory.PATIENT_SUMMARY);
-
-            if (psIt.hasNext()) {
-                // retrieve the first element of the Iterator where there is the DocRef of the PS
-                DocumentReference psDocRef = (DocumentReference)psIt.next();
-                // The PS may referenced by the attachment.url of the attachment or
-                // embedded as an array of byte in the attachment.content
-                Attachment attachment = psDocRef.getContentFirstRep().getAttachment();
-                final String psURL = attachment.getUrl();
-                if (!psURL.isEmpty()) {
-                    // if the URL is external, the Patient Summary cannot be retrievd
-                    if (!psURL.startsWith(r2dServerURL.toString())) {
-                        throw new IllegalStateException("The retrieved DocumentReference refers an external Patient Summary.");
-                    }
-
-                    // Once obtained the internal URL of the PS invokes the operation to retrieve it
-                    int idx = psURL.indexOf("/Composition/");
-                    if (idx >= 0)
-                        // using the $document operation, creates the Bundle form the Composition
-                        return getCompositionEverything(psURL.substring(idx + 1));
-                    else
-                        throw new IllegalArgumentException("URL " + psURL + " is not a valid URL to retrieve the PS.");
-                } else {
-                    throw new IllegalStateException("DocumentReference does not contain a valid URL to the PatientSummary.");
-                }
-            }
-        } catch (Exception e) {
-            Log.e("MR2DA", "Exception in method getPatientSummary()", e);
-            throw ExceptionDetector.detectException(e);
-        } finally {
-            Log.d("MR2DA", "Execution of method getPatientSummary() HAS_FINISHED.");
-        }
-
-        return null;
+        FHIRExecutor executor = createFHIRExecutorInstance();
+        return executor.executeOperation(op);
     }
 
     @Override
@@ -290,22 +255,35 @@ class DefaultMR2DAImpl implements MR2DA {
         return executor.executeOperation(op);
     }
 
+    @Override
+    public Locale getLanguage() {
+        return language;
+    }
+
+    @Override
+    public void setLanguage(Locale language) {
+        if (language == null)
+            throw new IllegalArgumentException("Argument 'language' cannot be null.");
+
+        this.language = language;
+        fhirClient.registerInterceptor(new LanguageInterceptor());
+    }
+
     protected FHIRExecutor createFHIRExecutorInstance() {
         FHIRExecutor executor = new ProgressiveQueryExecutor(this.fhirClient);
         return executor;
     }
 
-    private Bundle createBundleFromComposition(String psURL) {
-        // Invokes operation $document to create PS Bundle
-        Parameters operationOutcome =
-                fhirClient.operation()
-                        .onInstance(new IdType(psURL))
-                        .named("$document")
-                        .withNoParameters(Parameters.class)
-                        .useHttpGet()
-                        .execute();
+    /*
+     * Interceptor for adding the language to the request
+     */
+    class LanguageInterceptor implements IClientInterceptor {
+        @Override
+        public void interceptRequest(IHttpRequest iHttpRequest) {
+            iHttpRequest.addHeader("Content-Language", DefaultMR2DAImpl.this.language.getLanguage());
+        }
 
-        return (Bundle) operationOutcome.getParameterFirstRep().getResource();
+        @Override
+        public void interceptResponse(IHttpResponse iHttpResponse) throws IOException { }
     }
-
 }

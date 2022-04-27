@@ -68,7 +68,7 @@ public final class QueryGeneratorFactory {
                 continue;
             }
 
-            Log.d("MR2DA: ", "Adding generator for type: " + resourceCategory);
+            Log.d("MR2DA", "Adding generator for type: " + resourceCategory);
             generatorsMap.put(resourceCategory, generatorClass);
         }
     }

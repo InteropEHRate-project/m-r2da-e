@@ -6,16 +6,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import org.hl7.fhir.r4.model.Bundle;
-
-import java.io.IOException;
 
 import ca.uhn.fhir.rest.api.Constants;
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
+import eu.interopehrate.mr2da.provenance.ProvenanceValidationResults;
+import eu.interopehrate.mr2da.provenance.ProvenanceValidator;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 import eu.interopehrate.protocols.common.ResourceCategory;
 import okhttp3.OkHttpClient;
@@ -61,26 +58,40 @@ public class RequestResultHandler extends Handler {
                     // Retrieving response body
                     String body = response.body().string();
                     // Parsing results to FHIR Bundle
-                    Log.d("MR2DA.ResultHandler", "Parsing JSON to Java...");
+                    Log.d("MR2DA.ResultHandler", "Parsing JSON to Bundle...");
                     Bundle results = ConnectionFactory.getFHIRParser().parseResource(Bundle.class, body);
-                    // notifying callback handler
-                    Log.d("MR2DA.ResultHandler", "Notifying callback handler...");
-                    notifyCallback(outcome, results);
-                    break;
+
+                    // checks provenance
+                    Log.d("MR2DA.ResultHandler", "Validating provenances...");
+                    ProvenanceValidator validator = new ProvenanceValidator();
+                    ProvenanceValidationResults valRes = validator.validateBundle(results);
+                    boolean notifyCallback = true;
+                    if (!valRes.isSuccessful()) {
+                        Log.d("MR2DA.ResultHandler", "Validation was not successful");
+                        notifyCallback = callbackHandler.onProvenanceValidationError(valRes);
+                    } else
+                        Log.d("MR2DA.ResultHandler", "Validation was successful");
+
+                    // notifies callback handler
+                    if (notifyCallback) {
+                        Log.d("MR2DA.ResultHandler", "Notifying callback handler...");
+                        notifyCallback(outcome, results, valRes);
+                        break;
+                    }
                 default:
                     Log.e("MR2DA.ResultHandler", "Error " + response.code() + " while polling R2DAccess server.");
             }
-        } catch (IOException ioe) {
-            Log.e("MR2DA.ResultHandler", "Error while retrieving request results!", ioe);
+        } catch (Exception e) {
+            Log.e("MR2DA.ResultHandler", "Error while processing request results", e);
         }
     }
 
-    private void notifyCallback(RequestOutcome outcome, Bundle results) {
+    private void notifyCallback(RequestOutcome outcome, Bundle results, ProvenanceValidationResults valRes) {
         String originalRequest = outcome.getRequest();
 
-        if (originalRequest.contains("$document"))
+        if (originalRequest.contains("$document")) {
             callbackHandler.onCompositionDocumentCompleted(results);
-        else if (originalRequest.contains("$patient-summary")) {
+        } else if (originalRequest.contains("$patient-summary")) {
             callbackHandler.onPatientSummaryCompleted(results);
         } else if (originalRequest.contains("$everything")) {
             if (originalRequest.contains("/Patient"))
@@ -120,6 +131,5 @@ public class RequestResultHandler extends Handler {
 
             callbackHandler.onSearchCompleted(category, results);
         }
-
     }
 }

@@ -2,6 +2,9 @@ package eu.interopehrate.mr2da.api;
 
 import org.hl7.fhir.r4.model.Bundle;
 
+import java.util.Map;
+
+import eu.interopehrate.mr2da.provenance.ProvenanceValidationResults;
 import eu.interopehrate.protocols.common.ResourceCategory;
 
 /**
@@ -55,5 +58,13 @@ public interface MR2DACallbackHandler {
      * @param bundle
      */
     void onCompositionDocumentCompleted(Bundle bundle);
+
+    /**
+     * Callback invoked when there is a validation error regarding the provenance.
+     *
+     * @param valRes
+     * @return must return false if processing of health data must be stopped
+     */
+    boolean onProvenanceValidationError(ProvenanceValidationResults valRes);
 
 }

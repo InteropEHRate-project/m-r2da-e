@@ -5,6 +5,7 @@ import org.hl7.fhir.r4.model.Resource;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 import eu.interopehrate.protocols.client.ResourceReader;
 /**
@@ -33,6 +34,18 @@ import eu.interopehrate.protocols.client.ResourceReader;
  *  Instances of MR2DA are created by MR2DAFActory class.
  */
 public interface MR2DA extends ResourceReader {
+
+    /**
+     * Used to set the language of the patient
+     *
+     * @param language
+     */
+    void setLanguage(Locale language);
+
+    /**
+     * @return the current language
+     */
+    Locale getLanguage();
 
     /**
      * Used to retreive the Patient Summary of the citizen. The Patient Summary is described by an

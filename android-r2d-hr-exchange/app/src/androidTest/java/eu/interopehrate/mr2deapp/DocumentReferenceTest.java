@@ -17,10 +17,13 @@ import static org.junit.Assert.assertEquals;
 public class DocumentReferenceTest extends BasicMR2DATest {
 
     @Test
-    public void testDocumentReferenceWithDateAndType() throws Exception {
-        GregorianCalendar gc = new GregorianCalendar(2019, Calendar.JANUARY, 01);
+    public void testDocumentReference() throws Exception {
+         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DOCUMENT_REFERENCE,
+                null, false);
+        /*
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DOCUMENT_REFERENCE,
                 "", "http://loinc.org|742-7", gc.getTime(), false);
+         */
 
         int counter = 0;
         while (it.hasNext()) {
@@ -28,6 +31,22 @@ public class DocumentReferenceTest extends BasicMR2DATest {
             counter++;
         }
 
-        assertEquals(0, counter);
+        assertEquals(4, counter);
+    }
+
+    @Test
+    public void testDocumentReferenceWithDateAndType() throws Exception {
+        GregorianCalendar gc = new GregorianCalendar(2018, Calendar.JANUARY, 01);
+
+        Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.DOCUMENT_REFERENCE,
+                "", "http://loinc.org|57170-3", gc.getTime(), false);
+
+        int counter = 0;
+        while (it.hasNext()) {
+            it.next();
+            counter++;
+        }
+
+        assertEquals(1, counter);
     }
 }

@@ -17,6 +17,7 @@ package eu.interopehrate.mr2da;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 
 import eu.interopehrate.mr2da.api.MR2DA;
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
@@ -25,55 +26,57 @@ import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
  *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
- *  Description:
+ *  Description: factory class to create instances of MR2DA
  */
 public final class MR2DAFactory {
 
-    public static MR2DA create(String r2dEndpoint, String eidasToken) {
-        if (r2dEndpoint == null || r2dEndpoint.trim().isEmpty())
-            throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
-
-        URL r2dURL = null;
-        try {
-            r2dURL = new URL(r2dEndpoint);
-            return create(r2dURL, eidasToken);
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Provided endpoint '" + r2dEndpoint + "' is not valid. ");
-        }
+    public static MR2DA create(String r2dServerURL, String eidasToken) {
+        return create(r2dServerURL, eidasToken, null);
     }
 
-    public static MR2DA create(URL r2dServerURL, String eidasToken) {
+    public static MR2DA create(String r2dServerURL, String eidasToken, Locale language) {
         if (r2dServerURL == null)
             throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
 
         if (eidasToken == null || eidasToken.trim().isEmpty())
             throw new IllegalArgumentException("Provided auth token is empty.");
 
-        return new DefaultMR2DAImpl(r2dServerURL, eidasToken);
+        try {
+            URL endpoint = new URL(r2dServerURL);
+            DefaultMR2DAImpl mr2da = new DefaultMR2DAImpl(endpoint, eidasToken);
+            if (language != null)
+                mr2da.setLanguage(language);
+
+            return mr2da;
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Argument 'r2dServerURL' is malformed.");
+        }
     }
 
+    public static MR2DA createAsync(String r2dServerURL, String eidasToken,
+                                    MR2DACallbackHandler listener) {
+        return createAsync(r2dServerURL, eidasToken, listener, null);
+    }
 
-    public static MR2DA createAsync(URL r2dServerURL, String eidasToken, MR2DACallbackHandler listener) {
+    public static MR2DA createAsync(String r2dServerURL, String eidasToken,
+                                    MR2DACallbackHandler listener,
+                                    Locale language) {
         if (r2dServerURL == null)
             throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
 
         if (eidasToken == null || eidasToken.trim().isEmpty())
             throw new IllegalArgumentException("Provided auth token is empty.");
 
-        return new AsyncMR2DA(r2dServerURL, eidasToken, listener);
-    }
-
-
-    public static MR2DA createAsync(String r2dEndpoint, String eidasToken, MR2DACallbackHandler listener) {
-        if (r2dEndpoint == null || r2dEndpoint.trim().isEmpty())
-            throw new IllegalArgumentException("Provided URL of the R2D Access Server is empty.");
-
-        URL r2dURL = null;
         try {
-            r2dURL = new URL(r2dEndpoint);
-            return createAsync(r2dURL, eidasToken, listener);
+            URL endpoint = new URL(r2dServerURL);
+            AsyncMR2DA mr2da = new AsyncMR2DA(endpoint, eidasToken, listener);
+            if (language != null)
+                mr2da.setLanguage(language);
+
+            return mr2da;
         } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("Provided endpoint '" + r2dEndpoint + "' is not valid. ");
+            throw new IllegalArgumentException("Argument 'r2dServerURL' is malformed.");
         }
     }
+
 }

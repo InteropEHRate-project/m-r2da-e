@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import eu.interopehrate.mr2da.MR2DAFactory;
 import eu.interopehrate.mr2da.api.MR2DA;
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
+import eu.interopehrate.mr2da.provenance.ProvenanceValidationResults;
 import eu.interopehrate.protocols.common.FHIRResourceCategory;
 import eu.interopehrate.protocols.common.ResourceCategory;
 
@@ -144,6 +145,17 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
         Log.i("MR2DA.CallbackHandler", msg);
         this.runOnUiThread(buttonEnabler);
         Snackbar.make(execButton, msg, Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    @Override
+    public boolean onProvenanceValidationError(ProvenanceValidationResults valRes) {
+        boolean dispatchOnError = true;
+        String msg = "onValidationError: Propagation will continue: " + dispatchOnError;
+        Log.i("MR2DA.CallbackHandler", msg);
+        this.runOnUiThread(buttonEnabler);
+        Snackbar.make(execButton, msg, Snackbar.LENGTH_INDEFINITE).show();
+
+        return dispatchOnError;
     }
 
     public class EnableExecButton implements Runnable {

@@ -61,12 +61,4 @@ class AsyncMR2DA extends DefaultMR2DAImpl {
         return executor;
     }
 
-    @Override
-    public Bundle getPatientSummary() {
-        PatientQueryGenerator e = new PatientQueryGenerator(this.fhirClient);
-        IOperationUntypedWithInput<Bundle> op = e.generatePatientSummaryOperation();
-
-        FHIRExecutor executor = createFHIRExecutorInstance();
-        return executor.executeOperation(op);
-    }
 }

@@ -37,7 +37,7 @@ public class AsyncHTTPClientInterceptor implements IClientInterceptor {
             // request = new AsyncRequest(theRequest.getUri());
         } else
             throw new IllegalStateException("MR2DA.ClientInterceptor: cannot have more than 3 " +
-                    "requests pending! Request can't be submitted");
+                    "pending requests! Request can't be submitted");
 
     }
 

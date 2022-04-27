@@ -2,6 +2,7 @@ package eu.interopehrate.mr2deapp;
 
 import android.util.Log;
 
+import org.hl7.fhir.r4.model.Observation;
 import org.hl7.fhir.r4.model.Resource;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -51,13 +52,15 @@ public class ObservationTest extends BasicMR2DATest {
     }
 
     @Test
-    public void testObservationWithSubCategory() throws Exception {
+    public void testVitalSigns() throws Exception {
         Iterator<Resource> it = mr2da.getResourcesByCategory(FHIRResourceCategory.OBSERVATION,
                 "vital-signs", null, null, false);
 
         int counter = 0;
+        Observation o;
         while (it.hasNext()) {
-            it.next();
+            o = (Observation)it.next();
+            assertEquals("vital-signs", o.getCategoryFirstRep().getCodingFirstRep().getCode());
             counter++;
         }
 

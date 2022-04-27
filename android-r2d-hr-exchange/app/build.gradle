@@ -5,7 +5,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "eu.interopehrate.mr2dexc"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 29
         multiDexEnabled true
         versionCode 1

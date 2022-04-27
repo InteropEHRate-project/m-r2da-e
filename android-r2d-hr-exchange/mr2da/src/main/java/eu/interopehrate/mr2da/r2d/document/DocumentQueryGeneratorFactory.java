@@ -61,7 +61,7 @@ public class DocumentQueryGeneratorFactory {
                 generatorsList.add(generatorClass);
             }
 
-            Log.d("MR2DA: ", "Adding generators for type: " + documentCategory);
+            Log.d("MR2DA", "Adding generators for type: " + documentCategory);
             generatorsMap.put(documentCategory, generatorsList);
         }
 
