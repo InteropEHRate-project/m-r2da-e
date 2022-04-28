@@ -67,7 +67,8 @@ public class RequestResultHandler extends Handler {
                     ProvenanceValidationResults valRes = validator.validateBundle(results);
                     boolean notifyCallback = true;
                     if (!valRes.isSuccessful()) {
-                        Log.d("MR2DA.ResultHandler", "Validation was not successful");
+                        Log.d("MR2DA.ResultHandler", "Validation was not successful: " +
+                                valRes.getErrorMsg());
                         notifyCallback = callbackHandler.onProvenanceValidationError(valRes);
                     } else
                         Log.d("MR2DA.ResultHandler", "Validation was successful");

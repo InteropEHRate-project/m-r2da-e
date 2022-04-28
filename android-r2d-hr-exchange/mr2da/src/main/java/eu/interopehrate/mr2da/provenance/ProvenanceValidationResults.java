@@ -21,6 +21,10 @@ public class ProvenanceValidationResults {
         return successful;
     }
 
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
     void setSuccessful(boolean successful) {
         this.successful = successful;
     }
