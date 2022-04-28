@@ -11,7 +11,7 @@ import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
  *  Author: Engineering S.p.A. (www.eng.it)
  *  Project: InteropEHRate - www.interopehrate.eu
  *
- *  Description: builder class to crreate instances of MR2DA in a fluent style
+ *  Description: builder class to create instances of MR2DA in a fluent style
  */
 public class MR2DABuilder {
     private Locale language;

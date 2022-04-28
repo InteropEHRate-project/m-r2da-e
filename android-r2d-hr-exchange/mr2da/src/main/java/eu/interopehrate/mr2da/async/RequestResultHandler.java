@@ -19,6 +19,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: executes the download of the result produced by an async request.
+ */
 public class RequestResultHandler extends Handler {
     public static final int ASYNC_REQUEST_TO_GET_RESULT = 2000;
 
@@ -67,8 +73,7 @@ public class RequestResultHandler extends Handler {
                     ProvenanceValidationResults valRes = validator.validateBundle(results);
                     boolean notifyCallback = true;
                     if (!valRes.isSuccessful()) {
-                        Log.d("MR2DA.ResultHandler", "Validation was not successful: " +
-                                valRes.getErrorMsg());
+                        Log.d("MR2DA.ResultHandler", "Validation was not successful");
                         notifyCallback = callbackHandler.onProvenanceValidationError(valRes);
                     } else
                         Log.d("MR2DA.ResultHandler", "Validation was successful");

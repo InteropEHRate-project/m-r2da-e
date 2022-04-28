@@ -5,6 +5,12 @@ import android.os.HandlerThread;
 import android.os.Process;
 import android.util.Log;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description:
+ */
 public class PollingHandlerThread extends HandlerThread {
     private Handler handler;
     private String eidasToken;

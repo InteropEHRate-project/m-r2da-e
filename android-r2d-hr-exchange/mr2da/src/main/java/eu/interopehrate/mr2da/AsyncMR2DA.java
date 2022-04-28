@@ -13,6 +13,13 @@ import eu.interopehrate.mr2da.async.AsyncHTTPClientInterceptor;
 import eu.interopehrate.mr2da.fhir.FHIRExecutor;
 import eu.interopehrate.mr2da.r2d.resources.PatientQueryGenerator;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: Extends the DefaultMR2DAImpl class, adding the behaviour needed
+ *  to enable the asynchronous handling of a R2D Access transaction.
+ */
 class AsyncMR2DA extends DefaultMR2DAImpl {
 
     private MR2DACallbackHandler callbackHandler;

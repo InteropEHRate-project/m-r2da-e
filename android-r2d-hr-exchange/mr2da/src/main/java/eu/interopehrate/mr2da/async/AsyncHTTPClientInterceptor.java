@@ -11,7 +11,13 @@ import ca.uhn.fhir.rest.client.api.IClientInterceptor;
 import ca.uhn.fhir.rest.client.api.IHttpRequest;
 import ca.uhn.fhir.rest.client.api.IHttpResponse;
 
-
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: intercepts the outgoing HTTP requests and adds the handling of the
+ *  asynchronicity.
+ */
 public class AsyncHTTPClientInterceptor implements IClientInterceptor {
     private static final AsyncHTTPClientInterceptor INSTANCE = new AsyncHTTPClientInterceptor();
 

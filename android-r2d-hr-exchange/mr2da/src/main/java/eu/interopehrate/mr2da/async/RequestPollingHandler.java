@@ -19,7 +19,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: executes the HTTP polling to monitor the status of an async request.
+ *  When the request has been executed, it forward the request to the RequestResultHandler.
+ */
 public class RequestPollingHandler extends Handler {
     public static final int REQUEST_TERMINATED_HTTP_STATUS = 200;
     public static final int REQUEST_RUNNING_HTTP_STATUS = 202;

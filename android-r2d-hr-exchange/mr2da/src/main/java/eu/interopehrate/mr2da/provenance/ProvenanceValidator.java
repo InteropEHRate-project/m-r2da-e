@@ -4,21 +4,27 @@ import android.util.Log;
 
 import org.hl7.fhir.instance.model.api.IIdType;
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.DomainResource;
 import org.hl7.fhir.r4.model.Provenance;
-import org.hl7.fhir.r4.model.Resource;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ca.uhn.fhir.parser.IParser;
 import eu.interopehrate.m_rds_sm.CryptoManagementFactory;
 import eu.interopehrate.m_rds_sm.api.CryptoManagement;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: executes the validation of the received bundle.
+ */
 public class ProvenanceValidator {
+    public static final String NOT_VALIDATED_MSG = "Resource does not match with Provenance.";
+    public static final String NOT_VALIDABLE_MSG = "Resource does not have a related Provenance.";
+
     private CryptoManagement cryptoManagement;
     private IParser parser;
 
@@ -29,41 +35,60 @@ public class ProvenanceValidator {
         parser = ConnectionFactory.getFHIRParser().setPrettyPrint(false);
     }
 
+    /**
+     * Validates the provenance of the resources
+     *
+     * @param theBundle
+     * @return
+     * @throws Exception
+     */
     public ProvenanceValidationResults validateBundle(Bundle theBundle) throws Exception {
         ProvenanceValidationResults res = new ProvenanceValidationResults();
+
+        // Retrieves the signed provenances from the bundle
         List<Provenance> provenances = getSignedProvenances(theBundle);
 
-        if (provenances.size() == 0 && theBundle.getEntry().size() > 0) {
-            res.setSuccessful(false);
-            res.setErrorMsg("No Provenance information in the received bundle!");
-            return res;
-        }
+        // Creates the resource tree. The first level of this tree contains the
+        // resources that MUST have a Provenance
+        ResourceNode root = NodeFactory.createNode(theBundle);
+        root.loadChildren(root);
 
-        Resource resourceToValidate;
+        // Starts checking the provenance for each resource
+        DomainResource resourceToValidate;
         String jwsToken;
         IIdType id;
         String resourceId;
-        for (Provenance provenance : provenances) {
-            id = provenance.getTargetFirstRep().getReferenceElement();
-            resourceId = id.getResourceType() + "/" + id.getIdPart();
-            Log.d("MR2DA", "Validating resource: " + resourceId
-                    + " from Provenance: " + provenance.getId());
+        boolean foundProvenance = false;
+        for (ResourceNode child : root.getChildren()) {
+            resourceToValidate = (DomainResource)child.getResource();
+            resourceId = resourceToValidate.getIdElement().getResourceType() +
+                    "/" + resourceToValidate.getIdElement().getIdPart();
 
-            resourceToValidate = getResourceById(theBundle, resourceId);
+            Log.d("MR2DA", "Validating resource: " + resourceId);
+            foundProvenance = false;
+            for (Provenance provenance : provenances) {
+                foundProvenance = true;
+                if (matches(provenance, resourceToValidate)) {
+                    Log.d("MR2DA", "Validating resource: " + resourceId
+                            + " from Provenance: " + provenance.getId());
 
-            if (resourceToValidate != null) {
-                jwsToken = new String(provenance.getSignatureFirstRep().getData());
-                if (cryptoManagement.verifyDetachedJws(jwsToken,
-                        parser.encodeResourceToString(resourceToValidate))) {
-                    Log.d("MR2DA", "resource is valid!");
-                    res.addValidationResult(resourceToValidate.getId(), true);
-                } else {
-                    Log.d("MR2DA", "resource is NOT valid!");
-                    res.addValidationResult(resourceToValidate.getId(), false);
+                    jwsToken = new String(provenance.getSignatureFirstRep().getData());
+                    if (cryptoManagement.verifyDetachedJws(jwsToken,
+                            parser.encodeResourceToString(resourceToValidate))) {
+                        Log.d("MR2DA", "resource is valid!");
+                        res.addValidationResult(resourceId, true, "");
+                    } else {
+                        Log.d("MR2DA", "resource is NOT valid!");
+                        res.addValidationResult(resourceId, false, NOT_VALIDATED_MSG);
+                    }
+
+                    break;
                 }
-            } else {
-                Log.e("MR2DA", "Resource " + resourceId + " NOT found in bundle!");
-                res.addValidationResult(resourceId, false);
+            }
+
+            if (!foundProvenance) {
+                Log.e("MR2DA", "Provenance for " + resourceId + " NOT found in bundle. Resource is not valid.");
+                res.addValidationResult(resourceId, false, NOT_VALIDABLE_MSG);
             }
         }
 
@@ -93,25 +118,14 @@ public class ProvenanceValidator {
         return provenances;
     }
 
-    /**
-     * Looks for the resource identified by the provided id
-     *
-     * @param theBundle
-     * @param id
-     * @return
-     */
-    private Resource getResourceById(Bundle theBundle, String id) {
-        IIdType currentIdType;
-        String currentId;
-        for (Bundle.BundleEntryComponent entry : theBundle.getEntry()) {
-            currentIdType = entry.getResource().getIdElement();
-            currentId = currentIdType.getResourceType() + "/" + currentIdType.getIdPart();
-            // Log.d("MR2DA", "id: " + id + ", currentId: " + currentId);
-            if (id.equals(currentId))
-                return entry.getResource();
-        }
+    private boolean matches (Provenance provenance, DomainResource resource) {
+        IIdType targetIdType = provenance.getTargetFirstRep().getReferenceElement();
+        String targetId = targetIdType.getResourceType() + "/" + targetIdType.getIdPart();
 
-        return null;
+        IIdType resourceIdType = resource.getIdElement();
+        String resourceId = resourceIdType.getResourceType() + "/" + resourceIdType.getIdPart();
+
+        return resourceId.equals(targetId);
     }
 
 }

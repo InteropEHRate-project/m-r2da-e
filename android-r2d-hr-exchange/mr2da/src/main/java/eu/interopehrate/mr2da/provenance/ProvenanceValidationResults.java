@@ -1,19 +1,25 @@
 package eu.interopehrate.mr2da.provenance;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: used to represent the results of the validation of the provenances.
+ */
 public class ProvenanceValidationResults {
 
-    private Map<String, Boolean> validationMap = new HashMap<String, Boolean>();
+    private List<ProvenanceValidationRecord> results = new ArrayList<ProvenanceValidationRecord>();
     private boolean successful = true;
-    private String errorMsg;
 
-    public void addValidationResult(String resourceId, boolean valid) {
-        validationMap.put(resourceId, valid);
+    public void addValidationResult(String resourceId, boolean valid, String message) {
+        results.add(new ProvenanceValidationRecord(resourceId, valid, message));
         if (!valid) {
             successful = false;
-            errorMsg = "At least one resource was not validated.";
         }
     }
 
@@ -21,15 +27,8 @@ public class ProvenanceValidationResults {
         return successful;
     }
 
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
     void setSuccessful(boolean successful) {
         this.successful = successful;
     }
 
-    void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
-    }
 }

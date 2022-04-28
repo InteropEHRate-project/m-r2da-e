@@ -7,6 +7,12 @@ import android.util.Log;
 
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description:
+ */
 public class ResultsRetrieverHandlerThread extends HandlerThread {
     private Handler handler;
     private String eidasToken;

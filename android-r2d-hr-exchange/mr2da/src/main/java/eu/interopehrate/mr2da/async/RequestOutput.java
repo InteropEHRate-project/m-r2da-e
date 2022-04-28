@@ -1,5 +1,11 @@
 package eu.interopehrate.mr2da.async;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description:
+ */
 public class RequestOutput {
     private String type;
     private String url;

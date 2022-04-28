@@ -1,5 +1,11 @@
 package eu.interopehrate.mr2da.async;
 
+/**
+ *  Author: Engineering S.p.A. (www.eng.it)
+ *  Project: InteropEHRate - www.interopehrate.eu
+ *
+ *  Description: POJO used to represent the statu of an async request
+ */
 public class AsyncRequest {
 
     private String requestURL;

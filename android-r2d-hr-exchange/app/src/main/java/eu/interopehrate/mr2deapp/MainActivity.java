@@ -95,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
 
     @Override
     public void onSearchCompleted(ResourceCategory category, org.hl7.fhir.r4.model.Bundle bundle) {
-        String msg = "onSearchCompleted: received bundle with "
-                + bundle.getEntry().size() + " items of type " + category + " .";
+        String msg = "onSearchCompleted: search of " + category + "completed. Received a bundle with "
+                + bundle.getEntry().size() + " items.";
         Log.i("MR2DA.CallbackHandler", msg);
         this.runOnUiThread(buttonEnabler);
         Snackbar.make(execButton, msg, Snackbar.LENGTH_INDEFINITE).show();
