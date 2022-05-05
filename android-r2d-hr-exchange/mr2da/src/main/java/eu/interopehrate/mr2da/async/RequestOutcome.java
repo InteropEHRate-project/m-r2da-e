@@ -19,7 +19,7 @@ public class RequestOutcome {
     private boolean requiresAccessToken = true;
 
     private List<RequestOutput> output = new ArrayList<RequestOutput>();
-    private List<OperationOutcome> error = new ArrayList<OperationOutcome>();
+    private String error = "";
 
     public Date getTransactionTime() {
         return transactionTime;
@@ -45,20 +45,18 @@ public class RequestOutcome {
         this.requiresAccessToken = requiresAccessToken;
     }
 
+    public String getError() { return error; }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     public List<RequestOutput> getOutput() {
         return output;
     }
 
     public void setOutput(List<RequestOutput> output) {
         this.output = output;
-    }
-
-    public List<OperationOutcome> getError() {
-        return error;
-    }
-
-    public void setError(List<OperationOutcome> error) {
-        this.error = error;
     }
 
     public String getResponseURL() {

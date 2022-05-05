@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import eu.interopehrate.mr2da.MR2DAFactory;
 import eu.interopehrate.mr2da.api.MR2DA;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
                     if (checkedRadioButtonId == patientSummaryRadio.getId())
                         asyncTask.execute("PATIENT_SUMMARY");
                     else if (checkedRadioButtonId == encEverythingRadio.getId())
-                        asyncTask.execute("ENCOUNTER_EVERYTHING", "35");
+                        asyncTask.execute("ENCOUNTER_EVERYTHING", "6129269");
                     else if (checkedRadioButtonId == encSearchRadio.getId())
                         asyncTask.execute("ENCOUNTER_SEARCH");
                 }
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
 
         Log.d("MR2DA.MainActivity", "Creating MR2DA instance...");
         mr2da = MR2DAFactory.createAsync("http://213.249.46.205:8080/iehr/r2da/",
-                authToken, this);
+                authToken, this, Locale.ITALIAN);
     }
 
 
@@ -94,8 +95,13 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
     }
 
     @Override
+    public void onRequestCompleted() {
+        Log.d("MR2DA", "A request completed.");
+    }
+
+    @Override
     public void onSearchCompleted(ResourceCategory category, org.hl7.fhir.r4.model.Bundle bundle) {
-        String msg = "onSearchCompleted: search of " + category + "completed. Received a bundle with "
+        String msg = "onSearchCompleted: search of " + category + " completed. Received a bundle with "
                 + bundle.getEntry().size() + " items.";
         Log.i("MR2DA.CallbackHandler", msg);
         this.runOnUiThread(buttonEnabler);
@@ -156,6 +162,14 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
         Snackbar.make(execButton, msg, Snackbar.LENGTH_INDEFINITE).show();
 
         return dispatchOnError;
+    }
+
+    @Override
+    public void onError(String errorMsg) {
+        String msg = "onError: " + errorMsg;
+        Log.i("MR2DA.CallbackHandler", msg);
+        this.runOnUiThread(buttonEnabler);
+        Snackbar.make(execButton, msg, Snackbar.LENGTH_INDEFINITE).show();
     }
 
     public class EnableExecButton implements Runnable {

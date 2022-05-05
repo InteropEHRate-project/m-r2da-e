@@ -2,37 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="904eecff-67c8-45b0-8ffc-c18756ff4999" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/HealthRecordType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/ResponseFormat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/IMobileR2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/IMobileR2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/Mr2dexc.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/Mr2dexc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/ResourceType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/impl/fhir/fake/FHIRFakeMobileR2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/impl/fhir/fake/FHIRFakeMobileR2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/impl/fhir/utils/LoincCodes.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/impl/fhir/utils/LoincCodes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2da/src/main/java/eu/interopehrate/mr2da/MR2DABuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/BasicMR2DATest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/BasicMR2DATest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/DocumentReferenceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/DocumentReferenceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/MR2DATest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/MR2DATest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/ObservationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/ObservationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/OperationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/app/src/androidTest/java/eu/interopehrate/mr2deapp/OperationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2da/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2da/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2da/src/main/java/eu/interopehrate/mr2da/DefaultMR2DAImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2da/src/main/java/eu/interopehrate/mr2da/DefaultMR2DAImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2da/src/main/java/eu/interopehrate/mr2da/MR2DAFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/android-r2d-hr-exchange/mr2da/src/main/java/eu/interopehrate/mr2da/MR2DAFactory.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/IMobileR2D.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/MobileR2DFactory.java">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -43,6 +26,7 @@
     <option name="width" value="1411" />
     <option name="height" value="828" />
   </component>
+  <component name="ProjectId" id="27mYob04ZwVjK241Qd7it91Rbbj" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -64,21 +48,11 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="http.proxy" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -92,37 +66,5 @@
       <updated>1563461366834</updated>
     </task>
     <servers />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="22" y="23" width="1411" height="828" extended-state="0" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" visible="true" weight="0.26115108" />
-      <window_info id="Structure" side_tool="true" />
-      <window_info id="Image Layers" />
-      <window_info id="Designer" />
-      <window_info id="Resources Explorer" />
-      <window_info id="Capture Tool" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info id="Captures" order="0" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="TODO" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info anchor="right" id="Palette&#9;" />
-    </layout>
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/IMobileR2D.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/android-r2d-hr-exchange/mr2dexc/src/main/java/eu/interopehrate/mr2dexc/MobileR2DFactory.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
   </component>
 </project>

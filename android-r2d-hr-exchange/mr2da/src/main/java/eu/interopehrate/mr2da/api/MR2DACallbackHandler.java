@@ -17,6 +17,13 @@ import eu.interopehrate.protocols.common.ResourceCategory;
 public interface MR2DACallbackHandler {
 
     /**
+     * This callback is nott used to provide requested data, but only to
+     * notify to the client that a request has terminated and another one may
+     * be submitted in case the client is queueing requests.
+     */
+    void onRequestCompleted();
+
+    /**
      * Callback invoked when a search has produced its results.
      *
      * @param category
@@ -66,5 +73,13 @@ public interface MR2DACallbackHandler {
      * @return must return false if processing of health data must be stopped
      */
     boolean onProvenanceValidationError(ProvenanceValidationResults valRes);
+
+    /**
+     * Callback invoked when there is an error (server side or client side)
+     * during the processing of the request.
+     *
+     * @param errorMsg
+     */
+    void onError(String errorMsg);
 
 }

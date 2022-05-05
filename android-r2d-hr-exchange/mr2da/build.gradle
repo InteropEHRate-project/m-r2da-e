@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: "maven-publish"
 
 group = "eu.interopehrate"
-version="0.4.2"
+version="0.4.4"
 
 configurations {
     all*.exclude group: 'org.codehaus.woodstox'
@@ -38,8 +38,10 @@ dependencies {
      */
     api "ca.uhn.hapi.fhir:hapi-fhir-android:$FHIR_VERSION"
     api "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:$FHIR_VERSION"
+    /*
     api "ca.uhn.hapi.fhir:hapi-fhir-validation-resources-r4:$FHIR_VERSION"
     api "ca.uhn.hapi.fhir:hapi-fhir-validation:$FHIR_VERSION"
+    */
 
     /*
      * IEHR dependencies

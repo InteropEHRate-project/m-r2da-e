@@ -266,6 +266,7 @@ class DefaultMR2DAImpl implements MR2DA {
             throw new IllegalArgumentException("Argument 'language' cannot be null.");
 
         this.language = language;
+        Log.d("MR2DA", "adding LanguageInterceptor");
         fhirClient.registerInterceptor(new LanguageInterceptor());
     }
 
@@ -280,7 +281,8 @@ class DefaultMR2DAImpl implements MR2DA {
     class LanguageInterceptor implements IClientInterceptor {
         @Override
         public void interceptRequest(IHttpRequest iHttpRequest) {
-            iHttpRequest.addHeader("Content-Language", DefaultMR2DAImpl.this.language.getLanguage());
+            Log.d("MR2DA", "adding locale: " + DefaultMR2DAImpl.this.language.getLanguage());
+            iHttpRequest.addHeader("Accept-Language", DefaultMR2DAImpl.this.language.getLanguage());
         }
 
         @Override

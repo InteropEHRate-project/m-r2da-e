@@ -20,6 +20,7 @@ import ca.uhn.fhir.rest.client.api.IHttpResponse;
  */
 public class AsyncHTTPClientInterceptor implements IClientInterceptor {
     private static final AsyncHTTPClientInterceptor INSTANCE = new AsyncHTTPClientInterceptor();
+    public static final int MAX_RUNNING_REQUEST = 8;
 
     public static AsyncHTTPClientInterceptor getInstance() {
         return INSTANCE;
@@ -36,14 +37,14 @@ public class AsyncHTTPClientInterceptor implements IClientInterceptor {
     @Override
     public void interceptRequest(IHttpRequest theRequest) {
         RequestPollingHandler handler = (RequestPollingHandler) pollingThread.getHandler();
-        if (handler.getPendingRequestSize() < 3) {
+        if (handler.getPendingRequestSize() < MAX_RUNNING_REQUEST) {
             // Sets the Prefer header param for indicating asynchronous trx
             theRequest.addHeader(Constants.HEADER_PREFER, "respond-async");
             // sends a request to the R2DServer
             // request = new AsyncRequest(theRequest.getUri());
         } else
-            throw new IllegalStateException("MR2DA.ClientInterceptor: cannot have more than 3 " +
-                    "pending requests! Request can't be submitted");
+            throw new IllegalStateException("MR2DA.ClientInterceptor: cannot have more than " +
+                    MAX_RUNNING_REQUEST + " pending requests! Request can't be submitted");
 
     }
 

@@ -91,12 +91,14 @@ public class RequestPollingHandler extends Handler {
                     break;
                 case REQUEST_TERMINATED_HTTP_STATUS:
                     // Request terminated
-                    Log.d("MR2DA.PollingHandler", "Request has terminated successfully!");
+                    Log.d("MR2DA.PollingHandler", "Request has terminated");
                     // #1 decreases request size
                     pendingRequestsSize--;
                     // #2 parse response body to retrieve the URL for getting the results
                     String body = response.body().string();
+                    // Log.d("MR2DA", "body:" + body);
                     RequestOutcome outcome = gson.fromJson(body, RequestOutcome.class);
+                    // Log.d("MR2DA", "outcome:" + outcome);
                     // #3 notify handler responsible to retrieve results
                     Message outMsg = retrieverThread.getHandler().obtainMessage();
                     outMsg.what = RequestResultHandler.ASYNC_REQUEST_TO_GET_RESULT;

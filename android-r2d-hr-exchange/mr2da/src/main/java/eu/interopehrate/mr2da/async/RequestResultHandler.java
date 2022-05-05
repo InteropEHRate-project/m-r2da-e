@@ -7,6 +7,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.OperationOutcome;
+
+import java.util.List;
 
 import ca.uhn.fhir.rest.api.Constants;
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
@@ -44,55 +47,66 @@ public class RequestResultHandler extends Handler {
             Log.e("MR2DA.ResultHandler", "Error: received message with wrong message type.");
             return;
         }
+
+        // notifies the callback handler that a request completed
+        // so that if another request is waiting, it can be submitted
+        callbackHandler.onRequestCompleted();
+
         // Retrieves the URL to monitor from the msg
         RequestOutcome outcome = (RequestOutcome)msg.obj;
+        if (outcome.getOutput().size() > 0) {
+            // retrieves the results from the server
+            try {
+                Bundle result = retrieveRequestResult(outcome);
+                // checks provenance
+                Log.d("MR2DA.ResultHandler", "Validating provenances...");
+                ProvenanceValidator validator = new ProvenanceValidator();
+                ProvenanceValidationResults valRes = validator.validateBundle(result);
+                if (valRes.isSuccessful()) {
+                    Log.d("MR2DA.ResultHandler", "Validation was successful");
+                    notifyCallbackHandler(outcome, result, valRes);
+                } else {
+                    Log.d("MR2DA.ResultHandler", "Validation was not successful");
+                    if (callbackHandler.onProvenanceValidationError(valRes))
+                        notifyCallbackHandler(outcome, result, valRes);
+                }
+            } catch (Exception e) {
+                // inovkes the callback handler in case of error during processing of the request
+                Log.e("MR2DA.ResultHandler", e.getMessage());
+                callbackHandler.onError(e.getMessage());
+            }
+        } else {
+            // inovkes the callback handler in case of error during processing of the request
+            callbackHandler.onError(outcome.getError());
+        }
 
+    }
+
+
+    private Bundle retrieveRequestResult(RequestOutcome outcome) throws Exception {
         // Creates the OKHttp request to poll the URL
         Request request = new Request.Builder()
                 .url(outcome.getResponseURL())
                 .get()
                 .addHeader(Constants.HEADER_AUTHORIZATION,
-                           Constants.HEADER_AUTHORIZATION_VALPREFIX_BEARER + eidasToken)
+                        Constants.HEADER_AUTHORIZATION_VALPREFIX_BEARER + eidasToken)
                 .build();
 
-        try {
-            Log.d("MR2DA.ResultHandler", "Retrieving request results...");
-            // Submit the request...
-            Response response = client.newCall(request).execute();
-            switch (response.code()) {
-                case 200:
-                    // Retrieving response body
-                    String body = response.body().string();
-                    // Parsing results to FHIR Bundle
-                    Log.d("MR2DA.ResultHandler", "Parsing JSON to Bundle...");
-                    Bundle results = ConnectionFactory.getFHIRParser().parseResource(Bundle.class, body);
-
-                    // checks provenance
-                    Log.d("MR2DA.ResultHandler", "Validating provenances...");
-                    ProvenanceValidator validator = new ProvenanceValidator();
-                    ProvenanceValidationResults valRes = validator.validateBundle(results);
-                    boolean notifyCallback = true;
-                    if (!valRes.isSuccessful()) {
-                        Log.d("MR2DA.ResultHandler", "Validation was not successful");
-                        notifyCallback = callbackHandler.onProvenanceValidationError(valRes);
-                    } else
-                        Log.d("MR2DA.ResultHandler", "Validation was successful");
-
-                    // notifies callback handler
-                    if (notifyCallback) {
-                        Log.d("MR2DA.ResultHandler", "Notifying callback handler...");
-                        notifyCallback(outcome, results, valRes);
-                        break;
-                    }
-                default:
-                    Log.e("MR2DA.ResultHandler", "Error " + response.code() + " while polling R2DAccess server.");
-            }
-        } catch (Exception e) {
-            Log.e("MR2DA.ResultHandler", "Error while processing request results", e);
+        Response response = client.newCall(request).execute();
+        switch (response.code()) {
+            case 200:
+                // Retrieving response body
+                String body = response.body().string();
+                // Parsing results to FHIR Bundle
+                Log.d("MR2DA.ResultHandler", "Parsing JSON to Bundle...");
+                return ConnectionFactory.getFHIRParser().parseResource(Bundle.class, body);
+            default:
+                Log.e("MR2DA.ResultHandler", "Error " + response.code() + " while polling R2DAccess server.");
+                return null;
         }
     }
 
-    private void notifyCallback(RequestOutcome outcome, Bundle results, ProvenanceValidationResults valRes) {
+    private void notifyCallbackHandler(RequestOutcome outcome, Bundle results, ProvenanceValidationResults valRes) {
         String originalRequest = outcome.getRequest();
 
         if (originalRequest.contains("$document")) {
