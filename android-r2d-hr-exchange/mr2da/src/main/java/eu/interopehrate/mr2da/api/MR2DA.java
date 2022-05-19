@@ -36,6 +36,13 @@ import eu.interopehrate.protocols.client.ResourceReader;
 public interface MR2DA extends ResourceReader {
 
     /**
+     * Used to set a new refreshed eidas token
+     *
+     * @param eidasToken
+     */
+    void setFreshToken(String eidasToken);
+
+    /**
      * Used to set the language of the patient
      *
      * @param language

@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
         patientSummaryRadio.setChecked(true);
 
         execButton = findViewById(R.id.executeButton);
+
+        Log.d("MR2DA.MainActivity", "Creating MR2DA instance...");
+        mr2da = MR2DAFactory.createAsync("http://213.249.46.205:8080/iehr/r2da/",
+                authToken, MainActivity.this, Locale.ITALIAN);
+
         execButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,15 +69,10 @@ public class MainActivity extends AppCompatActivity implements MR2DACallbackHand
                 }
             }
         });
-
-        Log.d("MR2DA.MainActivity", "Creating MR2DA instance...");
-        mr2da = MR2DAFactory.createAsync("http://213.249.46.205:8080/iehr/r2da/",
-                authToken, this, Locale.ITALIAN);
     }
 
 
     private class SendRequestToR2DAccess extends AsyncTask<Object, Void, Void> {
-
         @Override
         protected Void doInBackground(Object... objects) {
 

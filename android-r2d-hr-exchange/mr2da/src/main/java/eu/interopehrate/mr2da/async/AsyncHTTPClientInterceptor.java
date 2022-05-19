@@ -19,16 +19,10 @@ import ca.uhn.fhir.rest.client.api.IHttpResponse;
  *  asynchronicity.
  */
 public class AsyncHTTPClientInterceptor implements IClientInterceptor {
-    private static final AsyncHTTPClientInterceptor INSTANCE = new AsyncHTTPClientInterceptor();
     public static final int MAX_RUNNING_REQUEST = 8;
-
-    public static AsyncHTTPClientInterceptor getInstance() {
-        return INSTANCE;
-    }
 
     //private AsyncRequest request;
     private PollingHandlerThread pollingThread;
-    private AsyncHTTPClientInterceptor() {};
 
     public void setHandlerThread(PollingHandlerThread pollingThread) {
         this.pollingThread = pollingThread;
@@ -45,7 +39,6 @@ public class AsyncHTTPClientInterceptor implements IClientInterceptor {
         } else
             throw new IllegalStateException("MR2DA.ClientInterceptor: cannot have more than " +
                     MAX_RUNNING_REQUEST + " pending requests! Request can't be submitted");
-
     }
 
     @Override
@@ -68,4 +61,5 @@ public class AsyncHTTPClientInterceptor implements IClientInterceptor {
             }
         }
     }
+
 }

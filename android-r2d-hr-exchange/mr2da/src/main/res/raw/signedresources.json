@@ -1,14 +1,9 @@
 {
   "resourceType": "Bundle",
   "id": "1",
-  "meta": {
-    "profile": [
-      "http://hl7.org/fhir/uv/ips/StructureDefinition/Bundle-uv-ips"
-    ]
-  },
   "language": "en",
   "type": "searchset",
-  "timestamp": "2022-03-16T18:06:28.644Z",
+  "timestamp": "2022-04-08T07:56:35.582Z",
   "entry": [
     {
       "fullUrl": "http://iehrexampleurl/Encounter/6129269",
@@ -24,7 +19,7 @@
           {
             "url": "http://interopehrate.eu/fhir/StructureDefinition/ProvenanceExtension-IEHR",
             "valueReference": {
-              "reference": "Provenance/62950935-8b6d-4756-a23d-6ca17232edad"
+              "reference": "Provenance/26c6576f-9c66-4214-92f4-275d8fa7834a"
             }
           }
         ],
@@ -43,417 +38,258 @@
       }
     },
     {
-      "fullUrl": "http://iehrexampleurl/DiagnosticReport/db734647-fc99-424c-a864-7e3cda82e703",
+      "fullUrl": "http://iehrexampleurl/Encounter/123456",
       "resource": {
-        "resourceType": "DiagnosticReport",
-        "id": "db734647-fc99-424c-a864-7e3cda82e703",
+        "resourceType": "Encounter",
+        "id": "123456",
         "meta": {
           "profile": [
-            "http://interopehrate.eu/fhir/StructureDefinition/DiagnosticReport-LaboratoryReport-IEHR"
+            "http://interopehrate.eu/fhir/StructureDefinition/Encounter-IEHR"
           ]
         },
         "extension": [
           {
             "url": "http://interopehrate.eu/fhir/StructureDefinition/ProvenanceExtension-IEHR",
             "valueReference": {
-              "reference": "Provenance/b228aff9-9a9b-4dea-a594-160be87abe94"
+              "reference": "Provenance/991bd92a-63c8-4df2-9611-0267f9c2584d"
             }
           }
         ],
-        "category": [
-          {
-            "coding": [
-              {
-                "system": "http://hl7.org",
-                "code": "LAB",
-                "display": "laboratory results"
-              }
-            ]
-          }
-        ],
-        "encounter": {
-          "reference": "Encounter/6129269"
+        "status": "finished",
+        "class": {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+          "code": "AMB",
+          "display": "ambulatory"
         },
-        "performer": [
+        "subject": {
+          "reference": "Patient/FTGM01"
+        },
+        "period": {
+          "start": "2021-12-08"
+        }
+      }
+    },
+    {
+      "fullUrl": "http://iehrexampleurl/Encounter/TTTTTTTTTT",
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "TTTTTTTTTT",
+        "meta": {
+          "profile": [
+            "http://interopehrate.eu/fhir/StructureDefinition/Encounter-IEHR"
+          ]
+        },
+        "extension": [
           {
-            "reference": "Practitioner/FSTPLG59A26F839C"
+            "url": "http://interopehrate.eu/fhir/StructureDefinition/ProvenanceExtension-IEHR",
+            "valueReference": {
+              "reference": "Provenance/582dbff5-5df1-4c3d-a948-9aef00d11794"
+            }
           }
         ],
-        "resultsInterpreter": [
+        "status": "finished",
+        "subject": {
+          "reference": "Patient/11111111111"
+        },
+        "period": {
+          "start": "1900-05-29"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Provenance",
+        "id": "26c6576f-9c66-4214-92f4-275d8fa7834a",
+        "meta": {
+          "profile": [
+            "http://interopehrate.eu/fhir/StructureDefinition/Provenance-IEHR"
+          ]
+        },
+        "target": [
           {
-            "reference": "Practitioner/FSTPLG59A26F839C"
+            "reference": "http://iehrexampleurl/Encounter/6129269"
           }
         ],
-        "result": [
+        "recorded": "2022-04-27T17:40:53.331+02:00",
+        "agent": [
           {
-            "reference": "Observation/loinc_4544-320190625083000"
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "author",
+                  "display": "Author"
+                }
+              ]
+            },
+            "who": {
+              "reference": "Organization/1"
+            }
           },
           {
-            "reference": "Observation/loinc_789-820190625083000"
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "custodian",
+                  "display": "Custodian"
+                }
+              ]
+            },
+            "who": {
+              "reference": "Organization/1"
+            }
+          }
+        ],
+        "signature": [
+          {
+            "id": "d64a8324-88c1-483f-b96a-23351bb1ef3b",
+            "type": [
+              {
+                "system": "urn:iso-astm:E1762-95:2013",
+                "code": "1.2.840.10065.1.12.1.5",
+                "display": "Verification Signature"
+              }
+            ],
+            "when": "2022-04-27T17:40:53.331+02:00",
+            "who": {
+              "reference": "Organization/1"
+            },
+            "targetFormat": "json",
+            "sigFormat": "application/jose",
+            "data": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbU5sY25ScFptbGpZWFJsSWpvaVZGVnNTbEp1UW5GUk1FNURVVlJhYmxGWVpFcFJhMFp1VTFaV1MyRnNTbWxXZVRsUVlqQmFTMHd6YUU5U1ZHZ3lWRWRyZDA1SWNIQmthM0JZWkZjNU0xSkdSbHBUYTNSMlYydHNiMlJ0VGs5UlZrWkdWRUZ3UTFWVlJqTlhWbEpHWVdzeFJGSlZaRVJhTWpGVVUyMDVkRlpFYUhCbFIzUkNWVlZXVGxKVVNrNWtSVEZJVkZST1QxWkdXbTlVTUZKeVRUQXhSV0ZIYkU1TmJGWTBWMWh3U21WRldsVlJWbEpEV2pBMVYwTnJTa0pVVlRGRlVsUkdiMWx0TVVkaWJIQllUVmQ0YVdKc1NrVlZWbEpHWVdzeFJGSlZaRUpOVmxaR1VUSmtNMWxXU2xaalJVNVNUVVZXYmxWVVNUVmtWMUpJVW01Q2FXSldXalZUVlZwSFRWZEdXRlJ1U1V0WmVrNVRZVWRPZFZWWVpFbGhSMDVQVkZkd1NtUXdOVVZTV0d4T1ZrWldORlJYY0VwbGJHUnZXVEExVG1Gc1JqTlVhMUpHWlVVeFZWWllhRTVoYTJ3MlZqSndSRkZ1VWpaU1Z6bE9VVEZzU0ZGVVJsWlNVWEJFVlZoa2JWWnRNWE5oUld4R1draENhMWRGTlhOWk1HaERZa1ZzUmsxWVdtcGliRmt5V2xjeGNsb3dNVlJrTW1SV1VqSjRObGRXVGtOVlZrNVZVbFU1VGxGWVpFaFJWRVpXVWxWV1VtUXdXazlXUm13MFEyc3hjVlZZYUV4V1JVWjFVVzFrY21OWGFISmhWV00xWkhwQ1ExRXhSbTVVVldSMFlVUkNhMU5GU2paVU1tczBaRzFSZWxwRVRrMWlWRVl5V1cweFIyVnRVa2hXYm14b1ZucG9NVmxXYUZKa2F6RlRVMWhqUzFKVlJscFNSbHBTVlZWU1JWRlhlRWhXYTFaclZHeG5lV0pIZUdoVFJXdzBWRWh3UW1SRlNtNVViRnBEVVZjNVRsTnRkR0ZrYlVwMFZXMW9iR0pYZURKWmJURldXakZhU0U5WWNGcE5hMW94VjFaT1ExTkJjRnBXTUhBMVdWWmtWMk14Y0ZSUmF6VnBUV3BXYjFsNlRsTmlSMDUwWWtoYVRsVllUak5STVVaYVVrWmFVbFZWWkVaa01IQkxWbXRTUkZFd1JuQlRXR1JGVlZac1MxTXlPV0ZUVjJneVdUQTFRbFZWVmtORGEwcFNVVlZTYmxvd2JGRlJWVkpFVVRCR2JtSXdUbTVhTUd4RFVWVXhVMUZYVWxaV01GcERWMjB4TTFRd2FEQlRWekZXVWtkS2IxcFdhRE5sYWtwMFZESTVRbVF5T1RKaFJsWXdZME01VFdGdE9WRmlSMGxMWlZoS2FVOUlValZWUm14dFkwaFdUMWxZUW5sT2JFRXdWbFJzTTJWSVRtdFpNSGh1Vldwa05XRkVVVEpYYTJoRlRtcG9WbUV5VGtsVlJrcENZbTVHZDJKcVRrOVZSWEJZVFRJNE1tUlVaRmRTYkZKU1lsRnZORXd6WkUxbFZGcFBVakExYVZsV2FGaGlWRkphWXpGSmRsWnJTVEpPUmxwd1dXcE9UbUpxV2pOU2VsSlFaRWhvUW1Fd1RsRlhSRXBJWVZWM05HSkhValJhYlhoRVZHeFdiVkZ1VWt4T2EwNTFUVEpPVEVOcWJIUmpWVVpWVWpBNVNGRnRWWFpPYTBwVFlWTjBlbFpzWkRWU1dGcHNVbTVHYjAxSVNsSkxNSGh1Vm10YVMwc3pWblJYUlVadldWZHZNMU13YUVsVGFtdHlVMnR6TkU1VVZqUk5WVXBEV1d0d05sVXdPRXRVTTJSQ1QwWkthR1ZIY0U1UlZFWXpTM3BhZEZOSVJUVmtWbkEyVlRCT2IyVnJTbEJXUlZKdVkxZE9iMUl6U2pGWmJYaHVWMnBrY1dReFpHOVRhVGxGWVZjeFVsWlVXa1ZWVnpGSVRraHJlVkpWVmpWVlFYQkNaVlZWZUV3eWQzcE5RM1EyWkcxc2VtUXdXbFJTVmtGNVRtMXdhVTB5WkZwUFZGWlNaR3RKTlVzeFNrVlpla2swVG5wV1JWbFhVa3RWUjJnd1dtczVWR1JFWkZsamVrRjNaVVJLZFUxV1pEWldhazV6UTJ4d1RWWkhkRXhpYkZwM1lVaFNlRkZWVm1sYVIwbDNVekZzYjFWWGF6UmxRM1IzVWtkU05XRnRPWGxXVnpsSlpWWm9kRk5ZVW5oWGJVWklZVmM0ZG1Rd1ducE9SMUY2WVhwc1lWb3lkR3hhUldSc1lWWkpTMlZJUW5CaWJUVlJUbXhPTTJGR1pFTmphMjh3VGxNNVJrNHlXak5QVjNjeFZVaFdjVlF6YURaa2FUbHFZek5PTVVzelFrVmlSVkpEVjJ4V01FMXFXakZVTW5oTVpHdDBSbVJyY0U1UlZrSklZVE5zVDFsM2J6TmtXR2Q0WVVScmVHRnFVa1ZPUm1oelQxVjRjMDB4V2taVVZHaHNUSHBhVWs5WFRqWk5NREZ0VFRCYVdsTlViRzVhVjBaRVRucHNiMkZJVmtaa2JXeFZUV3M1VEZORVJuZE9iVkpvVTJzd01sRXhaSFZEYW1OeVRrVjBNMHN3ZURaa1ZGSkNZVE5PUm1ReGNIZFVSVmswVjBoa1JWWXdPWFZYUkdScVRETkJlbUl4VWpOT1ZHaDVVbFU1Y2xOVmRFUmhlWFIwVkZod2VHRnFXa05oZWxwU1RYcGpORk42V2xSaFZsRkxWRVZTY0ZOc1ozcFNia295V2xaa1lXSnRiSFpUV0dONVYxTjBZV05ITlRabGFUbERVVlJDV21KclozZE5TSEJWV25rNE5XVlVWbE5rUkdSYVQwWldSbFZ1UmxsaFIwMXlUbnBuTUdGV1FuQmtibWQ0VlVGd1Fsb3dNVU5SVlVaSVlXMWFObEZxYkU1UldHUklVVlJHVmxwRlZqTlNWVWwyWkRGR1JGUlZSa0prTUdnelYxVlNWMVZxUW5GUmEwcHVaREJhZGxGV1ZrUmphMXBXVjFoUmRtUXdSbGhoU0hCWlpXMU9WRU5yVW1saE1scE1WRVZPUlUxRk9IZGtNR2hTVjFWU1YxVnFRbk5SYTBwYVpEQmFRbGRWYkV4a01XeERVV3hHVmxORlJqTlRWV1JFVVROT1NGRldSbFpTYTBvelZGVldUbEZxUWtoUlZFWldXa1ZTYmxWV1kwdFJhMHBUVmxaU1YyVnFWbGxSV0d0M1drVldWMVpGWkhOTk1ERklZVzFhV0ZJelVtOUxNVlp4VVZVNVExb3dOVmRUUmtVMFVXdEdiVTlGVmtOUlZURkVVVzFXUW1Rd1VsSlhWWEJNWWpGd1NtRklXbXBVWjNCQ1ZWVldUVkZzUmtKU1IyUnVVakJLUWxORVRrVmpNV3hHVG5wQ1JHUnRSazVTUkdOMllrUktjVlp0U2tsV00wcE9ZakZ3V1ZsVmNFcFVXRUpKWkRKNGJWWllUbXhSVkdocVRrUlNiVk5XV2pSalZFSlRRMnRXU0ZkWGJGSmxTRTVPVTFoT1IwMXRXWGhoTUdoM1pWWlNRbEV6YURWUldHeEpZa2h3VFU1VVJsbGFWVFZWWVd4U1ZsTXhjRk5YVlRsaFVWVXhVVm96UWs5aldFMTJVV3R3VmxWWWJ6VmthMDVGWTJwQlMxcEhaSFJWYlRCM1YyeG9VVlJXUWpabFZHaEtaV3MxVldGRldUVk9SV1JWVTFoc1NrMHdaRFJUTVZKWFl6Qm9jMHd5Y0VKV00wWjZVVlpPVkZSV1VsaE9hekI2WTBSV1dHTnRhRUpoUm1ScFdtazVVazFuY0dsV1Yyc3dWVmRTYVZSWVVUQmFlVGxHWldzNVMxVnRiM2xXYmxKWlRtdGtXRkpzVm1sUmVtZ3pUVE5vZG1WWGFFaFdSbFpXVTBjNWRsSlZjRTVhVjJ4eldqRldNRTB5TVhka2EzZ3dXa1UxVldWSVFuZERhM1JPVTI1dk0xUkhVbkpOTTBwMVZGUk9hRlpVVWpGa1ZWRnlWWHBXVTJKRVdtbGFXRVUwVkZabmVsZHRUa0paVmtKcFVrZHdSMDlYWkRaTk0yaElaREp6ZDJOVmIzaE1Na1pWVjBWb01GVnNSbXBrVjJkTFRraFdWV0ZWYkZCa1JYQndVbGN4YlUxcmRFWmpNakF5WTI1R1JtSXpWbWxrTVd4dlZFWnNhR1ZIUmtOTk1sVjVXVEpXYjFWR1kzWlVWVGsyWWtaT2FrOVdXWGRoUjBwV1ZVVldhR1JFYkUxaVZ6VkxZVkZ3YzFWVVFqTlZTRTEyVXpKNFJVMXRSbmxXYlZaT1VteHdRbG95WjNwaGFrcHRZMFYwV0ZKcVNsTlpWRnBUVkd4U1VHTklXWEpUYlVvMFpFVlNObVJFV2s1bFdGcExZVzAxYUdKWWJGRlZTRVZ5VGxkamQwTnJiRTFTZWtaVVpVYzFVRlZJV25aaGJYaFpXak5TVUZwVWF6Vmhia0o1WlVaT1lVMVVWbTVpVkU1T1lWZG9SRll5Vm5ST1IyTjZTM3BSTWxacmNETmhNRVp2VDFkR1RsVXlkSE5rYkZwV1VrVndTbFJJWTB0U1JtaDBZbFZPYVZJeVdUVlVWbGt5WlVkak9WQlJQVDBpZlE9PS4uVkhWM1VrWlRXa1pEVEVoa2JFNW1Ramd2UkVWME5uVlRZV3RoTkhCMVNIRlRiMkZsZGtWemVGQm1NbFpPVXpReU1FYzJVMVIwTmtjNGVFSk9UVUZJWjNCaGEwTnNNSEZZYW5vdlkwbG1SV2dyZUZWTVdrUnRjRzg1UXpCSE55dFliMGt4ZWtWcFZVRTJjVlJ1YkZCNWJWWkpOVXhOYlVnNEx6VjJXamhaWlZveVZHUjVjbHBEUm1oc2NHZFZUa1ZLYkZwMVNVRk9kSGcwT0ZCeU9FRk1VM012VldORlkwZFhjRTV3ZUVKVE9IRkdkVGdyYTNNeFZYVnBiblpOVFhaV04wRnZOa2xsVFZwRlRHRXZUSE5MZUZkdFVHOTZVVFZYTjI4eVFYaGhkRWxhVG5kd1QzUndkVTU1T0d4SVJFZHJXbUpJY2t0aFRVNHJXbkJpVmxKeFRGUktjMlpTZGk5d2MwSmtkR2hZYm1ZeWVGUmlPR3RtUkhKWllUSjBRbE5CTW1GWldTOUphelZTUkRsTU9VOHhSbVp1T0ZOVlpGUlZaRWR5Y0RGQmQzUkRaMkV6VEVnMVIzTkJNR2x2VmtabVZqSnJZMFJvV21zdlYzSXhSVmgxTDFCRFJVbDBVV05hUzFwVWQwbFhjbmRCWjJSQlVHaDRXSElyS3pkM2NXUnFUVGxKWVRaVlZHWlViekowYUdVME1tWk5XQzgzYzFSc2VsSkZZMFptTVRWRU0wdEZiMWhIZWpJME4zQmhRMWxwYzI4NGJXMW5RVk55UzFwcFZXNHZhMVl6VUhveGMzSkdURkUwY1RaRmExTmxlbEJuU1dKSWFETklUbmhxSzJ4bk9EZGxTeXRSZVd4NVF6Qm1PVlYzWm5wb1lVTmtkRVI2TUVGbFZUUkhhR1JzWW5GaWNtUm5XVXByUlhoaE0xRnZURzVzTjFadlRFaGpVa3RpWkROWWFuTmhNRk5wWWtGR2RYcFlTMlZPVW1OQlZtSlNVMWt3Vm5WTU16ZDNPRFZvVkVrMVl6ZFNjVWRqVkRSWk9GUnlUblpvU2swMFVHOXpNMXBCVm1kcFVFdG1VRVZIWkZWcVNFdHJNMjgzV1M4dlpVaHhUVzEyY201QmEwSkNVWEJuT1UwdlJ6RmthMU5TVEdRMkswWXlPVEJhUnpobFdVZEVUbUprZHpkaFZFRnBSVnBxY2xCb1UyOWhMMjg5"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Provenance",
+        "id": "991bd92a-63c8-4df2-9611-0267f9c2584d",
+        "meta": {
+          "profile": [
+            "http://interopehrate.eu/fhir/StructureDefinition/Provenance-IEHR"
+          ]
+        },
+        "target": [
+          {
+            "reference": "http://iehrexampleurl/Encounter/123456"
+          }
+        ],
+        "recorded": "2022-04-27T17:40:53.369+02:00",
+        "agent": [
+          {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "author",
+                  "display": "Author"
+                }
+              ]
+            },
+            "who": {
+              "reference": "Organization/1"
+            }
           },
           {
-            "reference": "Observation/loinc_718-720190625083000"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "http://iehrexampleurl/Observation/loinc_4544-320190625083000",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "loinc_4544-320190625083000",
-        "meta": {
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-uv-ips"
-          ]
-        },
-        "extension": [
-          {
-            "url": "http://interopehrate.eu/fhir/StructureDefinition/ProvenanceExtension-IEHR",
-            "valueReference": {
-              "reference": "Provenance/b228aff9-9a9b-4dea-a594-160be87abe94"
-            }
-          }
-        ],
-        "status": "final",
-        "category": [
-          {
-            "coding": [
-              {
-                "system": "http://loinc.org",
-                "code": "30954-2",
-                "display": "Relevant diagnostic tests/laboratory data Narrative",
-                "_display": {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/translation",
-                      "extension": [
-                        {
-                          "url": "lang",
-                          "valueCode": "ita"
-                        },
-                        {
-                          "url": "content",
-                          "valueString": "Test diagnostici rilevanti &o dati di laboratorio:Osservazione:Pt:^Paziente:Nar:"
-                        },
-                        {
-                          "url": "http://interopehrate.eu/fhir/StructureDefinition/ExtendedTranslation-IEHR",
-                          "valueReference": {
-                            "reference": "Provenance/1648199730417"
-                          }
-                        }
-                      ]
-                    }
-                  ]
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "custodian",
+                  "display": "Custodian"
                 }
-              }
-            ]
-          }
-        ],
-        "subject": {
-          "reference": "Patient/FTGM01"
-        },
-        "effectiveDateTime": "2017-07-03",
-        "performer": [
-          {
-            "reference": "Practitioner/FSTPLG59A26F839C"
-          }
-        ],
-        "valueQuantity": {
-          "value": 33.2,
-          "unit": "percentage"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 31,
-              "unit": "percentage"
+              ]
             },
-            "high": {
-              "value": 43.5,
-              "unit": "percentage"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "http://iehrexampleurl/Patient/FTGM01",
-      "resource": {
-        "resourceType": "Patient",
-        "id": "FTGM01",
-        "meta": {
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips"
-          ]
-        },
-        "name": [
-          {
-            "family": "FTGM",
-            "given": [
-              "FTGM01"
-            ]
-          }
-        ],
-        "gender": "male",
-        "birthDate": "2013-12-05",
-        "generalPractitioner": [
-          {
-            "reference": "Practitioner/FSTPLG59A26F839C"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "http://iehrexampleurl/Observation/loinc_718-720190625083000",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "loinc_718-720190625083000",
-        "meta": {
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-uv-ips"
-          ]
-        },
-        "extension": [
-          {
-            "url": "http://interopehrate.eu/fhir/StructureDefinition/ProvenanceExtension-IEHR",
-            "valueReference": {
-              "reference": "Provenance/b228aff9-9a9b-4dea-a594-160be87abe94"
+            "who": {
+              "reference": "Organization/1"
             }
           }
         ],
-        "status": "final",
-        "category": [
+        "signature": [
           {
-            "coding": [
+            "id": "6f6715ea-01a0-4c74-ba62-04ee6342c99d",
+            "type": [
               {
-                "system": "http://loinc.org",
-                "code": "30954-2",
-                "display": "Relevant diagnostic tests/laboratory data Narrative",
-                "_display": {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/translation",
-                      "extension": [
-                        {
-                          "url": "lang",
-                          "valueCode": "ita"
-                        },
-                        {
-                          "url": "content",
-                          "valueString": "Test diagnostici rilevanti &o dati di laboratorio:Osservazione:Pt:^Paziente:Nar:"
-                        },
-                        {
-                          "url": "http://interopehrate.eu/fhir/StructureDefinition/ExtendedTranslation-IEHR",
-                          "valueReference": {
-                            "reference": "Provenance/1648199730419"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
+                "system": "urn:iso-astm:E1762-95:2013",
+                "code": "1.2.840.10065.1.12.1.5",
+                "display": "Verification Signature"
               }
-            ]
-          }
-        ],
-        "subject": {
-          "reference": "Patient/FTGM01"
-        },
-        "effectiveDateTime": "2017-07-03",
-        "performer": [
-          {
-            "reference": "Practitioner/FSTPLG59A26F839C"
-          }
-        ],
-        "valueQuantity": {
-          "value": 11.3,
-          "unit": "g/dl"
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 10.2,
-              "unit": "g/dl"
+            ],
+            "when": "2022-04-27T17:40:53.370+02:00",
+            "who": {
+              "reference": "Organization/1"
             },
-            "high": {
-              "value": 14.5,
-              "unit": "g/dl"
-            }
+            "targetFormat": "json",
+            "sigFormat": "application/jose",
+            "data": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbU5sY25ScFptbGpZWFJsSWpvaVZGVnNTbEp1UW5GUk1FNURVVlJhYmxGWVpFcFJhMFp1VTFaV1MyRnNTbWxXZVRsUVlqQmFTMHd6YUU5U1ZHZ3lWRWRyZDA1SWNIQmthM0JZWkZjNU0xSkdSbHBUYTNSMlYydHNiMlJ0VGs5UlZrWkdWRUZ3UTFWVlJqTlhWbEpHWVdzeFJGSlZaRVJhTWpGVVUyMDVkRlpFYUhCbFIzUkNWVlZXVGxKVVNrNWtSVEZJVkZST1QxWkdXbTlVTUZKeVRUQXhSV0ZIYkU1TmJGWTBWMWh3U21WRldsVlJWbEpEV2pBMVYwTnJTa0pVVlRGRlVsUkdiMWx0TVVkaWJIQllUVmQ0YVdKc1NrVlZWbEpHWVdzeFJGSlZaRUpOVmxaR1VUSmtNMWxXU2xaalJVNVNUVVZXYmxWVVNUVmtWMUpJVW01Q2FXSldXalZUVlZwSFRWZEdXRlJ1U1V0WmVrNVRZVWRPZFZWWVpFbGhSMDVQVkZkd1NtUXdOVVZTV0d4T1ZrWldORlJYY0VwbGJHUnZXVEExVG1Gc1JqTlVhMUpHWlVVeFZWWllhRTVoYTJ3MlZqSndSRkZ1VWpaU1Z6bE9VVEZzU0ZGVVJsWlNVWEJFVlZoa2JWWnRNWE5oUld4R1draENhMWRGTlhOWk1HaERZa1ZzUmsxWVdtcGliRmt5V2xjeGNsb3dNVlJrTW1SV1VqSjRObGRXVGtOVlZrNVZVbFU1VGxGWVpFaFJWRVpXVWxWV1VtUXdXazlXUm13MFEyc3hjVlZZYUV4V1JVWjFVVzFrY21OWGFISmhWV00xWkhwQ1ExRXhSbTVVVldSMFlVUkNhMU5GU2paVU1tczBaRzFSZWxwRVRrMWlWRVl5V1cweFIyVnRVa2hXYm14b1ZucG9NVmxXYUZKa2F6RlRVMWhqUzFKVlJscFNSbHBTVlZWU1JWRlhlRWhXYTFaclZHeG5lV0pIZUdoVFJXdzBWRWh3UW1SRlNtNVViRnBEVVZjNVRsTnRkR0ZrYlVwMFZXMW9iR0pYZURKWmJURldXakZhU0U5WWNGcE5hMW94VjFaT1ExTkJjRnBXTUhBMVdWWmtWMk14Y0ZSUmF6VnBUV3BXYjFsNlRsTmlSMDUwWWtoYVRsVllUak5STVVaYVVrWmFVbFZWWkVaa01IQkxWbXRTUkZFd1JuQlRXR1JGVlZac1MxTXlPV0ZUVjJneVdUQTFRbFZWVmtORGEwcFNVVlZTYmxvd2JGRlJWVkpFVVRCR2JtSXdUbTVhTUd4RFVWVXhVMUZYVWxaV01GcERWMjB4TTFRd2FEQlRWekZXVWtkS2IxcFdhRE5sYWtwMFZESTVRbVF5T1RKaFJsWXdZME01VFdGdE9WRmlSMGxMWlZoS2FVOUlValZWUm14dFkwaFdUMWxZUW5sT2JFRXdWbFJzTTJWSVRtdFpNSGh1Vldwa05XRkVVVEpYYTJoRlRtcG9WbUV5VGtsVlJrcENZbTVHZDJKcVRrOVZSWEJZVFRJNE1tUlVaRmRTYkZKU1lsRnZORXd6WkUxbFZGcFBVakExYVZsV2FGaGlWRkphWXpGSmRsWnJTVEpPUmxwd1dXcE9UbUpxV2pOU2VsSlFaRWhvUW1Fd1RsRlhSRXBJWVZWM05HSkhValJhYlhoRVZHeFdiVkZ1VWt4T2EwNTFUVEpPVEVOcWJIUmpWVVpWVWpBNVNGRnRWWFpPYTBwVFlWTjBlbFpzWkRWU1dGcHNVbTVHYjAxSVNsSkxNSGh1Vm10YVMwc3pWblJYUlVadldWZHZNMU13YUVsVGFtdHlVMnR6TkU1VVZqUk5WVXBEV1d0d05sVXdPRXRVTTJSQ1QwWkthR1ZIY0U1UlZFWXpTM3BhZEZOSVJUVmtWbkEyVlRCT2IyVnJTbEJXUlZKdVkxZE9iMUl6U2pGWmJYaHVWMnBrY1dReFpHOVRhVGxGWVZjeFVsWlVXa1ZWVnpGSVRraHJlVkpWVmpWVlFYQkNaVlZWZUV3eWQzcE5RM1EyWkcxc2VtUXdXbFJTVmtGNVRtMXdhVTB5WkZwUFZGWlNaR3RKTlVzeFNrVlpla2swVG5wV1JWbFhVa3RWUjJnd1dtczVWR1JFWkZsamVrRjNaVVJLZFUxV1pEWldhazV6UTJ4d1RWWkhkRXhpYkZwM1lVaFNlRkZWVm1sYVIwbDNVekZzYjFWWGF6UmxRM1IzVWtkU05XRnRPWGxXVnpsSlpWWm9kRk5ZVW5oWGJVWklZVmM0ZG1Rd1ducE9SMUY2WVhwc1lWb3lkR3hhUldSc1lWWkpTMlZJUW5CaWJUVlJUbXhPTTJGR1pFTmphMjh3VGxNNVJrNHlXak5QVjNjeFZVaFdjVlF6YURaa2FUbHFZek5PTVVzelFrVmlSVkpEVjJ4V01FMXFXakZVTW5oTVpHdDBSbVJyY0U1UlZrSklZVE5zVDFsM2J6TmtXR2Q0WVVScmVHRnFVa1ZPUm1oelQxVjRjMDB4V2taVVZHaHNUSHBhVWs5WFRqWk5NREZ0VFRCYVdsTlViRzVhVjBaRVRucHNiMkZJVmtaa2JXeFZUV3M1VEZORVJuZE9iVkpvVTJzd01sRXhaSFZEYW1OeVRrVjBNMHN3ZURaa1ZGSkNZVE5PUm1ReGNIZFVSVmswVjBoa1JWWXdPWFZYUkdScVRETkJlbUl4VWpOT1ZHaDVVbFU1Y2xOVmRFUmhlWFIwVkZod2VHRnFXa05oZWxwU1RYcGpORk42V2xSaFZsRkxWRVZTY0ZOc1ozcFNia295V2xaa1lXSnRiSFpUV0dONVYxTjBZV05ITlRabGFUbERVVlJDV21KclozZE5TSEJWV25rNE5XVlVWbE5rUkdSYVQwWldSbFZ1UmxsaFIwMXlUbnBuTUdGV1FuQmtibWQ0VlVGd1Fsb3dNVU5SVlVaSVlXMWFObEZxYkU1UldHUklVVlJHVmxwRlZqTlNWVWwyWkRGR1JGUlZSa0prTUdnelYxVlNWMVZxUW5GUmEwcHVaREJhZGxGV1ZrUmphMXBXVjFoUmRtUXdSbGhoU0hCWlpXMU9WRU5yVW1saE1scE1WRVZPUlUxRk9IZGtNR2hTVjFWU1YxVnFRbk5SYTBwYVpEQmFRbGRWYkV4a01XeERVV3hHVmxORlJqTlRWV1JFVVROT1NGRldSbFpTYTBvelZGVldUbEZxUWtoUlZFWldXa1ZTYmxWV1kwdFJhMHBUVmxaU1YyVnFWbGxSV0d0M1drVldWMVpGWkhOTk1ERklZVzFhV0ZJelVtOUxNVlp4VVZVNVExb3dOVmRUUmtVMFVXdEdiVTlGVmtOUlZURkVVVzFXUW1Rd1VsSlhWWEJNWWpGd1NtRklXbXBVWjNCQ1ZWVldUVkZzUmtKU1IyUnVVakJLUWxORVRrVmpNV3hHVG5wQ1JHUnRSazVTUkdOMllrUktjVlp0U2tsV00wcE9ZakZ3V1ZsVmNFcFVXRUpKWkRKNGJWWllUbXhSVkdocVRrUlNiVk5XV2pSalZFSlRRMnRXU0ZkWGJGSmxTRTVPVTFoT1IwMXRXWGhoTUdoM1pWWlNRbEV6YURWUldHeEpZa2h3VFU1VVJsbGFWVFZWWVd4U1ZsTXhjRk5YVlRsaFVWVXhVVm96UWs5aldFMTJVV3R3VmxWWWJ6VmthMDVGWTJwQlMxcEhaSFJWYlRCM1YyeG9VVlJXUWpabFZHaEtaV3MxVldGRldUVk9SV1JWVTFoc1NrMHdaRFJUTVZKWFl6Qm9jMHd5Y0VKV00wWjZVVlpPVkZSV1VsaE9hekI2WTBSV1dHTnRhRUpoUm1ScFdtazVVazFuY0dsV1Yyc3dWVmRTYVZSWVVUQmFlVGxHWldzNVMxVnRiM2xXYmxKWlRtdGtXRkpzVm1sUmVtZ3pUVE5vZG1WWGFFaFdSbFpXVTBjNWRsSlZjRTVhVjJ4eldqRldNRTB5TVhka2EzZ3dXa1UxVldWSVFuZERhM1JPVTI1dk0xUkhVbkpOTTBwMVZGUk9hRlpVVWpGa1ZWRnlWWHBXVTJKRVdtbGFXRVUwVkZabmVsZHRUa0paVmtKcFVrZHdSMDlYWkRaTk0yaElaREp6ZDJOVmIzaE1Na1pWVjBWb01GVnNSbXBrVjJkTFRraFdWV0ZWYkZCa1JYQndVbGN4YlUxcmRFWmpNakF5WTI1R1JtSXpWbWxrTVd4dlZFWnNhR1ZIUmtOTk1sVjVXVEpXYjFWR1kzWlVWVGsyWWtaT2FrOVdXWGRoUjBwV1ZVVldhR1JFYkUxaVZ6VkxZVkZ3YzFWVVFqTlZTRTEyVXpKNFJVMXRSbmxXYlZaT1VteHdRbG95WjNwaGFrcHRZMFYwV0ZKcVNsTlpWRnBUVkd4U1VHTklXWEpUYlVvMFpFVlNObVJFV2s1bFdGcExZVzAxYUdKWWJGRlZTRVZ5VGxkamQwTnJiRTFTZWtaVVpVYzFVRlZJV25aaGJYaFpXak5TVUZwVWF6Vmhia0o1WlVaT1lVMVVWbTVpVkU1T1lWZG9SRll5Vm5ST1IyTjZTM3BSTWxacmNETmhNRVp2VDFkR1RsVXlkSE5rYkZwV1VrVndTbFJJWTB0U1JtaDBZbFZPYVZJeVdUVlVWbGt5WlVkak9WQlJQVDBpZlE9PS4uUVhGTlpVVnBkRkpuVDBaUlpFbHhiVFpzWlVWSVVWcHVRVVZWTjFWbGMzVXpNWHBpVEdSWWVFOUJZbXN3VjA1VE5FMU5PSEZwTVhsT0wyZDJWa3RyVjFsTWRESlVRak40U1ZkR00yMWFNazgyUVV4RFRrOXZjMVZYVERoYVRYUTJZWFV5UlhsTlRYVXJhVFZpTDFjeWNrNUtVR3cwUzFVckszbGtSa3Q1VEhJNVMxcGhTekJTVW1sR1ZVTnBZM2gyUTNWaFoyMHZPRkJyTUUwM1luTmxNWHBhYWtOWVYwMHlia012YTFCRVdrWm9ZMUlyUlVJM2JWcFBiVk5HYlRkdFIwTkVlamxwVWt0UVp6azFaMXBGTWxwclRHRkNWM1ZZVDJ4TE5tdzNaamN5YkdGM2JtSllhbnAyTkdSRlJIWnZOSFpWUWtveU0wbGlaSFpxZFRoVFJUYzJWWFJaYzBoRWFFODRiVUo0YWtaaGFuRmFhbWh4TW01MmQwZzFiRVJJWlROQk9IZHJSbGgzY2pSRE4zWXdLemRITUVkMFpXTmpRVVptUVdaYU5IUXlkekFyY2xwM1RHUXdkbTFDVUd3eU5FdG9jbTB4VG5FclNHbEJSWGR4ZEZoNE1UaG1TSEI0WWxaeVdrcEhNaXRQTW1admVraFJMMVZMTVc1NlZrcDJja3B4YldSSE5WVlNOelIxWjJGTlMwTnBWME1yYUVOdFNFUmxaazVRU1RCSWVsQlVVbUpaYTNKMmNrUm1jMDVMUkVkVmFHbDJOMmxGWlVSb1NHcElVM3BEY3psV2R6YzJOMWszZG1oc1dVOXRTVllyUlM5TWNHRkdOVmRHWjAxRlVUTm1ObkZ3VEZsUlduUTNhME5EVjBWM1IxSm1LMjVLVFZoc04yOXRWMFZNU3paWWRVOUlUV1JPY2toU1pHMXNReTlVYlZGUU0xVk1jVWhJTUdaRGFtRjJUMjFyWW10RVZFOVVXa2hTYjI1MVQwazBkR3RFUmt4T1VFVmxUVlJZYlhsblVqTmtTMDVFVWpOYVZFNVNPV1p6Y0RCVk5ISm9ZV1YxT1d0eVIyZHpNams1UTNaRFdIcDFaRlozWW5JMGVYaEdUV3hzVFhwTFZVUmhNMkpUUW13dlZVWXlOVWR6Um5OUmFXSm5lWGxqWVhOcVZXbG1XR2xITUc4d1JsUmFVM0F3T0RSbGVucEdMemc5"
           }
         ]
       }
     },
     {
-      "fullUrl": "http://iehrexampleurl/Practitioner/FSTPLG59A26F839C",
-      "resource": {
-        "resourceType": "Practitioner",
-        "id": "FSTPLG59A26F839C",
-        "meta": {
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/Practitioner-uv-ips"
-          ]
-        },
-        "name": [
-          {
-            "family": "FESTA",
-            "given": [
-              "PIERLUIGI"
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "http://iehrexampleurl/Observation/loinc_789-820190625083000",
-      "resource": {
-        "resourceType": "Observation",
-        "id": "loinc_789-820190625083000",
-        "meta": {
-          "profile": [
-            "http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-uv-ips"
-          ]
-        },
-        "extension": [
-          {
-            "url": "http://interopehrate.eu/fhir/StructureDefinition/ProvenanceExtension-IEHR",
-            "valueReference": {
-              "reference": "Provenance/b228aff9-9a9b-4dea-a594-160be87abe94"
-            }
-          }
-        ],
-        "status": "final",
-        "category": [
-          {
-            "coding": [
-              {
-                "system": "http://loinc.org",
-                "code": "30954-2",
-                "display": "Relevant diagnostic tests/laboratory data Narrative",
-                "_display": {
-                  "extension": [
-                    {
-                      "url": "http://hl7.org/fhir/StructureDefinition/translation",
-                      "extension": [
-                        {
-                          "url": "lang",
-                          "valueCode": "ita"
-                        },
-                        {
-                          "url": "content",
-                          "valueString": "Test diagnostici rilevanti &o dati di laboratorio:Osservazione:Pt:^Paziente:Nar:"
-                        },
-                        {
-                          "url": "http://interopehrate.eu/fhir/StructureDefinition/ExtendedTranslation-IEHR",
-                          "valueReference": {
-                            "reference": "Provenance/1648199730422"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ],
-        "subject": {
-          "reference": "Patient/FTGM01"
-        },
-        "effectiveDateTime": "2017-07-03",
-        "performer": [
-          {
-            "reference": "Practitioner/FSTPLG59A26F839C"
-          }
-        ],
-        "valueQuantity": {
-          "value": 4.12
-        },
-        "referenceRange": [
-          {
-            "low": {
-              "value": 3.89
-            },
-            "high": {
-              "value": 5.29
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "IEHR/fhir/Provenance/1648199730417/Observation/loinc_4544-320190625083000",
       "resource": {
         "resourceType": "Provenance",
-        "id": "loinc_4544-320190625083000",
+        "id": "582dbff5-5df1-4c3d-a948-9aef00d11794",
+        "meta": {
+          "profile": [
+            "http://interopehrate.eu/fhir/StructureDefinition/Provenance-IEHR"
+          ]
+        },
         "target": [
           {
-            "reference": "Observation/loinc_4544-320190625083000"
+            "reference": "http://iehrexampleurl/Encounter/TTTTTTTTTT"
           }
         ],
-        "occurredDateTime": "2022-03-25T09:15:30.417Z",
-        "recorded": "2022-03-25T09:15:30.417Z",
+        "recorded": "2022-04-27T17:40:53.390+02:00",
         "agent": [
           {
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "author",
+                  "display": "Author"
+                }
+              ]
+            },
             "who": {
-              "reference": "Device/1"
+              "reference": "Organization/1"
             }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "IEHR/fhir/Device/1",
-      "resource": {
-        "resourceType": "Device",
-        "id": "1",
-        "status": "active",
-        "deviceName": [
+          },
           {
-            "name": "iehr-translation-service",
-            "type": "other"
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "IEHR/fhir/Provenance/1648199730419/Observation/loinc_718-720190625083000",
-      "resource": {
-        "resourceType": "Provenance",
-        "id": "loinc_718-720190625083000",
-        "target": [
-          {
-            "reference": "Observation/loinc_718-720190625083000"
+            "type": {
+              "coding": [
+                {
+                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
+                  "code": "custodian",
+                  "display": "Custodian"
+                }
+              ]
+            },
+            "who": {
+              "reference": "Organization/1"
+            }
           }
         ],
-        "occurredDateTime": "2022-03-25T09:15:30.419Z",
-        "recorded": "2022-03-25T09:15:30.419Z",
-        "agent": [
+        "signature": [
           {
+            "id": "bd2c0c43-da59-4d09-9860-348d9c95922d",
+            "type": [
+              {
+                "system": "urn:iso-astm:E1762-95:2013",
+                "code": "1.2.840.10065.1.12.1.5",
+                "display": "Verification Signature"
+              }
+            ],
+            "when": "2022-04-27T17:40:53.390+02:00",
             "who": {
-              "reference": "Device/1"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "fullUrl": "IEHR/fhir/Provenance/1648199730422/Observation/loinc_789-820190625083000",
-      "resource": {
-        "resourceType": "Provenance",
-        "id": "loinc_789-820190625083000",
-        "target": [
-          {
-            "reference": "Observation/loinc_789-820190625083000"
-          }
-        ],
-        "occurredDateTime": "2022-03-25T09:15:30.422Z",
-        "recorded": "2022-03-25T09:15:30.422Z",
-        "agent": [
-          {
-            "who": {
-              "reference": "Device/1"
-            }
+              "reference": "Organization/1"
+            },
+            "targetFormat": "json",
+            "sigFormat": "application/jose",
+            "data": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbU5sY25ScFptbGpZWFJsSWpvaVZGVnNTbEp1UW5GUk1FNURVVlJhYmxGWVpFcFJhMFp1VTFaV1MyRnNTbWxXZVRsUVlqQmFTMHd6YUU5U1ZHZ3lWRWRyZDA1SWNIQmthM0JZWkZjNU0xSkdSbHBUYTNSMlYydHNiMlJ0VGs5UlZrWkdWRUZ3UTFWVlJqTlhWbEpHWVdzeFJGSlZaRVJhTWpGVVUyMDVkRlpFYUhCbFIzUkNWVlZXVGxKVVNrNWtSVEZJVkZST1QxWkdXbTlVTUZKeVRUQXhSV0ZIYkU1TmJGWTBWMWh3U21WRldsVlJWbEpEV2pBMVYwTnJTa0pVVlRGRlVsUkdiMWx0TVVkaWJIQllUVmQ0YVdKc1NrVlZWbEpHWVdzeFJGSlZaRUpOVmxaR1VUSmtNMWxXU2xaalJVNVNUVVZXYmxWVVNUVmtWMUpJVW01Q2FXSldXalZUVlZwSFRWZEdXRlJ1U1V0WmVrNVRZVWRPZFZWWVpFbGhSMDVQVkZkd1NtUXdOVVZTV0d4T1ZrWldORlJYY0VwbGJHUnZXVEExVG1Gc1JqTlVhMUpHWlVVeFZWWllhRTVoYTJ3MlZqSndSRkZ1VWpaU1Z6bE9VVEZzU0ZGVVJsWlNVWEJFVlZoa2JWWnRNWE5oUld4R1draENhMWRGTlhOWk1HaERZa1ZzUmsxWVdtcGliRmt5V2xjeGNsb3dNVlJrTW1SV1VqSjRObGRXVGtOVlZrNVZVbFU1VGxGWVpFaFJWRVpXVWxWV1VtUXdXazlXUm13MFEyc3hjVlZZYUV4V1JVWjFVVzFrY21OWGFISmhWV00xWkhwQ1ExRXhSbTVVVldSMFlVUkNhMU5GU2paVU1tczBaRzFSZWxwRVRrMWlWRVl5V1cweFIyVnRVa2hXYm14b1ZucG9NVmxXYUZKa2F6RlRVMWhqUzFKVlJscFNSbHBTVlZWU1JWRlhlRWhXYTFaclZHeG5lV0pIZUdoVFJXdzBWRWh3UW1SRlNtNVViRnBEVVZjNVRsTnRkR0ZrYlVwMFZXMW9iR0pYZURKWmJURldXakZhU0U5WWNGcE5hMW94VjFaT1ExTkJjRnBXTUhBMVdWWmtWMk14Y0ZSUmF6VnBUV3BXYjFsNlRsTmlSMDUwWWtoYVRsVllUak5STVVaYVVrWmFVbFZWWkVaa01IQkxWbXRTUkZFd1JuQlRXR1JGVlZac1MxTXlPV0ZUVjJneVdUQTFRbFZWVmtORGEwcFNVVlZTYmxvd2JGRlJWVkpFVVRCR2JtSXdUbTVhTUd4RFVWVXhVMUZYVWxaV01GcERWMjB4TTFRd2FEQlRWekZXVWtkS2IxcFdhRE5sYWtwMFZESTVRbVF5T1RKaFJsWXdZME01VFdGdE9WRmlSMGxMWlZoS2FVOUlValZWUm14dFkwaFdUMWxZUW5sT2JFRXdWbFJzTTJWSVRtdFpNSGh1Vldwa05XRkVVVEpYYTJoRlRtcG9WbUV5VGtsVlJrcENZbTVHZDJKcVRrOVZSWEJZVFRJNE1tUlVaRmRTYkZKU1lsRnZORXd6WkUxbFZGcFBVakExYVZsV2FGaGlWRkphWXpGSmRsWnJTVEpPUmxwd1dXcE9UbUpxV2pOU2VsSlFaRWhvUW1Fd1RsRlhSRXBJWVZWM05HSkhValJhYlhoRVZHeFdiVkZ1VWt4T2EwNTFUVEpPVEVOcWJIUmpWVVpWVWpBNVNGRnRWWFpPYTBwVFlWTjBlbFpzWkRWU1dGcHNVbTVHYjAxSVNsSkxNSGh1Vm10YVMwc3pWblJYUlVadldWZHZNMU13YUVsVGFtdHlVMnR6TkU1VVZqUk5WVXBEV1d0d05sVXdPRXRVTTJSQ1QwWkthR1ZIY0U1UlZFWXpTM3BhZEZOSVJUVmtWbkEyVlRCT2IyVnJTbEJXUlZKdVkxZE9iMUl6U2pGWmJYaHVWMnBrY1dReFpHOVRhVGxGWVZjeFVsWlVXa1ZWVnpGSVRraHJlVkpWVmpWVlFYQkNaVlZWZUV3eWQzcE5RM1EyWkcxc2VtUXdXbFJTVmtGNVRtMXdhVTB5WkZwUFZGWlNaR3RKTlVzeFNrVlpla2swVG5wV1JWbFhVa3RWUjJnd1dtczVWR1JFWkZsamVrRjNaVVJLZFUxV1pEWldhazV6UTJ4d1RWWkhkRXhpYkZwM1lVaFNlRkZWVm1sYVIwbDNVekZzYjFWWGF6UmxRM1IzVWtkU05XRnRPWGxXVnpsSlpWWm9kRk5ZVW5oWGJVWklZVmM0ZG1Rd1ducE9SMUY2WVhwc1lWb3lkR3hhUldSc1lWWkpTMlZJUW5CaWJUVlJUbXhPTTJGR1pFTmphMjh3VGxNNVJrNHlXak5QVjNjeFZVaFdjVlF6YURaa2FUbHFZek5PTVVzelFrVmlSVkpEVjJ4V01FMXFXakZVTW5oTVpHdDBSbVJyY0U1UlZrSklZVE5zVDFsM2J6TmtXR2Q0WVVScmVHRnFVa1ZPUm1oelQxVjRjMDB4V2taVVZHaHNUSHBhVWs5WFRqWk5NREZ0VFRCYVdsTlViRzVhVjBaRVRucHNiMkZJVmtaa2JXeFZUV3M1VEZORVJuZE9iVkpvVTJzd01sRXhaSFZEYW1OeVRrVjBNMHN3ZURaa1ZGSkNZVE5PUm1ReGNIZFVSVmswVjBoa1JWWXdPWFZYUkdScVRETkJlbUl4VWpOT1ZHaDVVbFU1Y2xOVmRFUmhlWFIwVkZod2VHRnFXa05oZWxwU1RYcGpORk42V2xSaFZsRkxWRVZTY0ZOc1ozcFNia295V2xaa1lXSnRiSFpUV0dONVYxTjBZV05ITlRabGFUbERVVlJDV21KclozZE5TSEJWV25rNE5XVlVWbE5rUkdSYVQwWldSbFZ1UmxsaFIwMXlUbnBuTUdGV1FuQmtibWQ0VlVGd1Fsb3dNVU5SVlVaSVlXMWFObEZxYkU1UldHUklVVlJHVmxwRlZqTlNWVWwyWkRGR1JGUlZSa0prTUdnelYxVlNWMVZxUW5GUmEwcHVaREJhZGxGV1ZrUmphMXBXVjFoUmRtUXdSbGhoU0hCWlpXMU9WRU5yVW1saE1scE1WRVZPUlUxRk9IZGtNR2hTVjFWU1YxVnFRbk5SYTBwYVpEQmFRbGRWYkV4a01XeERVV3hHVmxORlJqTlRWV1JFVVROT1NGRldSbFpTYTBvelZGVldUbEZxUWtoUlZFWldXa1ZTYmxWV1kwdFJhMHBUVmxaU1YyVnFWbGxSV0d0M1drVldWMVpGWkhOTk1ERklZVzFhV0ZJelVtOUxNVlp4VVZVNVExb3dOVmRUUmtVMFVXdEdiVTlGVmtOUlZURkVVVzFXUW1Rd1VsSlhWWEJNWWpGd1NtRklXbXBVWjNCQ1ZWVldUVkZzUmtKU1IyUnVVakJLUWxORVRrVmpNV3hHVG5wQ1JHUnRSazVTUkdOMllrUktjVlp0U2tsV00wcE9ZakZ3V1ZsVmNFcFVXRUpKWkRKNGJWWllUbXhSVkdocVRrUlNiVk5XV2pSalZFSlRRMnRXU0ZkWGJGSmxTRTVPVTFoT1IwMXRXWGhoTUdoM1pWWlNRbEV6YURWUldHeEpZa2h3VFU1VVJsbGFWVFZWWVd4U1ZsTXhjRk5YVlRsaFVWVXhVVm96UWs5aldFMTJVV3R3VmxWWWJ6VmthMDVGWTJwQlMxcEhaSFJWYlRCM1YyeG9VVlJXUWpabFZHaEtaV3MxVldGRldUVk9SV1JWVTFoc1NrMHdaRFJUTVZKWFl6Qm9jMHd5Y0VKV00wWjZVVlpPVkZSV1VsaE9hekI2WTBSV1dHTnRhRUpoUm1ScFdtazVVazFuY0dsV1Yyc3dWVmRTYVZSWVVUQmFlVGxHWldzNVMxVnRiM2xXYmxKWlRtdGtXRkpzVm1sUmVtZ3pUVE5vZG1WWGFFaFdSbFpXVTBjNWRsSlZjRTVhVjJ4eldqRldNRTB5TVhka2EzZ3dXa1UxVldWSVFuZERhM1JPVTI1dk0xUkhVbkpOTTBwMVZGUk9hRlpVVWpGa1ZWRnlWWHBXVTJKRVdtbGFXRVUwVkZabmVsZHRUa0paVmtKcFVrZHdSMDlYWkRaTk0yaElaREp6ZDJOVmIzaE1Na1pWVjBWb01GVnNSbXBrVjJkTFRraFdWV0ZWYkZCa1JYQndVbGN4YlUxcmRFWmpNakF5WTI1R1JtSXpWbWxrTVd4dlZFWnNhR1ZIUmtOTk1sVjVXVEpXYjFWR1kzWlVWVGsyWWtaT2FrOVdXWGRoUjBwV1ZVVldhR1JFYkUxaVZ6VkxZVkZ3YzFWVVFqTlZTRTEyVXpKNFJVMXRSbmxXYlZaT1VteHdRbG95WjNwaGFrcHRZMFYwV0ZKcVNsTlpWRnBUVkd4U1VHTklXWEpUYlVvMFpFVlNObVJFV2s1bFdGcExZVzAxYUdKWWJGRlZTRVZ5VGxkamQwTnJiRTFTZWtaVVpVYzFVRlZJV25aaGJYaFpXak5TVUZwVWF6Vmhia0o1WlVaT1lVMVVWbTVpVkU1T1lWZG9SRll5Vm5ST1IyTjZTM3BSTWxacmNETmhNRVp2VDFkR1RsVXlkSE5rYkZwV1VrVndTbFJJWTB0U1JtaDBZbFZPYVZJeVdUVlVWbGt5WlVkak9WQlJQVDBpZlE9PS4uVjJsU1NGaFVRMWQyWTJSdFNrMDJhSFY2TnpoYVJpc3pMMDF2TlUweFVFcG5LMHg0ZEc1ak1IaDVNVlpRTVV3MWNrVjFWMDl1Y0VNdlRtZDFWbWswVTI1UVpEaHJUR2xVY0V0blJFdHRMMkpCSzJwcFFrZEtWbnBDU21KWVQxVkRLMjVpVVVWa0syNWphMnBXWms5dGFqUk5XWEJZTlRaRVRWTmlXREpDTWtaWk1sUnNVVXd6TlRkcFFsVlJkbXRZYW5kSVREZ3lSMWxWVTFKME4zQmFUMlI2YjFCUWRGZEJNbU5sYWs5MlJsUXpia1JNUWtKaFluaFJUVEJZTWxGbFJUTkRXVWRaVUhSSU1ITk1SSFJ5ZEZOWlNVVjJkV0pWV2s5UmNqaERTMk55YW1ZM1lUWTNWelpFTWxodWRrZE9lVGhPTnpGbGJVeHFWbFY1ZEhaVlNGb3JTSFI1YzJwR2JYcERkMHg2VVRneVNFNVhVVnBhV0c5a1psbGpOek5YT0ZwMlFWaE1kbUZPTm1NdlNIVkthM0lyTVUxRE1VMVJSM0Y0VVZodWFIVnBaM1ZUYWxVdldHZHdaV1EwY1dkaFVYSk9hazlKYmpGSGRFb3ZOVWRWY0VGTmIwbFBTVGxvZGxsM1FtcHhMMkpJYzAxWFJtRXlVRlZLUXpKQ04zcGlkMnhuWWpKQlptSnplVFV6V21RelJ6aE1hMXB1V0U5bGJqRkJhMWhQVGtNcmVFNXRiVVpqUjI1dGRUaG5PVXhPWWxZMk1HeHNSVXhqT0dGUmNVbDNTR2R0YjAxQ2JrUmpUSGhPZW5CalluQnFaV3MzVW5VeU5YVkhOMm93T0daMloyRmFLMjVHY1RsNlRrTmtZVk50WjJ4U2VYWjFSbE51V0hvelFXWnpha0psWkZwR2JHRm1hbFpLWkdkSlVESldWbXBuVERGamJqVk9jRFpsUVVVMGJ6Vk9aaTl4Y0RKek0weHZTR3N6TUdNdk1FcHFNSGcxUVRSc2FrWlZNMjluVDFwMGRsTjFXRkk0VTNObFpXUlBiM1ZhVFc1SmIwRlVjV3gzWlhKNldIRndRMGR5V1RGUU9WZFRWR28xVTB4d1NrRlpkMWR5TVhSTlNEaFVSek5NTUhFM05WZERXalkwWldKRVRreENPV2MxVjFodlpURlNNa3B1U21wdFpIZFZObXRxY0RFNFQxQTJhMDA5"
           }
         ]
       }
@@ -461,7 +297,7 @@
     {
       "resource": {
         "resourceType": "Organization",
-        "id": "9b1aeeb6-cd5c-4a61-929d-9204858a55e7",
+        "id": "1",
         "identifier": [
           {
             "value": "FTGM"
@@ -478,138 +314,6 @@
             "city": "Pisa",
             "state": "Italia",
             "postalCode": "56126"
-          }
-        ]
-      }
-    },
-    {
-      "resource": {
-        "resourceType": "Provenance",
-        "id": "62950935-8b6d-4756-a23d-6ca17232edad",
-        "meta": {
-          "profile": [
-            "http://interopehrate.eu/fhir/StructureDefinition/Provenance-IEHR"
-          ]
-        },
-        "target": [
-          {
-            "reference": "http://iehrexampleurl/Encounter/6129269"
-          }
-        ],
-        "recorded": "2022-04-21T17:46:28.009+02:00",
-        "agent": [
-          {
-            "type": {
-              "coding": [
-                {
-                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
-                  "code": "author",
-                  "display": "Author"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/9b1aeeb6-cd5c-4a61-929d-9204858a55e7"
-            }
-          },
-          {
-            "type": {
-              "coding": [
-                {
-                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
-                  "code": "custodian",
-                  "display": "Custodian"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/9b1aeeb6-cd5c-4a61-929d-9204858a55e7"
-            }
-          }
-        ],
-        "signature": [
-          {
-            "id": "a44b5593-7e37-42a9-96a3-99c553829758",
-            "type": [
-              {
-                "system": "urn:iso-astm:E1762-95:2013",
-                "code": "1.2.840.10065.1.12.1.5",
-                "display": "Verification Signature"
-              }
-            ],
-            "when": "2022-04-21T17:46:28.009+02:00",
-            "who": {
-              "reference": "Organization/9b1aeeb6-cd5c-4a61-929d-9204858a55e7"
-            },
-            "targetFormat": "json",
-            "sigFormat": "application/jose",
-            "data": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbU5sY25ScFptbGpZWFJsSWpvaVZGVnNTbEp1UW5GUk1FNURVVlJhYmxGWVpFcFJhMFp1VTFaV1MyRnNTbWxXZVRsUVlqQmFTMHd6YUU5U1ZHZ3lWRWRyZDA1SWNIQmthM0JZWkZjNU0xSkdSbHBUYTNSMlYydHNiMlJ0VGs5UlZrWkdWRUZ3UTFWVlJqTlhWbEpHWVdzeFJGSlZaRVJhTWpGVVUyMDVkRlpFYUhCbFIzUkNWVlZXVGxKVVNrNWtSVEZJVkZST1QxWkdXbTlVTUZKeVRUQXhSV0ZIYkU1TmJGWTBWMWh3U21WRldsVlJWbEpEV2pBMVYwTnJTa0pVVlRGRlVsUkdiMWx0TVVkaWJIQllUVmQ0YVdKc1NrVlZWbEpHWVdzeFJGSlZaRUpOVmxaR1VUSmtNMWxXU2xaalJVNVNUVVZXYmxWVVNUVmtWMUpJVW01Q2FXSldXalZUVlZwSFRWZEdXRlJ1U1V0WmVrNVRZVWRPZFZWWVpFbGhSMDVQVkZkd1NtUXdOVVZTV0d4T1ZrWldORlJYY0VwbGJHUnZXVEExVG1Gc1JqTlVhMUpHWlVVeFZWWllhRTVoYTJ3MlZqSndSRkZ1VWpaU1Z6bE9VVEZzU0ZGVVJsWlNVWEJFVlZoa2JWWnRNWE5oUld4R1draENhMWRGTlhOWk1HaERZa1ZzUmsxWVdtcGliRmt5V2xjeGNsb3dNVlJrTW1SV1VqSjRObGRXVGtOVlZrNVZVbFU1VGxGWVpFaFJWRVpXVWxWV1VtUXdXazlXUm13MFEyc3hjVlZZYUV4V1JVWjFVVzFrY21OWGFISmhWV00xWkhwQ1ExRXhSbTVVVldSMFlVUkNhMU5GU2paVU1tczBaRzFSZWxwRVRrMWlWRVl5V1cweFIyVnRVa2hXYm14b1ZucG9NVmxXYUZKa2F6RlRVMWhqUzFKVlJscFNSbHBTVlZWU1JWRlhlRWhXYTFaclZHeG5lV0pIZUdoVFJXdzBWRWh3UW1SRlNtNVViRnBEVVZjNVRsTnRkR0ZrYlVwMFZXMW9iR0pYZURKWmJURldXakZhU0U5WWNGcE5hMW94VjFaT1ExTkJjRnBXTUhBMVdWWmtWMk14Y0ZSUmF6VnBUV3BXYjFsNlRsTmlSMDUwWWtoYVRsVllUak5STVVaYVVrWmFVbFZWWkVaa01IQkxWbXRTUkZFd1JuQlRXR1JGVlZac1MxTXlPV0ZUVjJneVdUQTFRbFZWVmtORGEwcFNVVlZTYmxvd2JGRlJWVkpFVVRCR2JtSXdUbTVhTUd4RFVWVXhVMUZYVWxaV01GcERWMjB4TTFRd2FEQlRWekZXVWtkS2IxcFdhRE5sYWtwMFZESTVRbVF5T1RKaFJsWXdZME01VFdGdE9WRmlSMGxMWlZoS2FVOUlValZWUm14dFkwaFdUMWxZUW5sT2JFRXdWbFJzTTJWSVRtdFpNSGh1Vldwa05XRkVVVEpYYTJoRlRtcG9WbUV5VGtsVlJrcENZbTVHZDJKcVRrOVZSWEJZVFRJNE1tUlVaRmRTYkZKU1lsRnZORXd6WkUxbFZGcFBVakExYVZsV2FGaGlWRkphWXpGSmRsWnJTVEpPUmxwd1dXcE9UbUpxV2pOU2VsSlFaRWhvUW1Fd1RsRlhSRXBJWVZWM05HSkhValJhYlhoRVZHeFdiVkZ1VWt4T2EwNTFUVEpPVEVOcWJIUmpWVVpWVWpBNVNGRnRWWFpPYTBwVFlWTjBlbFpzWkRWU1dGcHNVbTVHYjAxSVNsSkxNSGh1Vm10YVMwc3pWblJYUlVadldWZHZNMU13YUVsVGFtdHlVMnR6TkU1VVZqUk5WVXBEV1d0d05sVXdPRXRVTTJSQ1QwWkthR1ZIY0U1UlZFWXpTM3BhZEZOSVJUVmtWbkEyVlRCT2IyVnJTbEJXUlZKdVkxZE9iMUl6U2pGWmJYaHVWMnBrY1dReFpHOVRhVGxGWVZjeFVsWlVXa1ZWVnpGSVRraHJlVkpWVmpWVlFYQkNaVlZWZUV3eWQzcE5RM1EyWkcxc2VtUXdXbFJTVmtGNVRtMXdhVTB5WkZwUFZGWlNaR3RKTlVzeFNrVlpla2swVG5wV1JWbFhVa3RWUjJnd1dtczVWR1JFWkZsamVrRjNaVVJLZFUxV1pEWldhazV6UTJ4d1RWWkhkRXhpYkZwM1lVaFNlRkZWVm1sYVIwbDNVekZzYjFWWGF6UmxRM1IzVWtkU05XRnRPWGxXVnpsSlpWWm9kRk5ZVW5oWGJVWklZVmM0ZG1Rd1ducE9SMUY2WVhwc1lWb3lkR3hhUldSc1lWWkpTMlZJUW5CaWJUVlJUbXhPTTJGR1pFTmphMjh3VGxNNVJrNHlXak5QVjNjeFZVaFdjVlF6YURaa2FUbHFZek5PTVVzelFrVmlSVkpEVjJ4V01FMXFXakZVTW5oTVpHdDBSbVJyY0U1UlZrSklZVE5zVDFsM2J6TmtXR2Q0WVVScmVHRnFVa1ZPUm1oelQxVjRjMDB4V2taVVZHaHNUSHBhVWs5WFRqWk5NREZ0VFRCYVdsTlViRzVhVjBaRVRucHNiMkZJVmtaa2JXeFZUV3M1VEZORVJuZE9iVkpvVTJzd01sRXhaSFZEYW1OeVRrVjBNMHN3ZURaa1ZGSkNZVE5PUm1ReGNIZFVSVmswVjBoa1JWWXdPWFZYUkdScVRETkJlbUl4VWpOT1ZHaDVVbFU1Y2xOVmRFUmhlWFIwVkZod2VHRnFXa05oZWxwU1RYcGpORk42V2xSaFZsRkxWRVZTY0ZOc1ozcFNia295V2xaa1lXSnRiSFpUV0dONVYxTjBZV05ITlRabGFUbERVVlJDV21KclozZE5TSEJWV25rNE5XVlVWbE5rUkdSYVQwWldSbFZ1UmxsaFIwMXlUbnBuTUdGV1FuQmtibWQ0VlVGd1Fsb3dNVU5SVlVaSVlXMWFObEZxYkU1UldHUklVVlJHVmxwRlZqTlNWVWwyWkRGR1JGUlZSa0prTUdnelYxVlNWMVZxUW5GUmEwcHVaREJhZGxGV1ZrUmphMXBXVjFoUmRtUXdSbGhoU0hCWlpXMU9WRU5yVW1saE1scE1WRVZPUlUxRk9IZGtNR2hTVjFWU1YxVnFRbk5SYTBwYVpEQmFRbGRWYkV4a01XeERVV3hHVmxORlJqTlRWV1JFVVROT1NGRldSbFpTYTBvelZGVldUbEZxUWtoUlZFWldXa1ZTYmxWV1kwdFJhMHBUVmxaU1YyVnFWbGxSV0d0M1drVldWMVpGWkhOTk1ERklZVzFhV0ZJelVtOUxNVlp4VVZVNVExb3dOVmRUUmtVMFVXdEdiVTlGVmtOUlZURkVVVzFXUW1Rd1VsSlhWWEJNWWpGd1NtRklXbXBVWjNCQ1ZWVldUVkZzUmtKU1IyUnVVakJLUWxORVRrVmpNV3hHVG5wQ1JHUnRSazVTUkdOMllrUktjVlp0U2tsV00wcE9ZakZ3V1ZsVmNFcFVXRUpKWkRKNGJWWllUbXhSVkdocVRrUlNiVk5XV2pSalZFSlRRMnRXU0ZkWGJGSmxTRTVPVTFoT1IwMXRXWGhoTUdoM1pWWlNRbEV6YURWUldHeEpZa2h3VFU1VVJsbGFWVFZWWVd4U1ZsTXhjRk5YVlRsaFVWVXhVVm96UWs5aldFMTJVV3R3VmxWWWJ6VmthMDVGWTJwQlMxcEhaSFJWYlRCM1YyeG9VVlJXUWpabFZHaEtaV3MxVldGRldUVk9SV1JWVTFoc1NrMHdaRFJUTVZKWFl6Qm9jMHd5Y0VKV00wWjZVVlpPVkZSV1VsaE9hekI2WTBSV1dHTnRhRUpoUm1ScFdtazVVazFuY0dsV1Yyc3dWVmRTYVZSWVVUQmFlVGxHWldzNVMxVnRiM2xXYmxKWlRtdGtXRkpzVm1sUmVtZ3pUVE5vZG1WWGFFaFdSbFpXVTBjNWRsSlZjRTVhVjJ4eldqRldNRTB5TVhka2EzZ3dXa1UxVldWSVFuZERhM1JPVTI1dk0xUkhVbkpOTTBwMVZGUk9hRlpVVWpGa1ZWRnlWWHBXVTJKRVdtbGFXRVUwVkZabmVsZHRUa0paVmtKcFVrZHdSMDlYWkRaTk0yaElaREp6ZDJOVmIzaE1Na1pWVjBWb01GVnNSbXBrVjJkTFRraFdWV0ZWYkZCa1JYQndVbGN4YlUxcmRFWmpNakF5WTI1R1JtSXpWbWxrTVd4dlZFWnNhR1ZIUmtOTk1sVjVXVEpXYjFWR1kzWlVWVGsyWWtaT2FrOVdXWGRoUjBwV1ZVVldhR1JFYkUxaVZ6VkxZVkZ3YzFWVVFqTlZTRTEyVXpKNFJVMXRSbmxXYlZaT1VteHdRbG95WjNwaGFrcHRZMFYwV0ZKcVNsTlpWRnBUVkd4U1VHTklXWEpUYlVvMFpFVlNObVJFV2s1bFdGcExZVzAxYUdKWWJGRlZTRVZ5VGxkamQwTnJiRTFTZWtaVVpVYzFVRlZJV25aaGJYaFpXak5TVUZwVWF6Vmhia0o1WlVaT1lVMVVWbTVpVkU1T1lWZG9SRll5Vm5ST1IyTjZTM3BSTWxacmNETmhNRVp2VDFkR1RsVXlkSE5rYkZwV1VrVndTbFJJWTB0U1JtaDBZbFZPYVZJeVdUVlVWbGt5WlVkak9WQlJQVDBpZlE9PS4uYUhGTGRXMTZjV05tVDFWVFYydHBZVzFPU1RGUk1EZHJRakJVV0VsWWFtaDFUV1ZTY0VKNGFtb3dlbmxEVjI5b1JUbGFhMUYzV0hoWVprRXdiMDVEUjNkWk5HZzVkVlF3VEZoVlZHbFhTVkZFTjJ4MFVHOTFURGgwTkVKRmVpOXVkbkpOY0c5RGJrNW5SVzR3WTB0TVNsSTBNa1pGTTNGM09FTkJMelZCUzFGQ1lVcHFSamQwVFVGUk9UTTJUemRZU3psUVdHSk9NMnRKWVVKWVFsRmFjazgyTnpSUVZuaGhlRk5xTWxkbVZYVkZUVEpuZUVsbFFrMURWVkZETUdsSVJXbG5WbE54U1RCUFluTmpVa3RLU1ZkSVVIUlVaa2hETTBod2RYUm9kVTVHVWpGNGIxZzNiM05tY1RkMmFqRmpibHAwV214WGFWVjFiMVZITlRKVmJrYzNObW94YWxveFkwWkhPREpRZVhndlZ6ZFlUMmhSWVhkNGNYRjJkbUoyVFZwSVowSXZXUzh6TUdsT2EyaExTekJ0YWxwSlpuTnlSMHQxTVZWUkx5OURSV2haUjJ4Q1ZVNWxlbGxGYjJRMFdFaFlNVkF2T0d4WVVXbEtSRTh5WW1SSVVXOVZZbGRoUTNJck1tZDRaMHh1T0hwWWFERnhRMmhhUzFGRFJYcDFUakpWU1hOVFppOU9UakI2VkVwR2NVNVNNM2REZFZOWVZHRkdaVnBTZDIwdmFtVndVSFE0YURaUE1uQkJkMDFNYWpCcmRrZGxZbkJOUlZSTlVtSmFlR0UxWldOUlEyNXhNVXRuZUZScFN5dDRhRkZpZVdjNVdsbEpWREZ6T1dwTlNVTjJOME5RTDJacGIydzVhMnRPYWpacGRrdDVOelpXVUVrMFZURmliWFFyWjBvMFRsbG5NSEZQUlRrMVdFNXZUMnhwZW0wd2FERlNaMU5NWkc5RFp6bEJZM1FyVDFaMFNGbEpabUZzUldwSFJuZE9RekZTVjBkYWNtTkNTbTh3Wmt4UlVqbE5ZVzAzWTBNd1FVazVRbkEyYm5sbFVVbEJRak41UVV3dmQxVm9UblU0VlRsaVdVdFhkaXRzWkdOdVkwdzNielJqT0hOamIzbFFURWxLY1ZCWUsxZFdMME5zSzB4UmNUa3JabVZUWXpKRGFGVnBNRlpHSzNkRVRHZEhNbVZ5V201UllXNXZVMGs5"
-          }
-        ]
-      }
-    },
-    {
-      "resource": {
-        "resourceType": "Provenance",
-        "id": "b228aff9-9a9b-4dea-a594-160be87abe94",
-        "meta": {
-          "profile": [
-            "http://interopehrate.eu/fhir/StructureDefinition/Provenance-IEHR"
-          ]
-        },
-        "target": [
-          {
-            "reference": "http://iehrexampleurl/DiagnosticReport/db734647-fc99-424c-a864-7e3cda82e703"
-          }
-        ],
-        "recorded": "2022-04-21T17:46:28.232+02:00",
-        "agent": [
-          {
-            "type": {
-              "coding": [
-                {
-                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
-                  "code": "author",
-                  "display": "Author"
-                }
-              ]
-            },
-            "who": {
-              "reference": "http://iehrexampleurl/Practitioner/FSTPLG59A26F839C"
-            }
-          },
-          {
-            "type": {
-              "coding": [
-                {
-                  "system": "http://terminology.hl7.org/CodeSystem/provenance-participant-type",
-                  "code": "custodian",
-                  "display": "Custodian"
-                }
-              ]
-            },
-            "who": {
-              "reference": "Organization/9b1aeeb6-cd5c-4a61-929d-9204858a55e7"
-            }
-          }
-        ],
-        "signature": [
-          {
-            "id": "328538a9-9582-464f-b636-92d729314418",
-            "type": [
-              {
-                "system": "urn:iso-astm:E1762-95:2013",
-                "code": "1.2.840.10065.1.12.1.5",
-                "display": "Verification Signature"
-              }
-            ],
-            "when": "2022-04-21T17:46:28.232+02:00",
-            "who": {
-              "reference": "Organization/9b1aeeb6-cd5c-4a61-929d-9204858a55e7"
-            },
-            "targetFormat": "json",
-            "sigFormat": "application/jose",
-            "data": "ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbU5sY25ScFptbGpZWFJsSWpvaVZGVnNTbEp1UW5GUk1FNURVVlJhYmxGWVpFcFJhMFp1VTFaV1MyRnNTbWxXZVRsUVlqQmFTMHd6YUU5U1ZHZ3lWRWRyZDA1SWNIQmthM0JZWkZjNU0xSkdSbHBUYTNSMlYydHNiMlJ0VGs5UlZrWkdWRUZ3UTFWVlJqTlhWbEpHWVdzeFJGSlZaRVJhTWpGVVUyMDVkRlpFYUhCbFIzUkNWVlZXVGxKVVNrNWtSVEZJVkZST1QxWkdXbTlVTUZKeVRUQXhSV0ZIYkU1TmJGWTBWMWh3U21WRldsVlJWbEpEV2pBMVYwTnJTa0pVVlRGRlVsUkdiMWx0TVVkaWJIQllUVmQ0YVdKc1NrVlZWbEpHWVdzeFJGSlZaRUpOVmxaR1VUSmtNMWxXU2xaalJVNVNUVVZXYmxWVVNUVmtWMUpJVW01Q2FXSldXalZUVlZwSFRWZEdXRlJ1U1V0WmVrNVRZVWRPZFZWWVpFbGhSMDVQVkZkd1NtUXdOVVZTV0d4T1ZrWldORlJYY0VwbGJHUnZXVEExVG1Gc1JqTlVhMUpHWlVVeFZWWllhRTVoYTJ3MlZqSndSRkZ1VWpaU1Z6bE9VVEZzU0ZGVVJsWlNVWEJFVlZoa2JWWnRNWE5oUld4R1draENhMWRGTlhOWk1HaERZa1ZzUmsxWVdtcGliRmt5V2xjeGNsb3dNVlJrTW1SV1VqSjRObGRXVGtOVlZrNVZVbFU1VGxGWVpFaFJWRVpXVWxWV1VtUXdXazlXUm13MFEyc3hjVlZZYUV4V1JVWjFVVzFrY21OWGFISmhWV00xWkhwQ1ExRXhSbTVVVldSMFlVUkNhMU5GU2paVU1tczBaRzFSZWxwRVRrMWlWRVl5V1cweFIyVnRVa2hXYm14b1ZucG9NVmxXYUZKa2F6RlRVMWhqUzFKVlJscFNSbHBTVlZWU1JWRlhlRWhXYTFaclZHeG5lV0pIZUdoVFJXdzBWRWh3UW1SRlNtNVViRnBEVVZjNVRsTnRkR0ZrYlVwMFZXMW9iR0pYZURKWmJURldXakZhU0U5WWNGcE5hMW94VjFaT1ExTkJjRnBXTUhBMVdWWmtWMk14Y0ZSUmF6VnBUV3BXYjFsNlRsTmlSMDUwWWtoYVRsVllUak5STVVaYVVrWmFVbFZWWkVaa01IQkxWbXRTUkZFd1JuQlRXR1JGVlZac1MxTXlPV0ZUVjJneVdUQTFRbFZWVmtORGEwcFNVVlZTYmxvd2JGRlJWVkpFVVRCR2JtSXdUbTVhTUd4RFVWVXhVMUZYVWxaV01GcERWMjB4TTFRd2FEQlRWekZXVWtkS2IxcFdhRE5sYWtwMFZESTVRbVF5T1RKaFJsWXdZME01VFdGdE9WRmlSMGxMWlZoS2FVOUlValZWUm14dFkwaFdUMWxZUW5sT2JFRXdWbFJzTTJWSVRtdFpNSGh1Vldwa05XRkVVVEpYYTJoRlRtcG9WbUV5VGtsVlJrcENZbTVHZDJKcVRrOVZSWEJZVFRJNE1tUlVaRmRTYkZKU1lsRnZORXd6WkUxbFZGcFBVakExYVZsV2FGaGlWRkphWXpGSmRsWnJTVEpPUmxwd1dXcE9UbUpxV2pOU2VsSlFaRWhvUW1Fd1RsRlhSRXBJWVZWM05HSkhValJhYlhoRVZHeFdiVkZ1VWt4T2EwNTFUVEpPVEVOcWJIUmpWVVpWVWpBNVNGRnRWWFpPYTBwVFlWTjBlbFpzWkRWU1dGcHNVbTVHYjAxSVNsSkxNSGh1Vm10YVMwc3pWblJYUlVadldWZHZNMU13YUVsVGFtdHlVMnR6TkU1VVZqUk5WVXBEV1d0d05sVXdPRXRVTTJSQ1QwWkthR1ZIY0U1UlZFWXpTM3BhZEZOSVJUVmtWbkEyVlRCT2IyVnJTbEJXUlZKdVkxZE9iMUl6U2pGWmJYaHVWMnBrY1dReFpHOVRhVGxGWVZjeFVsWlVXa1ZWVnpGSVRraHJlVkpWVmpWVlFYQkNaVlZWZUV3eWQzcE5RM1EyWkcxc2VtUXdXbFJTVmtGNVRtMXdhVTB5WkZwUFZGWlNaR3RKTlVzeFNrVlpla2swVG5wV1JWbFhVa3RWUjJnd1dtczVWR1JFWkZsamVrRjNaVVJLZFUxV1pEWldhazV6UTJ4d1RWWkhkRXhpYkZwM1lVaFNlRkZWVm1sYVIwbDNVekZzYjFWWGF6UmxRM1IzVWtkU05XRnRPWGxXVnpsSlpWWm9kRk5ZVW5oWGJVWklZVmM0ZG1Rd1ducE9SMUY2WVhwc1lWb3lkR3hhUldSc1lWWkpTMlZJUW5CaWJUVlJUbXhPTTJGR1pFTmphMjh3VGxNNVJrNHlXak5QVjNjeFZVaFdjVlF6YURaa2FUbHFZek5PTVVzelFrVmlSVkpEVjJ4V01FMXFXakZVTW5oTVpHdDBSbVJyY0U1UlZrSklZVE5zVDFsM2J6TmtXR2Q0WVVScmVHRnFVa1ZPUm1oelQxVjRjMDB4V2taVVZHaHNUSHBhVWs5WFRqWk5NREZ0VFRCYVdsTlViRzVhVjBaRVRucHNiMkZJVmtaa2JXeFZUV3M1VEZORVJuZE9iVkpvVTJzd01sRXhaSFZEYW1OeVRrVjBNMHN3ZURaa1ZGSkNZVE5PUm1ReGNIZFVSVmswVjBoa1JWWXdPWFZYUkdScVRETkJlbUl4VWpOT1ZHaDVVbFU1Y2xOVmRFUmhlWFIwVkZod2VHRnFXa05oZWxwU1RYcGpORk42V2xSaFZsRkxWRVZTY0ZOc1ozcFNia295V2xaa1lXSnRiSFpUV0dONVYxTjBZV05ITlRabGFUbERVVlJDV21KclozZE5TSEJWV25rNE5XVlVWbE5rUkdSYVQwWldSbFZ1UmxsaFIwMXlUbnBuTUdGV1FuQmtibWQ0VlVGd1Fsb3dNVU5SVlVaSVlXMWFObEZxYkU1UldHUklVVlJHVmxwRlZqTlNWVWwyWkRGR1JGUlZSa0prTUdnelYxVlNWMVZxUW5GUmEwcHVaREJhZGxGV1ZrUmphMXBXVjFoUmRtUXdSbGhoU0hCWlpXMU9WRU5yVW1saE1scE1WRVZPUlUxRk9IZGtNR2hTVjFWU1YxVnFRbk5SYTBwYVpEQmFRbGRWYkV4a01XeERVV3hHVmxORlJqTlRWV1JFVVROT1NGRldSbFpTYTBvelZGVldUbEZxUWtoUlZFWldXa1ZTYmxWV1kwdFJhMHBUVmxaU1YyVnFWbGxSV0d0M1drVldWMVpGWkhOTk1ERklZVzFhV0ZJelVtOUxNVlp4VVZVNVExb3dOVmRUUmtVMFVXdEdiVTlGVmtOUlZURkVVVzFXUW1Rd1VsSlhWWEJNWWpGd1NtRklXbXBVWjNCQ1ZWVldUVkZzUmtKU1IyUnVVakJLUWxORVRrVmpNV3hHVG5wQ1JHUnRSazVTUkdOMllrUktjVlp0U2tsV00wcE9ZakZ3V1ZsVmNFcFVXRUpKWkRKNGJWWllUbXhSVkdocVRrUlNiVk5XV2pSalZFSlRRMnRXU0ZkWGJGSmxTRTVPVTFoT1IwMXRXWGhoTUdoM1pWWlNRbEV6YURWUldHeEpZa2h3VFU1VVJsbGFWVFZWWVd4U1ZsTXhjRk5YVlRsaFVWVXhVVm96UWs5aldFMTJVV3R3VmxWWWJ6VmthMDVGWTJwQlMxcEhaSFJWYlRCM1YyeG9VVlJXUWpabFZHaEtaV3MxVldGRldUVk9SV1JWVTFoc1NrMHdaRFJUTVZKWFl6Qm9jMHd5Y0VKV00wWjZVVlpPVkZSV1VsaE9hekI2WTBSV1dHTnRhRUpoUm1ScFdtazVVazFuY0dsV1Yyc3dWVmRTYVZSWVVUQmFlVGxHWldzNVMxVnRiM2xXYmxKWlRtdGtXRkpzVm1sUmVtZ3pUVE5vZG1WWGFFaFdSbFpXVTBjNWRsSlZjRTVhVjJ4eldqRldNRTB5TVhka2EzZ3dXa1UxVldWSVFuZERhM1JPVTI1dk0xUkhVbkpOTTBwMVZGUk9hRlpVVWpGa1ZWRnlWWHBXVTJKRVdtbGFXRVUwVkZabmVsZHRUa0paVmtKcFVrZHdSMDlYWkRaTk0yaElaREp6ZDJOVmIzaE1Na1pWVjBWb01GVnNSbXBrVjJkTFRraFdWV0ZWYkZCa1JYQndVbGN4YlUxcmRFWmpNakF5WTI1R1JtSXpWbWxrTVd4dlZFWnNhR1ZIUmtOTk1sVjVXVEpXYjFWR1kzWlVWVGsyWWtaT2FrOVdXWGRoUjBwV1ZVVldhR1JFYkUxaVZ6VkxZVkZ3YzFWVVFqTlZTRTEyVXpKNFJVMXRSbmxXYlZaT1VteHdRbG95WjNwaGFrcHRZMFYwV0ZKcVNsTlpWRnBUVkd4U1VHTklXWEpUYlVvMFpFVlNObVJFV2s1bFdGcExZVzAxYUdKWWJGRlZTRVZ5VGxkamQwTnJiRTFTZWtaVVpVYzFVRlZJV25aaGJYaFpXak5TVUZwVWF6Vmhia0o1WlVaT1lVMVVWbTVpVkU1T1lWZG9SRll5Vm5ST1IyTjZTM3BSTWxacmNETmhNRVp2VDFkR1RsVXlkSE5rYkZwV1VrVndTbFJJWTB0U1JtaDBZbFZPYVZJeVdUVlVWbGt5WlVkak9WQlJQVDBpZlE9PS4uUkV4d1IxTkJRbUZKVTJ4amVHZFZTREZsWlN0MFluQjZlVXRhWTIxQmVFWkxWSFZQTUVaM2VsWjBWalY0Y2tadVJ6VTBVM2R6Y0c5b1kwbHNNRGxVTmsxRldFVnBRbUZLV0ZNd1Z6ZE1Wak5WU21kTk56WlBVMDVNV0VWS2VFMHJlV0p4ZFdFMVVpOTBSa001WVZGelMyVjRZVFZHVUVSWU9IbGtiSGRyWlVwU2VUTjVRa2M0YlhKM1JGUXZlR05FWjBkd09EbEJiVXhuU1dWNFNIVmpXRElyTWtrMFlpOHZheTlMUVRjeGNGWkdSalI2VG5sbGF5dHpUMm94VWxCd05GZzJkR1kxWTFsWFZEaHRVRzlOTTBGSEsxbHZVamRqVVUwMmFVRXhPVTVMYTB4VlYzcGlTemR1TkZVek9VWlFlRGxsVmt0a09Hd3JjVTlWT1VsdlJEWnhZVWhDVTNCUmNIcDVkREF2WTAwMGJYQXlUa05tU1ZjMU5YRjRUMlpFUzA1bFFVSXlSemxOTXpGbWVqZE1RUzl5U1ZrdlZHUkdTR05HVWtWRGVqaG1ha2RsTURZMVVWRlVNa2d5WjA1R1FUSklSR05NZFVoYVN5OVBha3BhUW5KdmJVeDBlSEZVVVdScVdsVm9kV3hYWW05bE5HWTJOM2RxVFhRek5EaEdiRXBGWVVGWWRXOUdSVGt5WkhGRWFXSlVVMDVKZUdSS05qbFZkazFTVUdGamJHRmhaMFZ4T1drME9VdFZjRTA0Wkd3M1ZFMHpZaXRLWkVjcllXTk1UMEZsTVZFMFlVYzVia0poTW5FdmRqVmFkV1Y0WjFwMWExRTVla1JZYWxkblEybGFVelJVZGtwMVdGZFBZbmhVZEd0RGFWRlBhMnA2TTNSWFlVdGhVMEoyUm5kc1RURlVTM1ZrVEcxSlNGVkZWM3BSUTNsRWFqRTNMekp2TkhObmQxVnBLMUpKY25aSk5uSmtWR1JRVnpFelJuRk5Xamt5TXl0TU1teDRSRVZEWkZkdFRtdENlbU5vYmxwQ1FWbE1hakJYYjNKdVoyUjBXSEZVZFRsMVEzQlZielJUTTJ4d1VVRndVVGwxUm5CSWRuRkpZVGczSzFCSldHcDNXWGRIVlZOcGIxVlFRbTh4UlRST1FuSkVWSFl5YkZOWlkxQm9XWEpWV2xrdmNVMTZVMDVSWW5GamR6bHJiMnM5"
           }
         ]
       }

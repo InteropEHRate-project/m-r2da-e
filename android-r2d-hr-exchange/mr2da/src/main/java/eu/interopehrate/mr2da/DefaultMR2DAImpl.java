@@ -66,9 +66,8 @@ class DefaultMR2DAImpl implements MR2DA {
 
     protected final String eidasToken;
     protected final URL r2dServerURL;
-    protected final IGenericClient fhirClient;
+    protected IGenericClient fhirClient;
     protected Locale language;
-    protected boolean strictChecking = true;
 
     DefaultMR2DAImpl(URL r2dServerURL, String eidasToken) {
         if (r2dServerURL == null || r2dServerURL.getHost() == null || r2dServerURL.getHost().trim().isEmpty())
@@ -81,7 +80,13 @@ class DefaultMR2DAImpl implements MR2DA {
         this.r2dServerURL = r2dServerURL;
 
         // creates the instance of IGenericClient to submit requests to the R2D Server
-        this.fhirClient = ConnectionFactory.getFHIRClient(r2dServerURL, eidasToken);
+        fhirClient = ConnectionFactory.getFHIRClient(r2dServerURL, eidasToken);
+    }
+
+    @Override
+    public void setFreshToken(String eidasToken) {
+        // creates the instance of IGenericClient to submit requests to the R2D Server
+        fhirClient = ConnectionFactory.getFHIRClient(r2dServerURL, eidasToken);
     }
 
     @Override

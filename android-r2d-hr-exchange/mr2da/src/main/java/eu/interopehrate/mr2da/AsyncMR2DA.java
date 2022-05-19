@@ -32,23 +32,22 @@ class AsyncMR2DA extends DefaultMR2DAImpl {
         // store the callback handler
         this.setCallbackHandler(callbackHandler);
 
+        // register the AsyncResponseClientInterceptor to the fhirClient assuring it is only one
+        AsyncHTTPClientInterceptor httpClientInterceptor = new AsyncHTTPClientInterceptor();
+        fhirClient.registerInterceptor(httpClientInterceptor);
+
         // instantiates the result retriever Thread
         resultsThread = new ResultsRetrieverHandlerThread(eidasToken, callbackHandler);
-        // instantiates the polling Thread
-        pollingThread = new PollingHandlerThread(eidasToken, resultsThread);
-
-        // register the AsyncResponseClientInterceptor to the fhirClient assuring it is only one
-        this.fhirClient.unregisterInterceptor(AsyncHTTPClientInterceptor.getInstance());
-        this.fhirClient.registerInterceptor(AsyncHTTPClientInterceptor.getInstance());
-
-        // starts the polling thread
-        pollingThread.start();
-
         // starts the results retriever thread
         resultsThread.start();
 
+        // instantiates the polling Thread
+        pollingThread = new PollingHandlerThread(eidasToken, resultsThread);
         // provides handler to client interceptor
-        AsyncHTTPClientInterceptor.getInstance().setHandlerThread(pollingThread);
+        httpClientInterceptor.setHandlerThread(pollingThread);
+
+        // starts the polling thread
+        pollingThread.start();
     }
 
 

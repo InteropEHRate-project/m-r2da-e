@@ -14,6 +14,8 @@ import ca.uhn.fhir.parser.IParser;
 import eu.interopehrate.m_rds_sm.CryptoManagementFactory;
 import eu.interopehrate.m_rds_sm.api.CryptoManagement;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
+import eu.interopehrate.protocols.provenance.NodeFactory;
+import eu.interopehrate.protocols.provenance.ResourceNode;
 
 /**
  *  Author: Engineering S.p.A. (www.eng.it)
@@ -61,14 +63,13 @@ public class ProvenanceValidator {
         boolean foundProvenance = false;
         for (ResourceNode child : root.getChildren()) {
             resourceToValidate = (DomainResource)child.getResource();
-            resourceId = resourceToValidate.getIdElement().getResourceType() +
+            resourceId = resourceToValidate.getResourceType() +
                     "/" + resourceToValidate.getIdElement().getIdPart();
 
-            Log.d("MR2DA", "Validating resource: " + resourceId);
             foundProvenance = false;
             for (Provenance provenance : provenances) {
-                foundProvenance = true;
                 if (matches(provenance, resourceToValidate)) {
+                    foundProvenance = true;
                     Log.d("MR2DA", "Validating resource: " + resourceId
                             + " from Provenance: " + provenance.getId());
 
@@ -119,12 +120,12 @@ public class ProvenanceValidator {
     }
 
     private boolean matches (Provenance provenance, DomainResource resource) {
-        IIdType targetIdType = provenance.getTargetFirstRep().getReferenceElement();
-        String targetId = targetIdType.getResourceType() + "/" + targetIdType.getIdPart();
+        if (provenance.getTarget().size() == 0)
+            return false;
 
-        IIdType resourceIdType = resource.getIdElement();
-        String resourceId = resourceIdType.getResourceType() + "/" + resourceIdType.getIdPart();
-
+        DomainResource target = (DomainResource) provenance.getTargetFirstRep().getResource();
+        final String targetId = target.getResourceType() + "/" + target.getIdElement().getIdPart();
+        final String resourceId = resource.getResourceType() + "/" + resource.getIdElement().getIdPart();
         return resourceId.equals(targetId);
     }
 

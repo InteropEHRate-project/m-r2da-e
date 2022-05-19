@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: "maven-publish"
 
 group = "eu.interopehrate"
-version="0.4.4"
+version="0.4.6"
 
 configurations {
     all*.exclude group: 'org.codehaus.woodstox'
@@ -32,7 +32,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     def FHIR_VERSION = "4.1.0"
-    def R2D_D2D_COMMONS_VERSION = "0.1.1";
+    def R2D_D2D_COMMONS_VERSION = "0.1.2";
     /*
      * FHIR dependencies
      */
