@@ -20,6 +20,10 @@ public class ResultsRetrieverHandlerThread extends HandlerThread {
 
     public ResultsRetrieverHandlerThread(String eidasToken, MR2DACallbackHandler callbackHandler) {
         super("R2D Result Retriever Thread", Process.THREAD_PRIORITY_BACKGROUND);
+
+        if (eidasToken == null || eidasToken.trim().isEmpty())
+            throw new IllegalArgumentException("Provided auth token is empty.");
+
         this.eidasToken = eidasToken;
         this.callbackHandler = callbackHandler;
     }

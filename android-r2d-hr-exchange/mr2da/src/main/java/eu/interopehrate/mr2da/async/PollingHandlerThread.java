@@ -18,6 +18,10 @@ public class PollingHandlerThread extends HandlerThread {
 
     public PollingHandlerThread(String eidasToken, ResultsRetrieverHandlerThread retrieverThread) {
         super("R2D Polling Thread", Process.THREAD_PRIORITY_BACKGROUND);
+
+        if (eidasToken == null || eidasToken.trim().isEmpty())
+            throw new IllegalArgumentException("Provided auth token is empty.");
+
         this.eidasToken = eidasToken;
         this.retrieverThread = retrieverThread;
     }

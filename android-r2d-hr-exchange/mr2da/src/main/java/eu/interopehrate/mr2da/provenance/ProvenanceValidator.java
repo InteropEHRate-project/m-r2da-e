@@ -76,7 +76,7 @@ public class ProvenanceValidator {
                     jwsToken = new String(provenance.getSignatureFirstRep().getData());
                     if (cryptoManagement.verifyDetachedJws(jwsToken,
                             parser.encodeResourceToString(resourceToValidate))) {
-                        Log.d("MR2DA", "resource is valid!");
+                        // Log.d("MR2DA", "resource is valid!");
                         res.addValidationResult(resourceId, true, "");
                     } else {
                         Log.d("MR2DA", "resource is NOT valid!");

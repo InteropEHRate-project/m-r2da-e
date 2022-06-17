@@ -37,6 +37,10 @@ public class RequestResultHandler extends Handler {
 
     public RequestResultHandler(String eidasToken, MR2DACallbackHandler callbackHandler) {
         super();
+
+        if (eidasToken == null || eidasToken.trim().isEmpty())
+            throw new IllegalArgumentException("Provided auth token is empty.");
+
         this.eidasToken = eidasToken;
         this.callbackHandler = callbackHandler;
     }
@@ -48,15 +52,15 @@ public class RequestResultHandler extends Handler {
             return;
         }
 
-        // notifies the callback handler that a request completed
-        // so that if another request is waiting, it can be submitted
-        callbackHandler.onRequestCompleted();
-
         // Retrieves the URL to monitor from the msg
         RequestOutcome outcome = (RequestOutcome)msg.obj;
+        // Log.d("MR2DA.ResultHandler", "outcome.size=" + outcome.getOutput().size());
         if (outcome.getOutput().size() > 0) {
             // retrieves the results from the server
             try {
+                // invokes callback method for start of download
+                callbackHandler.onDownloadStarted();
+
                 Bundle result = retrieveRequestResult(outcome);
                 // checks provenance
                 Log.d("MR2DA.ResultHandler", "Validating provenances...");
@@ -64,25 +68,35 @@ public class RequestResultHandler extends Handler {
                 ProvenanceValidationResults valRes = validator.validateBundle(result);
                 if (valRes.isSuccessful()) {
                     Log.d("MR2DA.ResultHandler", "Validation was successful");
-                    notifyCallbackHandler(outcome, result, valRes);
+                    notifyCallbackHandler(outcome, result);
                 } else {
                     Log.d("MR2DA.ResultHandler", "Validation was not successful");
                     if (callbackHandler.onProvenanceValidationError(valRes))
-                        notifyCallbackHandler(outcome, result, valRes);
+                        notifyCallbackHandler(outcome, result);
                 }
             } catch (Exception e) {
-                // inovkes the callback handler in case of error during processing of the request
+                // invokes the callback handler in case of error during processing of the request
                 Log.e("MR2DA.ResultHandler", e.getMessage());
                 callbackHandler.onError(e.getMessage());
             }
         } else {
-            // inovkes the callback handler in case of error during processing of the request
+            // invokes the callback handler in case of error during processing of the request
+            Log.e("MR2DA.ResultHandler", "Request execution throw the " +
+                    "following error: " + outcome.getError());
             callbackHandler.onError(outcome.getError());
         }
 
+        // notifies the callback handler that a request completed
+        // so that if another request is waiting, it can be submitted
+        callbackHandler.onRequestCompleted();
     }
 
-
+    /**
+     *
+     * @param outcome
+     * @return
+     * @throws Exception
+     */
     private Bundle retrieveRequestResult(RequestOutcome outcome) throws Exception {
         // Creates the OKHttp request to poll the URL
         Request request = new Request.Builder()
@@ -92,21 +106,25 @@ public class RequestResultHandler extends Handler {
                         Constants.HEADER_AUTHORIZATION_VALPREFIX_BEARER + eidasToken)
                 .build();
 
+        Log.d("MR2DA.ResultHandler", "Starting download of FHIR data...");
         Response response = client.newCall(request).execute();
         switch (response.code()) {
             case 200:
-                // Retrieving response body
-                String body = response.body().string();
                 // Parsing results to FHIR Bundle
-                Log.d("MR2DA.ResultHandler", "Parsing JSON to Bundle...");
-                return ConnectionFactory.getFHIRParser().parseResource(Bundle.class, body);
+                Log.d("MR2DA.ResultHandler", "Downloading and parsing FHIR data...");
+                Bundle bundle = ConnectionFactory.getFHIRParser().parseResource(
+                        Bundle.class,
+                        response.body().byteStream());
+                // Log.d("MR2DA.ResultHandler", "Downloaded " + response.body().contentLength() + " data.");
+                return bundle;
+
             default:
-                Log.e("MR2DA.ResultHandler", "Error " + response.code() + " while polling R2DAccess server.");
+                Log.e("MR2DA.ResultHandler", "Error " + response.code() + " while retrieving results from R2DAccess server.");
                 return null;
         }
     }
 
-    private void notifyCallbackHandler(RequestOutcome outcome, Bundle results, ProvenanceValidationResults valRes) {
+    private void notifyCallbackHandler(RequestOutcome outcome, Bundle results) {
         String originalRequest = outcome.getRequest();
 
         if (originalRequest.contains("$document")) {

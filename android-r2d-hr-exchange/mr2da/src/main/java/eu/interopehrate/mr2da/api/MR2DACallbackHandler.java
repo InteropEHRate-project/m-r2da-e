@@ -17,11 +17,16 @@ import eu.interopehrate.protocols.common.ResourceCategory;
 public interface MR2DACallbackHandler {
 
     /**
-     * This callback is nott used to provide requested data, but only to
+     * This callback is not used to provide requested data, but only to
      * notify to the client that a request has terminated and another one may
      * be submitted in case the client is queueing requests.
      */
     void onRequestCompleted();
+
+    /**
+     * Invoked when download of data starts.
+     */
+    void onDownloadStarted();
 
     /**
      * Callback invoked when a search has produced its results.

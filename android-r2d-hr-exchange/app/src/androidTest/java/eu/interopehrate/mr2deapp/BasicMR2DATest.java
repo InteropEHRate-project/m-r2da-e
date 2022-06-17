@@ -6,6 +6,7 @@ import eu.interopehrate.mr2da.MR2DAFactory;
 import eu.interopehrate.mr2da.api.MR2DA;
 
 public abstract class BasicMR2DATest {
+    private static final String ASYNC_HTTP_ENDPOINT = "http://213.249.46.205:8080/r2da/";
     private static final String HTTP_ENDPOINT = "http://213.249.46.205:8080/R2D/fhir/";
     private static final String HTTPS_ENDPOINT = "https://213.249.46.205:8443/R2D/fhir/";
 
@@ -20,11 +21,12 @@ public abstract class BasicMR2DATest {
                 HTTP_ENDPOINT,
                 authToken,
                 Locale.ITALIAN);
-
+        /*
         mr2da = MR2DAFactory.create(
                 HTTP_ENDPOINT,
                 authToken,
                 Locale.ITALIAN);
+         */
 
     }
 

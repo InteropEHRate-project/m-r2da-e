@@ -50,14 +50,14 @@ public class SingleQueryExecutor implements FHIRExecutor {
         try {
             // Executes the query
             query.execute();
+            return null;
         } catch (Exception e) {
             if (e.getCause() != null && e.getCause() instanceof DataFormatException)
-                Log.i("MR2DA.SingleExecutor", "Exception DataFormatException has been ignored due to asynchronous management.");
-            else
-                throw e;
-        }
+                return null;
+                // Log.i("MR2DA.SingleExecutor", "Exception DataFormatException has been ignored due to asynchronous management.");
 
-        return null;
+            throw e;
+        }
     }
 
     @Override
@@ -71,9 +71,10 @@ public class SingleQueryExecutor implements FHIRExecutor {
             }
         } catch (Exception e) {
             if (e.getCause() != null && e.getCause() instanceof DataFormatException)
-                Log.i("MR2DA.SingleExecutor", "Exception DataFormatException has been ignored due to asynchronous management.");
-            else
-                throw e;
+                return null;
+                // Log.i("MR2DA.SingleExecutor", "Exception DataFormatException has been ignored due to asynchronous management.");
+
+            throw e;
         }
 
         return null;

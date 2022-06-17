@@ -39,17 +39,25 @@ public class RequestPollingHandler extends Handler {
     private Gson gson;
     private ResultsRetrieverHandlerThread retrieverThread;
     private int pendingRequestsSize = 0;
-    private long pollingInterval;
+    private int pollingInterval;
+    private int initialInterval;
 
     public RequestPollingHandler(String eidasToken, ResultsRetrieverHandlerThread retrieverThread) {
         super();
+
+        if (eidasToken == null || eidasToken.trim().isEmpty())
+            throw new IllegalArgumentException("Provided auth token is empty.");
+
         this.eidasToken = eidasToken;
         this.retrieverThread = retrieverThread;
         gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
                 .create();
 
-        pollingInterval = Long.valueOf(MR2DAContext.INSTANCE.
+        initialInterval = Integer.valueOf(MR2DAContext.INSTANCE.
+                getPollingProperties().getProperty("INITIAL_INTERVAL"));
+
+        pollingInterval = Integer.valueOf(MR2DAContext.INSTANCE.
                 getPollingProperties().getProperty("POLLING_INTERVAL"));
     }
 
@@ -66,8 +74,14 @@ public class RequestPollingHandler extends Handler {
 
         // Retrieves the URL to monitor from the msg
         String monitoringURL = (String)msg.obj;
-        if (msg.arg1 == NEW_REQUEST)
+        if (msg.arg1 == NEW_REQUEST) {
             pendingRequestsSize++;
+            Message delayedMsg = this.obtainMessage(ASYNC_REQUEST_TO_BE_MONITORED);
+            delayedMsg.arg1 = RequestPollingHandler.OLD_REQUEST;
+            delayedMsg.obj = msg.obj;
+            sendMessageDelayed(delayedMsg, initialInterval);
+            return;
+        }
 
         // Creates the OKHttp request to poll the URL
         try {
