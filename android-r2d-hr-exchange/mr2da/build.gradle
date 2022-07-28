@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: "maven-publish"
 
 group = "eu.interopehrate"
-version="0.4.9"
+version="0.4.14"
 
 configurations {
     all*.exclude group: 'org.codehaus.woodstox'

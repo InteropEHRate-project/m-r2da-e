@@ -7,11 +7,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.OperationOutcome;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.Properties;
 
 import ca.uhn.fhir.rest.api.Constants;
+import eu.interopehrate.mr2da.MR2DAContext;
 import eu.interopehrate.mr2da.api.MR2DACallbackHandler;
 import eu.interopehrate.mr2da.fhir.ConnectionFactory;
 import eu.interopehrate.mr2da.provenance.ProvenanceValidationResults;
@@ -30,10 +31,14 @@ import okhttp3.Response;
  */
 public class RequestResultHandler extends Handler {
     public static final int ASYNC_REQUEST_TO_GET_RESULT = 2000;
+    public static final int ASYNC_REQUEST_ON_NETWORK_ERROR = 3000;
 
     private OkHttpClient client = new OkHttpClient();
     private String eidasToken;
     private MR2DACallbackHandler callbackHandler;
+    private int numMaxRetries = 10;
+    private int consecutiveErrors = 0;
+    private int pollingInterval;
 
     public RequestResultHandler(String eidasToken, MR2DACallbackHandler callbackHandler) {
         super();
@@ -43,12 +48,24 @@ public class RequestResultHandler extends Handler {
 
         this.eidasToken = eidasToken;
         this.callbackHandler = callbackHandler;
+
+        final Properties pollingProps = MR2DAContext.INSTANCE.getPollingProperties();
+        pollingInterval = Integer.valueOf(pollingProps.getProperty("POLLING_INTERVAL"));
+        if (pollingProps.getProperty("POLLING_MAX_NUM_RETRIES") != null) {
+            numMaxRetries = Integer.valueOf(pollingProps.getProperty("POLLING_MAX_NUM_RETRIES"));
+        }
     }
 
     @Override
     public void handleMessage(@NonNull Message msg) {
-        if (msg.what != ASYNC_REQUEST_TO_GET_RESULT) {
+        if (msg.what != ASYNC_REQUEST_TO_GET_RESULT && msg.what != ASYNC_REQUEST_ON_NETWORK_ERROR) {
             Log.e("MR2DA.ResultHandler", "Error: received message with wrong message type.");
+            return;
+        }
+
+        if (msg.what == ASYNC_REQUEST_ON_NETWORK_ERROR) {
+            callbackHandler.onError("Network communication error. Lost connection for too much time " +
+                    "during request processing.");
             return;
         }
 
@@ -56,12 +73,32 @@ public class RequestResultHandler extends Handler {
         RequestOutcome outcome = (RequestOutcome)msg.obj;
         // Log.d("MR2DA.ResultHandler", "outcome.size=" + outcome.getOutput().size());
         if (outcome.getOutput().size() > 0) {
-            // retrieves the results from the server
-            try {
-                // invokes callback method for start of download
-                callbackHandler.onDownloadStarted();
+            // invokes callback method for start of download
+            callbackHandler.onDownloadStarted();
 
-                Bundle result = retrieveRequestResult(outcome);
+            Bundle result = new Bundle();
+            try {
+                // retrieves the results from the server
+                result = retrieveRequestResult(outcome);
+                consecutiveErrors = 0;
+            } catch (Error | Exception e) {
+                consecutiveErrors++;
+                if (consecutiveErrors <= numMaxRetries) {
+                    Log.e("MR2DA.PollingHandler", "Error while downloading request file. Another try will be executed.", e);
+                    Message retryMsg = this.obtainMessage();
+                    retryMsg.what = RequestResultHandler.ASYNC_REQUEST_TO_GET_RESULT;
+                    retryMsg.obj = (RequestOutcome)msg.obj;
+                    sendMessageDelayed(retryMsg, pollingInterval);
+                } else {
+                    Log.e("MR2DA.PollingHandler", "Max number of retries executed. Download failed for network troubles", e);
+                    callbackHandler.onError("Network communication error. Lost connection for too much time " +
+                            "during download of requested data.");
+                }
+                return;
+            }
+
+            // If Bundle is download then validation of provenances takes place
+            try {
                 // checks provenance
                 Log.d("MR2DA.ResultHandler", "Validating provenances...");
                 ProvenanceValidator validator = new ProvenanceValidator();
@@ -74,11 +111,12 @@ public class RequestResultHandler extends Handler {
                     if (callbackHandler.onProvenanceValidationError(valRes))
                         notifyCallbackHandler(outcome, result);
                 }
-            } catch (Exception e) {
+            } catch (Error | Exception e) {
                 // invokes the callback handler in case of error during processing of the request
                 Log.e("MR2DA.ResultHandler", e.getMessage());
                 callbackHandler.onError(e.getMessage());
             }
+
         } else {
             // invokes the callback handler in case of error during processing of the request
             Log.e("MR2DA.ResultHandler", "Request execution throw the " +

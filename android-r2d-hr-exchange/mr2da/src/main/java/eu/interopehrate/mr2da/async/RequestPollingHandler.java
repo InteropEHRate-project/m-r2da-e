@@ -10,8 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Properties;
 
 import ca.uhn.fhir.rest.api.Constants;
 import eu.interopehrate.mr2da.MR2DAContext;
@@ -41,6 +40,8 @@ public class RequestPollingHandler extends Handler {
     private int pendingRequestsSize = 0;
     private int pollingInterval;
     private int initialInterval;
+    private int numMaxRetries = 10;
+    private int consecutiveErrors;
 
     public RequestPollingHandler(String eidasToken, ResultsRetrieverHandlerThread retrieverThread) {
         super();
@@ -54,11 +55,17 @@ public class RequestPollingHandler extends Handler {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
                 .create();
 
-        initialInterval = Integer.valueOf(MR2DAContext.INSTANCE.
-                getPollingProperties().getProperty("INITIAL_INTERVAL"));
+        // reads polling properties from config file
+        final Properties pollingProps = MR2DAContext.INSTANCE.getPollingProperties();
 
-        pollingInterval = Integer.valueOf(MR2DAContext.INSTANCE.
-                getPollingProperties().getProperty("POLLING_INTERVAL"));
+        initialInterval = Integer.valueOf(pollingProps.getProperty("INITIAL_INTERVAL"));
+
+        pollingInterval = Integer.valueOf(pollingProps.getProperty("POLLING_INTERVAL"));
+
+        if (pollingProps.getProperty("POLLING_MAX_NUM_RETRIES") != null) {
+            numMaxRetries = Integer.valueOf(pollingProps.getProperty("POLLING_MAX_NUM_RETRIES"));
+        }
+
     }
 
     public int getPendingRequestSize() {
@@ -83,8 +90,8 @@ public class RequestPollingHandler extends Handler {
             return;
         }
 
-        // Creates the OKHttp request to poll the URL
         try {
+            // Creates the OKHttp request to poll the URL
            Request request = new Request.Builder()
                 .url(monitoringURL)
                 .get()
@@ -94,6 +101,7 @@ public class RequestPollingHandler extends Handler {
 
             // Submit the request...
             Response response = client.newCall(request).execute();
+            consecutiveErrors = 0;
             switch (response.code()) {
                 case REQUEST_RUNNING_HTTP_STATUS:
                     // Request is not finished yet
@@ -122,8 +130,21 @@ public class RequestPollingHandler extends Handler {
                 default:
                     Log.e("MR2DA.PollingHandler", "Error " + response.code() + " while polling R2DAccess server.");
             }
-        } catch (IOException ioe) {
-            Log.e("MR2DA.PollingHandler", "Error while polling request status!", ioe);
+        } catch (Error | Exception e) {
+            consecutiveErrors++;
+            if (consecutiveErrors <= numMaxRetries) {
+                Log.e("MR2DA.PollingHandler", "Error while polling request status, polling will continue", e);
+                Message retryMsg = this.obtainMessage(ASYNC_REQUEST_TO_BE_MONITORED);
+                retryMsg.arg1 = RequestPollingHandler.OLD_REQUEST;
+                retryMsg.obj = msg.obj;
+                sendMessageDelayed(retryMsg, pollingInterval);
+            } else {
+                Log.e("MR2DA.PollingHandler", "Connection is lost, request result could not " +
+                        "be retrieved after several tries.", e);
+                Message outMsg = retrieverThread.getHandler().obtainMessage();
+                outMsg.what = RequestResultHandler.ASYNC_REQUEST_ON_NETWORK_ERROR;
+                retrieverThread.getHandler().sendMessage(outMsg);
+            }
         }
     }
 
