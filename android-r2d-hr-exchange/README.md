@@ -40,18 +40,58 @@ Due to the nature of these transactions, users of the MR2DA library, are request
 2) implements methods of the interface MR2DACallbackHandler to be notified about the
 status of a previously submitted request.
 
+MR2DACallbackHandler interface:
+
+- onRequestCompleted: notifies the user that a request (of whatever type has finished).
+- onDownloadStarted: notifies the user that server side processing of data has completed and that
+                     download of data has started.
+- onSearchCompleted: Invoked when a search method has completed successfully and data have
+                     been downloaded. This method defines two arguments, the first one is of
+                     type eu.interopehrate.protocols.common.ResourceCategory and states what
+                     kind of search has completed, while the second one is of type
+                     org.hl7.fhir.r4.model.Bundle and contains the received health data.
+- onPatientSummaryCompleted: Invoked when a the request for the patient summary has completed
+                     successfully and data have been downloaded. This method defines one argument
+                     of type org.hl7.fhir.r4.model.Bundle that contains the received health data.
+- onEncounterEverythingCompleted: Invoked when a the request for the encounter everything method
+                     has completed successfully and data have been downloaded. This method defines
+                     one argument of type org.hl7.fhir.r4.model.Bundle that contains the received
+                     health data.
+- onProvenanceValidationError: Invoked when heath data have been downloaded, but validation of the
+                     provenance has failed. This method defines one argument of type
+                     eu.interopehrate.mr2da.provenance.ProvenanceValidationResults containing
+                     detailed information about the validation errors produced during the
+                     validation process.
+- onError: Invoked when a request for health data, has thrown an error. This method defines only
+                     one argument of tye String, containing the description of the error.
+
+Creating an instance of MR2DA
+
 To obtain an instance of MR2DA, developers must use the static method create() of the class
 MR2DFactory, as shown in the following example:
 
-  MR2DA mr2da = MR2DAFactory.create("https://hospitalOne/R2D", authToken, Locale.ITALIAN);
+  MR2DA mr2da = MR2DAFactory.create(
+                "https://hospitalOne/R2D",
+                authToken,
+                anInstanceofMR2DACallbackHandler,
+                Locale.ITALIAN);
 
 The create() method takes as input parameter the endpoint of the R2D server that it must connect to,
 the authentication token retrieved with the eIDAS login, and the language of the citizen.
 If the S-EHR app needs to connect to more than one R2D server, it must creates a MR2DA
 instance for every R2D server:
 
-  MR2DA mr2da_1 = MR2DAFactory.create("https://hospitalOne/R2D", authToken,Locale.ITALIAN);
-  MR2DA mr2da_2 = MR2DAFactory.create("https://hospitalTwo/R2D", authToken, Locale.ITALIAN);
+  MR2DA mr2da_1 = MR2DAFactory.create(
+                "https://hospitalOne/r2da",
+                authToken,
+                anInstanceofMR2DACallbackHandler,
+                Locale.ITALIAN);
+
+  MR2DA mr2da_2 = MR2DAFactory.create(
+                "https://hospitalTWO/r2da",
+                authToken,
+                anotherInstanceofMR2DACallbackHandler,
+                Locale.ITALIAN);
 
 Sample code:
 1) Requesting the Patient Summary
